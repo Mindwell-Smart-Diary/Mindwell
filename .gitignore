@@ -1,0 +1,57 @@
+# Ignore compiled files
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore temporary files and directories
+/target/
+/.gradle/
+/.idea/
+/.vscode/
+/.DS_Store
+Thumbs.db
+
+# Ignore log files
+*.log
+
+# Ignore build-related files
+build/
+dist/
+out/
+
+# Ignore configuration files
+*.iml
+.idea/
+
+# Ignore dependencies folder
+/node_modules/
+/vendor/
+
+# Ignore environment-specific files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# Ignore database files
+*.sqlite
+*.db
+*.sql
+
+# Ignore Jekyll build folder (if using Jekyll)
+_site/
+
+# Ignore macOS metadata files
+.DS_Store
+
+# Ignore Visual Studio Code settings
+.vscode/
