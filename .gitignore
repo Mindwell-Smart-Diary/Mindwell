@@ -25,6 +25,7 @@ Thumbs.db
 build/
 dist/
 out/
+coverage/
 
 # Ignore configuration files
 *.iml

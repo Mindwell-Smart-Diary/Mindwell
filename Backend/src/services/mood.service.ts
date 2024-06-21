@@ -1,5 +1,5 @@
-import { Mood } from "../models/enums/Mood";
-import { MOOD_CATEGORIES } from "../models/enums/MoodCategory";
+import { Mood } from "../models/enums/mood.enum";
+import { MOOD_CATEGORIES } from "../models/enums/mood-category.enum";
 
 const generateMoodPrompt = (
   userInformation: { age: number; gender: string },

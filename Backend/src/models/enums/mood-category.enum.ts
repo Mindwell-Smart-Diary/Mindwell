@@ -1,4 +1,4 @@
-import { Mood } from "./Mood";
+import { Mood } from "./mood.enum";
 
 export enum MoodCategory {
   Positive = "Positive",
