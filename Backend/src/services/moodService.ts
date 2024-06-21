@@ -2,7 +2,7 @@ import { Mood } from "../models/enums/Mood";
 import { MOOD_CATEGORIES } from "../models/enums/MoodCategory";
 
 const generateMoodPrompt = (
-  userInformation: { name: string; age: number; gender: string },
+  userInformation: { age: number; gender: string },
   dailySharing: string
 ): string => {
   let possibleMoods = "";
@@ -13,10 +13,9 @@ const generateMoodPrompt = (
 
   return `
     Determine the mood of the user based on the following information:
-    - Name: ${userInformation.name}
+    - Daily Sharing: "${dailySharing}"
     - Age: ${userInformation.age}
     - Gender: ${userInformation.gender}
-    - Daily Sharing: "${dailySharing}"
 
     Possible moods are:
     ${possibleMoods}
@@ -31,7 +30,6 @@ export const sendToGennerativeAi = (prompt: string): any => {
 
 export const moodPromptFunction = (
   userInformation: {
-    name: string;
     age: number;
     gender: string;
   },
