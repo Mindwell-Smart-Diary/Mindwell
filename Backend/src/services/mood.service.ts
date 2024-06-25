@@ -1,28 +1,20 @@
 import { Mood } from "../models/enums/mood.enum";
-import { MOOD_CATEGORIES } from "../models/enums/mood-category.enum";
 import { sendToGennerativeAi } from "./generative-ai.service";
+import { PromptPart } from "../models/prompt-parts.model";
 
 const generateMoodPrompt = (
   userInformation: { age: number; gender: string },
   dailySharing: string
-): string => {
-  let possibleMoods = "";
+): PromptPart[] => {
+  const parts: PromptPart[] = [
+    { text: `You are a psychologist and your main goal is to define the patient's mood based on the input.\nPossible moods are: ${Object.values(Mood).join(", ")}.\nReturn the most appropriate mood from the list above in the format: {\"mood\":\"the mood\"}.` },
+    { text: `Daily sharing: ${dailySharing}` },
+    { text: `Age:  ${userInformation.age}` },
+    { text: `Gender: ${userInformation.gender}` },
+    { text: "Mood:  " },
+  ];
 
-  for (const [category, moods] of Object.entries(MOOD_CATEGORIES)) {
-    possibleMoods += `${category}: ${moods.join(", ")}\n    `;
-  }
-
-  return `
-    Determine the mood of the user based on the following information:
-    - Daily Sharing: "${dailySharing}"
-    - Age: ${userInformation.age}
-    - Gender: ${userInformation.gender}
-
-    Possible moods are:
-    ${possibleMoods}
-
-    Return the most appropriate mood from the list above in the format: {"mood":"the mood"}.
-  `;
+  return parts;
 };
 
 export const moodPromptFunction = (
