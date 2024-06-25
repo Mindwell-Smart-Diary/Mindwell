@@ -1,5 +1,6 @@
 import { Mood } from "../models/enums/mood.enum";
 import { MOOD_CATEGORIES } from "../models/enums/mood-category.enum";
+import { sendToGennerativeAi } from "./generative-ai.service";
 
 const generateMoodPrompt = (
   userInformation: { age: number; gender: string },
@@ -22,10 +23,6 @@ const generateMoodPrompt = (
 
     Return the most appropriate mood from the list above in the format: {"mood":"the mood"}.
   `;
-};
-
-export const sendToGennerativeAi = (prompt: string): any => {
-  // Assume this function is implemented elsewhere
 };
 
 export const moodPromptFunction = (
