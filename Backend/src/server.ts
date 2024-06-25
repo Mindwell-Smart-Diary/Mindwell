@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
 
 app.get("/history", (req, res) => {
   
-  res.send(JSON.stringify(getUserHistory("1","Happy")));
+  res.send(JSON.stringify(getUserHistory(1,"Happy")));
 });
 
 app.listen(port, () => {
