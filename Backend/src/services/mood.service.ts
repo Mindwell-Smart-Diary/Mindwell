@@ -1,6 +1,6 @@
 import { Mood } from "../models/enums/mood.enum";
 import { MOOD_CATEGORIES } from "../models/enums/mood-category.enum";
-import { sendToGennerativeAi } from "./generative-ai.service";
+import { llmGenerate } from "./generative-ai.service";
 
 const generateMoodPrompt = (
   userInformation: { age: number; gender: string },
@@ -25,14 +25,15 @@ const generateMoodPrompt = (
   `;
 };
 
-export const moodPromptFunction = (
+export const moodPromptFunction = async (
   userInformation: {
     age: number;
     gender: string;
   },
   dailySharing: string
-): Mood => {
+): Promise<Mood> => {
   const prompt = generateMoodPrompt(userInformation, dailySharing);
-  const response = sendToGennerativeAi(prompt); // Assume this returns a JSON object like {"mood":"Happy"}
-  return response.mood as Mood;
+  const response = await llmGenerate([{ text: prompt }]); // Assume this returns a JSON object like {"mood":"Happy"}
+
+  return JSON.parse(response).mood as Mood;
 };

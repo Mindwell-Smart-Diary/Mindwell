@@ -1,12 +1,23 @@
 import express from "express";
+import { Server } from "http";
+import { Configuration } from "./config/Configuration";
 
-const app = express();
-const port = 3000;
+export const initServer = () => {
+  const { PORT } = Configuration.getInstance();
 
-app.get("/", (req, res) => {
-  res.send("Hello, TypeScript with Express!");
-});
+  const app = express();
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+  app.get("/", async (req, res) => {
+    res.send("Hello, Typescript with Express!");
+  });
+
+  const server: Server = app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+
+  return (): Promise<void> => {
+    return new Promise((resolve: () => void) => {
+      server.close(() => resolve());
+    });
+  };
+};
