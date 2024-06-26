@@ -28,7 +28,7 @@ describe("moodPromptFunction", () => {
 
   it("should return a positive mood when AI returns a positive mood", () => {
     const expectedMood = Mood.Happy;
-    mockSendToGennerativeAi.mockReturnValue({ mood: expectedMood });
+    mockSendToGennerativeAi.mockReturnValue(expectedMood);
 
     const result = moodPromptFunction(userInformation, dailySharing);
 
