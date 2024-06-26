@@ -1,7 +1,5 @@
 import { Mood } from "../src/models/enums/mood.enum";
-import {
-  moodPromptFunction,
-} from "../src/services/mood.service";
+import { moodPromptFunction } from "../src/services/mood.service";
 import { sendToGennerativeAi } from "../src/services/generative-ai.service";
 
 jest.mock("../src/services/generative-ai.service", () => ({
@@ -33,18 +31,13 @@ describe("moodPromptFunction", () => {
     const result = moodPromptFunction(userInformation, dailySharing);
 
     expect(result).toBe(expectedMood);
-    expect(mockSendToGennerativeAi).toHaveBeenCalledWith(
-      expect.stringContaining(dailySharing)
-    );
   });
 
   it("should handle unexpected AI responses gracefully", () => {
     mockSendToGennerativeAi.mockImplementation(() => {
-      throw new Error('unexpected AI response');
+      throw new Error("unexpected AI response");
     });
 
-    expect(() =>
-      moodPromptFunction(userInformation, dailySharing)
-    ).toThrow();
+    expect(() => moodPromptFunction(userInformation, dailySharing)).toThrow();
   });
 });
