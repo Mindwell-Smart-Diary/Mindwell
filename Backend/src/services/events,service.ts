@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
-export const getUserLastDaysEventsAndMoods = async (prisma: PrismaClient, userId:number, numOfDays: number) => {
+export const getUserLastDaysEventsAndMoods = async (prisma: PrismaClient, userId:number, numOfDays: number):
+  Promise<{ title: string; mood: string; }[]> => {
     try {
         const lastDaysAgo = new Date();
         lastDaysAgo.setDate(lastDaysAgo.getDate() - numOfDays);
@@ -22,5 +23,6 @@ export const getUserLastDaysEventsAndMoods = async (prisma: PrismaClient, userId
       } catch (err) {
         console.error(err);
       }
+      
       return null
 };
