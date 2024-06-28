@@ -22,7 +22,6 @@ export const getUserLastDaysEventsAndMoods = async (prisma: PrismaClient, userId
         return events;
       } catch (err) {
         console.error(err);
+        throw err;
       }
-      
-      return null
 };

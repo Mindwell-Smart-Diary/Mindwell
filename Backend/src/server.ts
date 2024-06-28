@@ -13,8 +13,11 @@ app.get("/", (req, res) => {
 
 // Just for checking the functions
 app.get("/history", async (req, res) => {
-  const suggestions = await getSuggestionsByUserMood(prisma,1, Mood.Happy)
-  const lastDays = await getUserLastDaysEventsAndMoods(prisma, 1,3);
+  try {
+    const suggestions = await getSuggestionsByUserMood(prisma,1, Mood.Happy);
+    const lastDays = await getUserLastDaysEventsAndMoods(prisma, 1,3);
+
+  }
 
   console.log(suggestions);
   console.log(lastDays);
