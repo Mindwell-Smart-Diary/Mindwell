@@ -16,12 +16,13 @@ app.get("/history", async (req, res) => {
   try {
     const suggestions = await getSuggestionsByUserMood(prisma,1, Mood.Happy);
     const lastDays = await getUserLastDaysEventsAndMoods(prisma, 1,3);
-
+    console.log(suggestions);
+    console.log(lastDays);
+    res.send("");
+  } catch (err) {
+    res.status(500).send(err);
   }
 
-  console.log(suggestions);
-  console.log(lastDays);
-  res.send("");
 });
 
 app.listen(port, () => {
