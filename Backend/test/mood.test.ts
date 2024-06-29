@@ -1,8 +1,6 @@
 import { Mood } from "../src/models/enums/mood.enum";
-import {
-  moodPromptFunction,
-} from "../src/services/mood.service";
-import { sendToGennerativeAi } from "../src/services/generative-ai.service";
+import { moodPromptFunction } from "../src/services/mood.service";
+import { llmGenerate } from "../src/services/generative-ai.service";
 
 jest.mock("../src/services/generative-ai.service", () => ({
   ...jest.requireActual("../src/services/generative-ai.service"),
@@ -10,8 +8,8 @@ jest.mock("../src/services/generative-ai.service", () => ({
 }));
 
 describe("moodPromptFunction", () => {
-  const mockSendToGennerativeAi = sendToGennerativeAi as jest.MockedFunction<
-    typeof sendToGennerativeAi
+  const mockLLMGenerate = llmGenerate as jest.MockedFunction<
+    typeof llmGenerate
   >;
 
   const userInformation = {
@@ -28,23 +26,21 @@ describe("moodPromptFunction", () => {
 
   it("should return a positive mood when AI returns a positive mood", () => {
     const expectedMood = Mood.Happy;
-    mockSendToGennerativeAi.mockReturnValue(expectedMood);
+    mockLLMGenerate.mockReturnValue(expectedMood);
 
     const result = moodPromptFunction(userInformation, dailySharing);
 
     expect(result).toBe(expectedMood);
-    expect(mockSendToGennerativeAi).toHaveBeenCalledWith(
+    expect(mockLLMGenerate).toHaveBeenCalledWith(
       expect.stringContaining(dailySharing)
     );
   });
 
   it("should handle unexpected AI responses gracefully", () => {
-    mockSendToGennerativeAi.mockImplementation(() => {
-      throw new Error('unexpected AI response');
+    mockLLMGenerate.mockImplementation(() => {
+      throw new Error("unexpected AI response");
     });
 
-    expect(() =>
-      moodPromptFunction(userInformation, dailySharing)
-    ).toThrow();
+    expect(() => moodPromptFunction(userInformation, dailySharing)).toThrow();
   });
 });
