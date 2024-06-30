@@ -1,27 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Mood } from '../models/enums/mood.enum';
+import { getSuggestionsByUserMoodFromDB, suggestionByMood } from '../repository/suggestions.repository';
 
 export const getSuggestionsByUserMood = async(prisma: PrismaClient, userId: number, userMood: Mood): 
-  Promise<{ id: number; title: string; rank: number; execution_date: Date; }[]> => {
-    try {
-      const suggestions = await prisma.suggestions.findMany({
-        where: {
-          events: {
-            user_id: userId,
-            mood: userMood
-          }
-        },
-        select: {
-          id: true,
-          title: true,
-          rank: true,
-          execution_date: true
-        }
-      });
-      
-      return suggestions;
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-}
+  Promise<suggestionByMood[]> => getSuggestionsByUserMoodFromDB(prisma, userId, userMood);

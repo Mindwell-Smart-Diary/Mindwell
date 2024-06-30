@@ -1,6 +1,6 @@
 import express from "express";
 import { getSuggestionsByUserMood } from "./services/suggestions.service";
-import { getUserLastDaysEventsAndMoods } from "./services/events,service";
+import { getUserLastDaysEventsAndMoods } from "./services/events.service";
 import { prisma } from './prisma/prismaClient';
 import { Mood } from "./models/enums/mood.enum";
 
