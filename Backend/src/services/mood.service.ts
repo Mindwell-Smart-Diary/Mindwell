@@ -31,7 +31,7 @@ export const moodPromptFunction = async (
   dailySharing: string
 ): Promise<Mood> => {
   const prompt = generateMoodPrompt(userInformation, dailySharing);
-  const response = await llmGenerate([{ text: prompt }]); // Assume this returns a JSON object like {"mood":"Happy"}
+  const response = await llmGenerate(prompt); // Assume this returns a JSON object like {"mood":"Happy"}
 
   return JSON.parse(response).mood as Mood;
 };

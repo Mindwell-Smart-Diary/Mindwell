@@ -4,7 +4,7 @@ import {
   Part,
 } from "@google/generative-ai";
 import { Configuration } from "../config/Configuration";
-import memoize from "memoize";
+import memoize from "p-memoize";
 
 const DEFAULT_GEN_CONFIG: GenerationConfig = {
   temperature: 1,

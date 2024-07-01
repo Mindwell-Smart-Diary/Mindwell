@@ -5,7 +5,7 @@
   "description": "A virtual diary that provides a consultant based on generative artificial intelligence",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --coverage --forceExit",
+    "test": "jest",
     "start": "tsx src/index.ts"
   },
   "repository": {
@@ -23,14 +23,16 @@
     "@google/generative-ai": "^0.13.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "memoize": "^10.0.0"
+    "memoize": "^0.1.1",
+    "p-memoize": "^7.1.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.11",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.9",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1",
     "tsx": "^4.15.7",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2"
   }
 }

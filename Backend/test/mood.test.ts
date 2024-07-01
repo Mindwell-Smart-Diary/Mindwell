@@ -1,17 +1,10 @@
 import { Mood } from "../src/models/enums/mood.enum";
 import { moodPromptFunction } from "../src/services/mood.service";
-import { llmGenerate } from "../src/services/generative-ai.service";
+import * as genAI from "../src/services/generative-ai.service";
 
-jest.mock("../src/services/generative-ai.service", () => ({
-  ...jest.requireActual("../src/services/generative-ai.service"),
-  sendToGennerativeAi: jest.fn(),
-}));
+const mockLLMGenerate = jest.spyOn(genAI, "llmGenerate");
 
 describe("moodPromptFunction", () => {
-  const mockLLMGenerate = llmGenerate as jest.MockedFunction<
-    typeof llmGenerate
-  >;
-
   const userInformation = {
     age: 30,
     gender: "Male",
@@ -26,7 +19,7 @@ describe("moodPromptFunction", () => {
 
   it("should return a positive mood when AI returns a positive mood", () => {
     const expectedMood = Mood.Happy;
-    mockLLMGenerate.mockReturnValue(expectedMood);
+    mockLLMGenerate.mockResolvedValue(expectedMood);
 
     const result = moodPromptFunction(userInformation, dailySharing);
 
