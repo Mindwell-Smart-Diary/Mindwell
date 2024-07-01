@@ -1,8 +1,9 @@
 import { Mood } from "../src/models/enums/mood.enum";
 import { moodPromptFunction } from "../src/services/mood.service";
 import * as genAI from "../src/services/generative-ai.service";
+import { vi, describe, beforeEach, it } from "vitest";
 
-const mockLLMGenerate = jest.spyOn(genAI, "llmGenerate");
+const mockLLMGenerate = vi.spyOn(genAI, "llmGenerate");
 
 describe("moodPromptFunction", () => {
   const userInformation = {
@@ -14,7 +15,7 @@ describe("moodPromptFunction", () => {
     "I had a productive day at work and enjoyed a nice walk in the evening.";
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return a positive mood when AI returns a positive mood", () => {
