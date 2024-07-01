@@ -29,7 +29,7 @@ describe("suggestionPromptFunction", () => {
         jest.clearAllMocks();
     });
 
-    it("should return a positive suggetion when AI returns a positive suggetion", () => {
+    it("should return a positive suggestion when AI returns a positive suggestion", () => {
         const expectSuggestion = `Since you enjoyed going for a walk in the park and watching a comedy movie, how about planning a fun outing with friends to a nearby park?
          You can enjoy some outdoor activities and have a picnic together.`;
 
