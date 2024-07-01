@@ -11,20 +11,6 @@ app.get("/", (req, res) => {
   res.send("Hello, TypeScript with Express!");
 });
 
-// Just for checking the functions
-app.get("/history", async (req, res) => {
-  try {
-    const suggestions = await getSuggestionsByUserMood(prisma,1, Mood.Happy);
-    const lastDays = await getUserLastDaysEventsAndMoods(prisma, 1,3);
-    console.log(suggestions);
-    console.log(lastDays);
-    res.send("");
-  } catch (err) {
-    res.status(500).send(err);
-  }
-
-});
-
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
