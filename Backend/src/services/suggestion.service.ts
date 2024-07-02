@@ -48,5 +48,5 @@ export const suggestionPromptFunction = async (
     dislikedSuggestionsHistoryInCurrMode
   );
   const response = await llmGenerate(prompt);
-  return response;
+  return response.trim();
 };
