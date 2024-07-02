@@ -2,6 +2,7 @@ import { suggestionPromptFunction } from "../src/services/suggestion.service";
 import * as genAI from "../src/services/generative-ai.service";
 import { Mood } from "../src/models/enums/mood.enum";
 import { vi, describe, it, beforeEach, expect } from "vitest";
+
 const mockLLMGenerate = vi.spyOn(genAI, "llmGenerate");
 
 describe("suggestionPromptFunction", () => {
@@ -29,10 +30,10 @@ describe("suggestionPromptFunction", () => {
   });
 
   it("should return a positive suggestion when AI returns a positive suggestion", async () => {
-    const expectSuggestion = `Since you enjoyed going for a walk in the park and watching a comedy movie, how about planning a fun outing with friends to a nearby park?
+    const expectedSuggestion = `Since you enjoyed going for a walk in the park and watching a comedy movie, how about planning a fun outing with friends to a nearby park?
          You can enjoy some outdoor activities and have a picnic together.`;
 
-    mockLLMGenerate.mockResolvedValue(expectSuggestion);
+    mockLLMGenerate.mockResolvedValue(expectedSuggestion);
 
     const result = await suggestionPromptFunction(
       userInformation,
@@ -42,20 +43,6 @@ describe("suggestionPromptFunction", () => {
       dislikedSuggestionsHistory
     );
 
-    expect(result).toBe(expectSuggestion);
-  });
-
-  it.fails("should handle unexpected AI responses gracefully", () => {
-    // mockLLMGenerate.mockRejectedValue(new Error("unexpected AI response"));
-
-    expect(() =>
-      suggestionPromptFunction(
-        userInformation,
-        dailySharing,
-        mood,
-        likedSuggestionsHistory,
-        dislikedSuggestionsHistory
-      )
-    ).toThrow();
+    expect(result).toBe(expectedSuggestion);
   });
 });

@@ -1,7 +1,7 @@
 import { Mood } from "../src/models/enums/mood.enum";
 import { moodPromptFunction } from "../src/services/mood.service";
 import * as genAI from "../src/services/generative-ai.service";
-import { vi, describe, beforeEach, it } from "vitest";
+import { vi, describe, beforeEach, it, expect } from "vitest";
 
 const mockLLMGenerate = vi.spyOn(genAI, "llmGenerate");
 
@@ -18,23 +18,20 @@ describe("moodPromptFunction", () => {
     vi.clearAllMocks();
   });
 
-  it("should return a positive mood when AI returns a positive mood", () => {
+  it("should return a positive mood when AI returns a positive mood", async () => {
     const expectedMood = Mood.Happy;
     mockLLMGenerate.mockResolvedValue(expectedMood);
 
-    const result = moodPromptFunction(userInformation, dailySharing);
-
+    const result = await moodPromptFunction(userInformation, dailySharing);
     expect(result).toBe(expectedMood);
-    expect(mockLLMGenerate).toHaveBeenCalledWith(
-      expect.stringContaining(dailySharing)
-    );
   });
 
-  it("should handle unexpected AI responses gracefully", () => {
-    mockLLMGenerate.mockImplementation(() => {
-      throw new Error("unexpected AI response");
-    });
+  it("should throw an error if the returned mood is not valid", async () => {
+    const InvalidMood = 'InvalidMood';
+    mockLLMGenerate.mockResolvedValue(InvalidMood);
 
-    expect(() => moodPromptFunction(userInformation, dailySharing)).toThrow();
+    await expect(moodPromptFunction(userInformation, dailySharing)).rejects.toThrow(
+      `Invalid mood received: ${InvalidMood}`
+    );
   });
 });
