@@ -32,7 +32,7 @@ export const moodPromptFunction = async (
 ): Promise<Mood> => {
   const prompt = generateMoodPrompt(userInformation, dailySharing);
   const response = await llmGenerate(prompt); // Assume this returns a JSON object like "Happy"
-  const mood = response as Mood;
+  const mood = response.trim() as Mood;
 
   if (!Object.values(Mood).includes(mood)) {
     throw new Error(`Invalid mood received: ${mood}`);
