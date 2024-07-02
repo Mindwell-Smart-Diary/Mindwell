@@ -5,6 +5,7 @@ import { getSuggestionsByUserMood } from "../../../../services/suggestions.servi
 import { prisma } from "../../prisma/prismaClient";
 import { Request, Response } from "express";
 import { suggestionSchema } from "./schema";
+import { getUserAge, getUserById } from "../../../../services/users.service";
 
 export const generateSuggestionHandler = async (
   req: Request,
@@ -12,10 +13,12 @@ export const generateSuggestionHandler = async (
 ) => {
   const { userId, dailySharing } = suggestionSchema.parse(req.body);
 
+  const user = await getUserById(prisma, userId);
+  
   const userInformation: {
     age: number;
     gender: string;
-  } = null; // getUserInfo(id)
+  } =  { age: getUserAge(user), gender: "male"}; // TODO: Add "gender" to users schema and exrtract it from user const
 
   const mood: Mood = await moodPromptFunction(userInformation, dailySharing);
 
