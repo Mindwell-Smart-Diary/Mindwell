@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Mindwell-Smart-Diary/Mindwell#readme",
   "dependencies": {
     "@google/generative-ai": "^0.13.0",
+    "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "http-status-codes": "^2.3.0",

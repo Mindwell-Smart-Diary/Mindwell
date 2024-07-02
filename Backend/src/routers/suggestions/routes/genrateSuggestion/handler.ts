@@ -2,7 +2,7 @@ import { Mood } from "../../../../models/enums/mood.enum";
 import { moodPromptFunction } from "../../../../services/mood.service";
 import { suggestionPromptFunction } from "../../../../services/suggestion.service";
 import { getSuggestionsByUserMood } from "../../../../services/suggestions.service";
-import { prisma } from "../../prisma/prismaClient";
+import { prisma } from "../../../../prisma/prismaClient"
 import { Request, Response } from "express";
 import { suggestionSchema } from "./schema";
 import { getUserAge, getUserById } from "../../../../services/users.service";
