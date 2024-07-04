@@ -1,5 +1,7 @@
 DROP TABLE IF EXISTS suggestions;
+
 DROP TABLE IF EXISTS events;
+
 DROP TABLE IF EXISTS users;
 
 -- Create the users table
@@ -7,6 +9,7 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
+  gender TEXT NOT NULL CHECK (gender IN ('male', 'female', 'other')),
   birthdate DATE NOT NULL,
   email TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL
