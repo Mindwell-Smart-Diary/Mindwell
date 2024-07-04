@@ -45,4 +45,38 @@ describe("suggestionPromptFunction", () => {
 
     expect(result).toBe(expectedSuggestion);
   });
+
+  it("should throw an error for suggestion with invalid characters", async () => {
+    const invalidSuggestion = `Since you enjoyed going for a walk in the park and watching a comedy movie, how about planning a fun outing with friends to a nearby park?
+      You can enjoy some outdoor activities and have a picnic together. 🌳🍔`;
+
+    mockLLMGenerate.mockResolvedValue(invalidSuggestion);
+
+    await expect(suggestionPromptFunction(
+      userInformation,
+      dailySharing,
+      mood,
+      likedSuggestionsHistory,
+      dislikedSuggestionsHistory
+    )).rejects.toThrow(
+      `Suggestion contains invalid characters: ${invalidSuggestion}`
+    );
+  });
+
+  it("should throw an error for an empty suggestion", async () => {
+    const invalidSuggestion = '';
+
+    mockLLMGenerate.mockResolvedValue(invalidSuggestion);
+
+    await expect(suggestionPromptFunction(
+      userInformation,
+      dailySharing,
+      mood,
+      likedSuggestionsHistory,
+      dislikedSuggestionsHistory
+    )).rejects.toThrow(
+      "No suggestion received"
+    );
+  });
+
 });
