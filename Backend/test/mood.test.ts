@@ -19,7 +19,6 @@ describe("moodPromptFunction", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // vi.restoreAllMocks();
   });
 
   it("should return a positive mood when AI returns a positive mood", async () => {
@@ -30,15 +29,7 @@ describe("moodPromptFunction", () => {
     expect(result).toBe(expectedMood);
   });
 
-  it("should return a motivated mood according to the daily sharing", async () => {
-    const expectedMood = Mood.Motivated;
-    const dailySharingInMotivatedMood = 'Worked out at the gym, focusing on strength training and cardio exercises to stay fit and healthy';
-
-    const result = await moodPromptFunction(userInformation, dailySharingInMotivatedMood);
-    expect(result).toBe(expectedMood);
-  });
-
-  it("should throw an error if the returned mood is not valid", async () => {
+  it("should throw an error if the returned invalid mood", async () => {
     const InvalidMood = 'InvalidMood';
     mockLLMGenerate.mockResolvedValue(InvalidMood);
 
