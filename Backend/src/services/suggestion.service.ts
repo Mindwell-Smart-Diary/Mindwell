@@ -1,6 +1,7 @@
 import { Mood } from "../models/enums/mood.enum";
 import { llmGenerate } from "./generative-ai.service";
 import { PromptPart } from "../models/prompt-parts.model";
+import { englishCharactersDigitsSymbolsPattern } from "../utilities/validation.utils";
 
 const generateSuggestionPrompt = (
   userInformation: { age: number; gender: string },
@@ -48,5 +49,14 @@ export const suggestionPromptFunction = async (
     dislikedSuggestionsHistoryInCurrMode
   );
   const response = await llmGenerate(prompt);
-  return response.trim();
+  const suggestion = response.trim() as string;
+
+  if (!suggestion || suggestion.length === 0) {
+    throw new Error("No suggestion received");
+  }
+  if (!englishCharactersDigitsSymbolsPattern.test(suggestion)) {
+    throw new Error(`Suggestion contains invalid characters: ${suggestion}`);
+  }
+
+  return suggestion;
 };
