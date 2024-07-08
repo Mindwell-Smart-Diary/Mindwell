@@ -19,7 +19,7 @@ export const generateSuggestionHandler = async (
     const userInformation: {
       age: number;
       gender: string;
-    } = { age: getUserAge(user), gender: "male" }; // TODO: Add "gender" to users schema and exrtract it from user const
+    } = { age: getUserAge(user), gender: user.gender }; // TODO: Add "gender" to users schema and exrtract it from user const
 
     const mood: Mood = await moodPromptFunction(userInformation, dailySharing);
 
