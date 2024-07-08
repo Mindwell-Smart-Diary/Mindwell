@@ -1,4 +1,4 @@
-import { suggestionPromptFunction } from "../src/services/suggestion.service";
+import { suggestionPromptFunction } from "../src/services/suggestions.service";
 import * as genAI from "../src/services/generative-ai.service";
 import { Mood } from "../src/models/enums/mood.enum";
 import { vi, describe, it, beforeEach, expect } from "vitest";
@@ -45,4 +45,21 @@ describe("suggestionPromptFunction", () => {
 
     expect(result).toBe(expectedSuggestion);
   });
+
+  it("should throw an error for an empty suggestion", async () => {
+    const invalidSuggestion = '';
+
+    mockLLMGenerate.mockResolvedValue(invalidSuggestion);
+
+    await expect(suggestionPromptFunction(
+      userInformation,
+      dailySharing,
+      mood,
+      likedSuggestionsHistory,
+      dislikedSuggestionsHistory
+    )).rejects.toThrow(
+      "No suggestion received"
+    );
+  });
+
 });

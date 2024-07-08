@@ -1,11 +1,10 @@
 import { Mood } from "../../../../models/enums/mood.enum";
-import { moodPromptFunction } from "../../../../services/mood.service";
-import { suggestionPromptFunction } from "../../../../services/suggestion.service";
-import { getSuggestionsByUserMood } from "../../../../services/suggestions.service";
+import { moodPromptFunction } from "../../../../services/moods.service";
 import { prisma } from "../../../../prisma/prismaClient";
 import { NextFunction, Request, Response } from "express";
 import { suggestionSchema } from "./schema";
 import { getUserAge, getUserById } from "../../../../services/users.service";
+import { getSuggestionsByUserMood, suggestionPromptFunction } from "../../../../services/suggestions.service";
 
 export const generateSuggestionHandler = async (
   req: Request,
