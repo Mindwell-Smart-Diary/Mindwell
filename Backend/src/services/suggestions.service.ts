@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import { Mood } from "../models/enums/mood.enum";
 import { llmGenerate } from "./generative-ai.service";
 import { PromptPart } from "../models/prompt-parts.model";
-import { englishCharactersDigitsSymbolsPattern } from "../utilities/validation.utils";
 import { getSuggestionsByUserMoodFromDB, suggestionByMood } from '../repository/suggestions.repository';
 
 const generateSuggestionPrompt = (
@@ -55,9 +54,6 @@ export const suggestionPromptFunction = async (
 
   if (!suggestion || suggestion.length === 0) {
     throw new Error("No suggestion received");
-  }
-  if (!englishCharactersDigitsSymbolsPattern.test(suggestion)) {
-    throw new Error(`Suggestion contains invalid characters: ${suggestion}`);
   }
 
   return suggestion;
