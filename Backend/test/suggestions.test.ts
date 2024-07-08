@@ -1,4 +1,4 @@
-import { suggestionPromptFunction } from "../src/services/suggestion.service";
+import { suggestionPromptFunction } from "../src/services/suggestions.service";
 import * as genAI from "../src/services/generative-ai.service";
 import { Mood } from "../src/models/enums/mood.enum";
 import { vi, describe, it, beforeEach, expect } from "vitest";

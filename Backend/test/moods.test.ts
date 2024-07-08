@@ -1,5 +1,5 @@
 import { Mood } from "../src/models/enums/mood.enum";
-import { moodPromptFunction } from "../src/services/mood.service";
+import { moodPromptFunction } from "../src/services/moods.service";
 import * as genAI from "../src/services/generative-ai.service";
 import { vi, describe, beforeEach, it, expect } from "vitest";
 import dotenv from "dotenv";
