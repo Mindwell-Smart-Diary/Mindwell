@@ -1,8 +1,24 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Alef, Miriam Libre, Arimo, Inter, system-ui, Avenir, Helvetica,
+    Arial, sans-serif;
 }
 
 body {
   margin: 0;
   width: 100vw;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 2px;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #e6e6e6;
+  border-radius: 2px;
 }
