@@ -3,6 +3,8 @@ import { Day } from "../types/enums/Day";
 import { Month } from "../types/enums/Month";
 import { MonthCalendar } from "../types/MonthCalendar";
 
+export const YEARS: number[] = [2024, 2025, 2026, 2027, 2028, 2029];
+
 //TODO create a api call to fetch data from a server instead of this mock data
 export const getMonthCalendar = (month: Month, year: number): MonthCalendar => {
     const daysInMonth = new Date(year, month, 0).getDate();
