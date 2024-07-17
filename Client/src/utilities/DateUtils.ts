@@ -5,6 +5,15 @@ import { MonthCalendar } from "../types/MonthCalendar";
 
 export const YEARS: number[] = [2024, 2025, 2026, 2027, 2028, 2029];
 
+export const splitDaysIntoWeeks = (days: CalendarDay[]): CalendarDay[][] => {
+    const weeks: CalendarDay[][] = [];
+    for (let i = 0; i < days.length; i += 7) {
+        weeks.push(days.slice(i, i + 7));
+    }
+
+    return weeks;
+}
+
 //TODO create a api call to fetch data from a server instead of this mock data
 export const getMonthCalendar = (month: Month, year: number): MonthCalendar => {
     const daysInMonth = new Date(year, month, 0).getDate();

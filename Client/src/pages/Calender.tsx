@@ -1,7 +1,20 @@
+import { CalendarDay } from "@/types/CalendarDay";
+import { DAYS_OF_WEEK } from "@/types/enums/Day";
 import { Month, MONTHS_OF_YEAR } from "@/types/enums/Month";
-import { YEARS } from "@/utilities/DateUtils";
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useState } from "react";
+import {
+  getMonthCalendar,
+  splitDaysIntoWeeks,
+  YEARS,
+} from "@/utilities/DateUtils";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
+import { useMemo, useState } from "react";
 
 export const Calender = () => {
   const currentDate = new Date();
@@ -10,6 +23,15 @@ export const Calender = () => {
 
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
   const [selectedMonth, setSelectedMonth] = useState<Month>(currentMonth);
+
+  const calendarDay: CalendarDay[] = useMemo(() => {
+    return getMonthCalendar(selectedMonth, selectedYear).days;
+  }, [selectedYear, selectedMonth]);
+
+  const calendarDayAsWeeks: CalendarDay[][] = useMemo(
+    () => splitDaysIntoWeeks(calendarDay),
+    [calendarDay]
+  );
 
   return (
     <Box p={5} sx={{ minWidth: 120 }}>
@@ -60,6 +82,66 @@ export const Calender = () => {
             ))}
         </Select>
       </FormControl>
+
+      <Box
+        sx={{
+          display: "flex",
+          minWidth: 1000,
+          maxWidth: 1000,
+          flexWrap: "nowrap",
+          justifyContent: "space-around",
+        }}
+      >
+        {[...DAYS_OF_WEEK].map((day, index) => (
+          <Box
+            sx={{
+              backgroundColor:
+                index % 2 == 0 ? "primary.main" : "secondary.main",
+              display: "flex",
+              justifyContent: "center",
+              maxWidth: 120,
+              minWidth: 120,
+            }}
+            key={day}
+          >
+            <Typography color={index % 2 == 0 ? "white" : "black"} variant="h6">
+              {day}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+
+      {calendarDayAsWeeks.map((week) => (
+        <Box
+          sx={{
+            display: "flex",
+            minWidth: 1000,
+            maxWidth: 1000,
+            flexWrap: "nowrap",
+            justifyContent: "space-around",
+          }}
+        >
+          {[...week].map((day, index) => (
+            <Box
+              sx={{
+                backgroundColor:
+                  index % 2 == 0 ? "primary.main" : "secondary.main",
+                display: "flex",
+                justifyContent: "center",
+                maxWidth: 120,
+                minWidth: 120,
+              }}
+            >
+              <Typography
+                color={index % 2 == 0 ? "white" : "black"}
+                variant="h6"
+              >
+                {`${day.date}`}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      ))}
     </Box>
   );
 };
