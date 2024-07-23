@@ -1,6 +1,6 @@
-import { Mood } from "../models/enums/mood.enum";
-import { llmGenerate } from "./generative-ai.service";
-import { PromptPart } from "../models/prompt-parts.model";
+import { Mood } from "../../models/enums/mood.enum";
+import { llmGenerate } from "../generative-ai.service";
+import { PromptPart } from "../../models/prompt-parts.model";
 
 const generateMoodPrompt = (
   userInformation: { age: number; gender: string },
