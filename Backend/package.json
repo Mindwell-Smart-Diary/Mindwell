@@ -7,8 +7,7 @@
   "scripts": {
     "test:unit": "vitest -c vitest-unit.config.ts",
     "test:api": "dotenv -e .env.test -- vitest -c vitest-api.config.ts",
-    "start": "tsx src/index.ts",
-    "prepare": "husky"
+    "start": "tsx src/index.ts"
   },
   "repository": {
     "type": "git",
