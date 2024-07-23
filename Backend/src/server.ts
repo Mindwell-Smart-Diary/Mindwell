@@ -4,7 +4,7 @@ import { Configuration } from "./config/Configuration";
 import { buildSuggestionRouter } from "./routers/suggestions/suggestionRouter";
 import { errorHandler } from "./middleware/errorMiddleware";
 import bodyParser from "body-parser";
-import { buildEventsRouter } from "./routers/events/eventsRouter";
+import { buildEventsRouter } from "./routers/moods/moodsRouter";
 
 export const initServer = () => {
   const { PORT } = Configuration.getInstance();
