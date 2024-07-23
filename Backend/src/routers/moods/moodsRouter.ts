@@ -6,7 +6,7 @@ export const buildEventsRouter = () => {
   const router = Router();
 
   // TODO: add authorizeUser middleware
-  router.get("/moods/", getMoodsCalendarHandler);
+  router.get("/moods/calendar", getMoodsCalendarHandler);
 
   return router;
 };
