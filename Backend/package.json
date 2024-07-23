@@ -7,7 +7,8 @@
   "scripts": {
     "test:unit": "vitest -c vitest-unit.config.ts",
     "test:api": "dotenv -e .env.test -- vitest -c vitest-api.config.ts",
-    "start": "tsx src/index.ts"
+    "start": "tsx src/index.ts",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -42,6 +43,7 @@
     "axios": "^1.7.2",
     "dotenv-cli": "^7.4.2",
     "express": "^4.19.2",
+    "husky": "^9.1.1",
     "pg": "^8.12.0",
     "prisma": "^5.16.0",
     "ts-node": "^10.9.2",

@@ -11,10 +11,10 @@ import { Mood } from "../../models/enums/mood.enum";
 
 const { PORT } = Configuration.getInstance();
 
-const getEvents = async (queryParams: Record<string, string>) => {
+const getMoodsCalendar = async (queryParams: Record<string, string>) => {
   const queryParamsString = new URLSearchParams(queryParams).toString();
   const res = await testAxios.get(
-    `http://localhost:${PORT}/events?${queryParamsString}`
+    `http://localhost:${PORT}/moods/calendar?${queryParamsString}`
   );
 
   return {
@@ -31,14 +31,14 @@ describe("Events router", () => {
   describe("Get events", () => {
     describe("Should validate query params", () => {
       it("Should throw error when missing month", async () => {
-        const response = await getEvents({ year: "2024" });
+        const response = await getMoodsCalendar({ year: "2024" });
 
         expect(response.status).toBe(StatusCodes.BAD_REQUEST);
         expect(response.data).toBe("Invalid query params: month is Required");
       });
 
       it("Should throw error when missing year", async () => {
-        const response = await getEvents({ month: "1" });
+        const response = await getMoodsCalendar({ month: "1" });
 
         expect(response.status).toBe(StatusCodes.BAD_REQUEST);
         expect(response.data).toBe("Invalid query params: year is Required");
@@ -60,7 +60,7 @@ describe("Events router", () => {
       ])(
         "Should throw error when for invalid month (%s)",
         async (month, error) => {
-          const response = await getEvents({ month, year: "2024" });
+          const response = await getMoodsCalendar({ month, year: "2024" });
 
           expect(response.status).toBe(StatusCodes.BAD_REQUEST);
 
@@ -80,7 +80,7 @@ describe("Events router", () => {
       ])(
         "Should throw error when for invalid year (%s)",
         async (year, error) => {
-          const response = await getEvents({ month: "2", year });
+          const response = await getMoodsCalendar({ month: "2", year });
 
           expect(response.status).toBe(StatusCodes.BAD_REQUEST);
 
@@ -118,7 +118,7 @@ describe("Events router", () => {
       });
 
       it("Should return correct moods", async () => {
-        const response = await getEvents({ year: "2024", month: "10" });
+        const response = await getMoodsCalendar({ year: "2024", month: "10" });
         console.log("PRE");
         console.log(
           preMadeEvents

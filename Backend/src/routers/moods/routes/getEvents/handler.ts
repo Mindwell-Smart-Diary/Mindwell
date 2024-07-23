@@ -3,10 +3,10 @@ import { queryParamsSchema } from "./schema";
 import { AuthRequest } from "../../../../middleware/auth";
 import { validateData2 } from "../../../../middleware/zodValidate";
 import { prisma } from "../../../../prisma/prismaClient";
-import { USER_ID } from "../../eventsRouter.spec";
+import { USER_ID } from "../../moodsRouter.spec";
 import { getEvents } from "../../../../services/events.service";
 
-export const getEventsHandler = async (
+export const getMoodsCalendarHandler = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction

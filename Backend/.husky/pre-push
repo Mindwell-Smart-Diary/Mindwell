@@ -1,0 +1,2 @@
+npm run test:unit
+npm run test:api
