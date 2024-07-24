@@ -5,6 +5,7 @@ import {
   getUserLastDaysEventsAndMoodsFromDB,
 } from "../repository/events.repository";
 import { Mood } from "../models/enums/mood.enum";
+import { DateTime } from "luxon";
 
 export const getUserLastDaysEventsAndMoods = async (
   prisma: PrismaClient,
@@ -16,29 +17,25 @@ export const getUserLastDaysEventsAndMoods = async (
 export const getEvents = async (
   prisma: PrismaClient,
   userId: number,
-  month: number,
-  year: number
-): Promise<Record<string, Mood[]>> => {
+  options: { date: number }
+) => {
+  const { date } = options;
+
+  const startDate =
+    DateTime.fromMillis(date).startOf("day").toString().split("+")[0] + "Z";
+  const endDate =
+    DateTime.fromMillis(date)
+      .plus({ day: 1 })
+      .startOf("day")
+      .toString()
+      .split("+")[0] + "Z";
+
   const matchingEvents: events[] = await getEventsByDates(
     prisma,
     userId,
-    month,
-    year
+    startDate,
+    endDate
   );
 
-  console.log("FOUND");
-  console.log(matchingEvents.map(({ id, date }) => ({ id, date })));
-  return matchingEvents.reduce<Record<string, Mood[]>>(
-    (finalRes, currEvent) => {
-      const day = new Date(currEvent.date).getDate();
-      if (!finalRes[day]) {
-        finalRes[day] = [];
-      }
-
-      finalRes[day].push(currEvent.mood as Mood);
-
-      return finalRes;
-    },
-    {}
-  );
+  return matchingEvents;
 };

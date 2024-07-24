@@ -13,5 +13,6 @@ beforeAll(() => {
 });
 
 afterAll(async () => {
+  console.log("killing server");
   await killServer();
 });

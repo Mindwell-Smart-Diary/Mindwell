@@ -3,7 +3,7 @@ import { z, ZodError } from "zod";
 
 import { BadRequestError } from "../errors/BadRequestError";
 
-export function validateData2(
+export function validateData(
   schema: z.ZodObject<any, any>,
   data: Record<string, unknown>,
   message?: string
@@ -27,7 +27,7 @@ export function validateData2(
 
 export function validateDataMiddleware(schema: z.ZodObject<any, any>) {
   return (req: Request, res: Response, next: NextFunction) => {
-    validateData2(schema, req.body);
+    validateData(schema, req.body);
     next();
   };
 }
