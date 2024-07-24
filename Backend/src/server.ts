@@ -4,7 +4,8 @@ import { Configuration } from "./config/Configuration";
 import { buildSuggestionRouter } from "./routers/suggestions/suggestionRouter";
 import { errorHandler } from "./middleware/errorMiddleware";
 import bodyParser from "body-parser";
-import { buildEventsRouter } from "./routers/moods/moodsRouter";
+import { buildMoodsRouter } from "./routers/moods/moodsRouter";
+import { buildEventsRouter } from "./routers/events/eventsRouter";
 
 export const initServer = () => {
   const { PORT } = Configuration.getInstance();
@@ -12,6 +13,7 @@ export const initServer = () => {
   const app = express();
   app.use(bodyParser.json());
   app.use(buildSuggestionRouter());
+  app.use(buildMoodsRouter());
   app.use(buildEventsRouter());
 
   app.use(errorHandler);

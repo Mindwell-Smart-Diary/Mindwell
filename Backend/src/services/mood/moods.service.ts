@@ -1,6 +1,9 @@
 import { Mood } from "../../models/enums/mood.enum";
 import { llmGenerate } from "../generative-ai.service";
 import { PromptPart } from "../../models/prompt-parts.model";
+import { DateTime } from "luxon";
+import { PrismaClient, events } from "@prisma/client";
+import { getEventsByDates } from "../../repository/events.repository";
 
 const generateMoodPrompt = (
   userInformation: { age: number; gender: string },
@@ -39,4 +42,43 @@ export const moodPromptFunction = async (
   }
 
   return mood;
+};
+
+export const getMoodsByMonth = async (
+  prisma: PrismaClient,
+  userId: number,
+  month: number,
+  year: number
+): Promise<Record<string, Mood[]>> => {
+  const startDate =
+    DateTime.fromObject({ year, month })
+      .startOf("month")
+      .toString()
+      .split("+")[0] + "Z";
+  const endDate =
+    DateTime.fromObject({ year, month })
+      .plus({ month: 1 })
+      .startOf("month")
+      .toString()
+      .split("+")[0] + "Z";
+  const matchingEvents: events[] = await getEventsByDates(
+    prisma,
+    userId,
+    startDate,
+    endDate
+  );
+
+  return matchingEvents.reduce<Record<string, Mood[]>>(
+    (finalRes, currEvent) => {
+      const day = new Date(currEvent.date).getDate();
+      if (!finalRes[day]) {
+        finalRes[day] = [];
+      }
+
+      finalRes[day].push(currEvent.mood as Mood);
+
+      return finalRes;
+    },
+    {}
+  );
 };

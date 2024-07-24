@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { queryParamsSchema } from "./schema";
 import { AuthRequest } from "../../../../middleware/auth";
-import { validateData2 } from "../../../../middleware/zodValidate";
+import { validateData } from "../../../../middleware/zodValidate";
 import { prisma } from "../../../../prisma/prismaClient";
-import { USER_ID } from "../../moodsRouter.spec";
-import { getEvents } from "../../../../services/events.service";
+// import { USER_ID } from "../../moodsRouter2";
+import { getMoodsByMonth } from "../../../../services/mood/moods.service";
+import { USER_ID } from "../../moodsRouter2";
 
 export const getMoodsCalendarHandler = async (
   req: AuthRequest,
@@ -14,7 +15,7 @@ export const getMoodsCalendarHandler = async (
   const { userId } = { userId: USER_ID }; // req.user;
 
   try {
-    const data = validateData2(
+    const data = validateData(
       queryParamsSchema,
       {
         year: isNaN(Number(req.query.year))
@@ -27,9 +28,8 @@ export const getMoodsCalendarHandler = async (
       "Invalid query params"
     );
 
-    const events = await getEvents(prisma, userId, data.month, data.year);
+    const events = await getMoodsByMonth(prisma, userId, data.month, data.year);
 
-    // console.log(events);
     res.json(events);
   } catch (e) {
     next(e);

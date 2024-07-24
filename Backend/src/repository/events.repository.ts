@@ -1,5 +1,4 @@
 import { PrismaClient, events } from "@prisma/client";
-import { DateTime } from "luxon";
 export type eventsAndMoods = {
   title: string;
   mood: string;
@@ -37,25 +36,15 @@ export const getUserLastDaysEventsAndMoodsFromDB = async (
 export const getEventsByDates = (
   prisma: PrismaClient,
   userId: number,
-  month: number,
-  year: number
+  startDate: string,
+  endDate: string
 ): Promise<events[]> => {
   return prisma.events.findMany({
     where: {
       user_id: userId,
       date: {
-        gte:
-          DateTime.fromObject({ year, month })
-            .startOf("month")
-            .toString()
-            .split("+")[0] + "Z",
-        lt:
-          DateTime.fromObject({ year, month })
-            .plus({ month: 1 })
-            .startOf("month")
-            .toString()
-            .split("+")[0] + "Z",
-        // lt: new Date(endYear, nextMoth),
+        gte: startDate,
+        lt: endDate,
       },
     },
   });

@@ -27,7 +27,7 @@ export const USER_ID = 777;
 
 const chance = new Chance();
 
-describe("Events router", () => {
+describe("Moods router", () => {
   describe("Get events", () => {
     describe("Should validate query params", () => {
       it("Should throw error when missing month", async () => {
@@ -119,16 +119,7 @@ describe("Events router", () => {
 
       it("Should return correct moods", async () => {
         const response = await getMoodsCalendar({ year: "2024", month: "10" });
-        console.log("PRE");
-        console.log(
-          preMadeEvents
-            .filter(
-              ({ date }) =>
-                new Date(date).getFullYear() === 2024 &&
-                new Date(date).getMonth() == 9
-            )
-            .map(({ id, date }) => ({ id, date }))
-        );
+
         const EXPECTED = preMadeEvents
           .filter(
             ({ date }) =>
