@@ -1,0 +1,3 @@
+cd Backend
+npm run test:api -- run
+npm run test:unit -- run

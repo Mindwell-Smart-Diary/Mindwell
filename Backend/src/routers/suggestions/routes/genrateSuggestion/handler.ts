@@ -9,6 +9,7 @@ import {
   suggestionPromptFunction,
 } from "../../../../services/suggestions/suggestions.service";
 
+// TODO: remove user id from the body and take it from the cookie
 export const generateSuggestionHandler = async (
   req: Request,
   res: Response,
