@@ -1,6 +1,6 @@
-import { Mood } from "../src/models/enums/mood.enum";
-import { moodPromptFunction } from "../src/services/moods.service";
-import * as genAI from "../src/services/generative-ai.service";
+import { Mood } from "../../models/enums/mood.enum";
+import { moodPromptFunction } from "./moods.service";
+import * as genAI from "../generative-ai.service";
 import { vi, describe, beforeEach, it, expect } from "vitest";
 import dotenv from "dotenv";
 
@@ -30,11 +30,11 @@ describe("moodPromptFunction", () => {
   });
 
   it("should throw an error if the returned invalid mood", async () => {
-    const InvalidMood = 'InvalidMood';
+    const InvalidMood = "InvalidMood";
     mockLLMGenerate.mockResolvedValue(InvalidMood);
 
-    await expect(moodPromptFunction(userInformation, dailySharing)).rejects.toThrow(
-      `Invalid mood received: ${InvalidMood}`
-    );
+    await expect(
+      moodPromptFunction(userInformation, dailySharing)
+    ).rejects.toThrow(`Invalid mood received: ${InvalidMood}`);
   });
 });
