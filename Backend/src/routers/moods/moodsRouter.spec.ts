@@ -8,6 +8,7 @@ import { createUser } from "../../testUtils/entityBuilders/users";
 import { createEvent } from "../../testUtils/entityBuilders/events";
 import { events, users } from "@prisma/client";
 import { Mood } from "../../models/enums/mood.enum";
+import { USER_ID } from "./moodRouterTestData";
 
 const { PORT } = Configuration.getInstance();
 
@@ -23,12 +24,10 @@ const getMoodsCalendar = async (queryParams: Record<string, string>) => {
   };
 };
 
-export const USER_ID = 777;
-
 const chance = new Chance();
 
 describe("Moods router", () => {
-  describe("Get events", () => {
+  describe("Get moods calendar", () => {
     describe("Should validate query params", () => {
       it("Should throw error when missing month", async () => {
         const response = await getMoodsCalendar({ year: "2024" });
@@ -106,13 +105,13 @@ describe("Moods router", () => {
 
       afterEach(async () => {
         await prisma.$transaction([
+          prisma.events.deleteMany({
+            where: { user_id: USER_ID },
+          }),
           prisma.users.delete({
             where: {
               id: USER_ID,
             },
-          }),
-          prisma.events.deleteMany({
-            where: { user_id: USER_ID },
           }),
         ]);
       });

@@ -3,9 +3,8 @@ import { queryParamsSchema } from "./schema";
 import { AuthRequest } from "../../../../middleware/auth";
 import { validateData } from "../../../../middleware/zodValidate";
 import { prisma } from "../../../../prisma/prismaClient";
-// import { USER_ID } from "../../moodsRouter2";
 import { getMoodsByMonth } from "../../../../services/mood/moods.service";
-import { USER_ID } from "../../moodsRouter2";
+import { USER_ID } from "../../moodRouterTestData";
 
 export const getMoodsCalendarHandler = async (
   req: AuthRequest,
