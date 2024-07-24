@@ -10,15 +10,24 @@ import { useThemeMode } from '@/hooks/ThemeModeContext';
 import { useState } from 'react';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
+export default function LoginPage() {
   
+  const { theme } = useThemeMode();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async (e: any) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+
+  const handleRedirect = () => {
+    navigate('/signup'); // Adjust the path to match your login route
+  };
+  
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
     if (!username || !password) {
       setError('Please fill in both fields.');
@@ -30,7 +39,8 @@ export default function Login() {
     const data = { username, password };
 
     try {
-      const response = await fetch('backend/login', {
+      // TODO: send to server currectly
+      const response = await fetch('BACKENDURL/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,9 +60,6 @@ export default function Login() {
     }
   };
 
-
-  const { theme } = useThemeMode();
-
   return (
     <ThemeProvider theme={theme}>
       <Container>
@@ -64,7 +71,7 @@ export default function Login() {
           style={{ minHeight: '100vh' }}
         >
           <Grid item xs={11} style={{ marginBottom: '16px' }}>
-            <Typography component="h1" variant="h3">
+            <Typography component="h1" variant="h2">
               Login
             </Typography>
             </Grid>
@@ -109,8 +116,8 @@ export default function Login() {
                 </Button>
               </Grid>
               <Grid item xs={4}>
-                <Button variant="outlined" color="primary" fullWidth>
-                  Sign In
+                <Button variant="outlined" color="primary" fullWidth  onClick={handleRedirect}>
+                  Sign Up
                 </Button>
               </Grid>
             </Grid>

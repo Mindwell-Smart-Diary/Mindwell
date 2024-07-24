@@ -1,22 +1,19 @@
 import { Button, Card, ThemeProvider } from "@mui/material";
 import { useThemeMode } from "./hooks/ThemeModeContext";
-import Login from "./pages/login/Login";
+import LoginPage from "./pages/login/Login";
+import SignUpPage from "./pages/signup/Signup";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 
 const App = () => {
   // const { isDarkMode, toggleDarkMode, theme } = useThemeMode();
 
   return (
-    <Login></Login>
-    // <ThemeProvider theme={theme}>
-    //   <Card sx={{ p: 5, m: 8, width: 200, height: 200 }}>
-    //     <Button variant="contained" color="secondary" onClick={toggleDarkMode}>
-    //       {!isDarkMode ? "Light Mode" : "Dark Mode"}
-    //     </Button>
-    //     <Button variant="contained" color="primary" onClick={toggleDarkMode}>
-    //       {!isDarkMode ? "Light Mode" : "Dark Mode"}
-    //     </Button>
-    //   </Card>
-    // </ThemeProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
