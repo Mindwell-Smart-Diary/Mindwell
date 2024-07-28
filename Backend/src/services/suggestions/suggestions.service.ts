@@ -1,8 +1,11 @@
-import { PrismaClient } from '@prisma/client';
-import { Mood } from "../models/enums/mood.enum";
-import { llmGenerate } from "./generative-ai.service";
-import { PromptPart } from "../models/prompt-parts.model";
-import { getSuggestionsByUserMoodFromDB, suggestionByMood } from '../repository/suggestions.repository';
+import { PrismaClient } from "@prisma/client";
+import { Mood } from "../../models/enums/mood.enum";
+import { llmGenerate } from "../generative-ai.service";
+import { PromptPart } from "../../models/prompt-parts.model";
+import {
+  getSuggestionsByUserMoodFromDB,
+  suggestionByMood,
+} from "../../repository/suggestions.repository";
 
 const generateSuggestionPrompt = (
   userInformation: { age: number; gender: string },
@@ -59,5 +62,9 @@ export const suggestionPromptFunction = async (
   return suggestion;
 };
 
-export const getSuggestionsByUserMood = async (prisma: PrismaClient, userId: number, userMood: Mood):
-  Promise<suggestionByMood[]> => getSuggestionsByUserMoodFromDB(prisma, userId, userMood);
+export const getSuggestionsByUserMood = async (
+  prisma: PrismaClient,
+  userId: number,
+  userMood: Mood
+): Promise<suggestionByMood[]> =>
+  getSuggestionsByUserMoodFromDB(prisma, userId, userMood);

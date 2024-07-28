@@ -1,11 +1,15 @@
 import { Mood } from "../../../../models/enums/mood.enum";
-import { moodPromptFunction } from "../../../../services/moods.service";
+import { moodPromptFunction } from "../../../../services/mood/moods.service";
 import { prisma } from "../../../../prisma/prismaClient";
 import { NextFunction, Request, Response } from "express";
 import { suggestionSchema } from "./schema";
 import { getUserAge, getUserById } from "../../../../services/users.service";
-import { getSuggestionsByUserMood, suggestionPromptFunction } from "../../../../services/suggestions.service";
+import {
+  getSuggestionsByUserMood,
+  suggestionPromptFunction,
+} from "../../../../services/suggestions/suggestions.service";
 
+// TODO: remove user id from the body and take it from the cookie
 export const generateSuggestionHandler = async (
   req: Request,
   res: Response,
@@ -19,7 +23,7 @@ export const generateSuggestionHandler = async (
     const userInformation: {
       age: number;
       gender: string;
-    } = { age: getUserAge(user), gender: user.gender }; // TODO: Add "gender" to users schema and exrtract it from user const
+    } = { age: getUserAge(user), gender: "male" }; // TODO: Add "gender" to users schema and exrtract it from user const
 
     const mood: Mood = await moodPromptFunction(userInformation, dailySharing);
 
