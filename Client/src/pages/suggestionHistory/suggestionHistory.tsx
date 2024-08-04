@@ -2,8 +2,6 @@
 import { useThemeMode } from '@/hooks/ThemeModeContext';
 import { ThemeProvider, Container, Grid, Typography, Card, CardContent, Rating, IconButton, Collapse, Box } from '@mui/material';
 import React, { useState } from 'react';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
-import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
