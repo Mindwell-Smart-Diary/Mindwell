@@ -1,96 +1,80 @@
 import React, { useState, ChangeEvent } from 'react';
-import { TextField, Button, Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, Box } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { TextField, Button, Card, Typography, Box } from '@mui/material';
 import * as styles from "./styles";
-
-interface AccordionItem {
-    dailySharing: string;
-    suggestion: string;
-    date: Date;
-}
+import { SuggestionRank } from '@/types/enums/SuggestionRank';
 
 const SuggestionPage: React.FC = () => {
-    const [inputText, setInputText] = useState<string>('');
+    const [dailySharing, setDailySharing] = useState<string>('');
+    const [dailySharings, setDailySharings] = useState<string[]>([]);
     const [suggestion, setSuggestion] = useState<string>('');
-    const [accordionItems, setAccordionItems] = useState<AccordionItem[]>([]);
+    const [chosenRank, setChosenRank] = useState<SuggestionRank>();
 
-    const handleAskForSuggestion = () => {
-        // Generate a suggestion
-        setSuggestion('Generated suggestion text'); // Replace with your suggestion logic
-    };
+    const handleAddDailySharing = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === 'Enter' && dailySharing.trim().length) {
+            // Todo: create daily sharing and get the suggestion and the current mood
+            setDailySharings([dailySharing, ...dailySharings])
+            setDailySharing('')
+            setSuggestion('Your suggestion is...');
+            setChosenRank(undefined);
+            event.preventDefault()
+        }
+    }
 
-    const handleLike = () => {
-        const currentDateTime = new Date();
-        setAccordionItems([...accordionItems, { dailySharing: inputText, suggestion, date: currentDateTime }]);
-        setInputText('');
-        setSuggestion('');
-    };
+    const handleChangeRank = (rank: SuggestionRank) => {
+        // Todo: update rank and execution date in the server
+        setChosenRank(rank);
+    }
 
-    const handleReplaceSuggestion = () => {
-        setSuggestion('New generated suggestion text'); // Replace with your suggestion logic
-    };
-
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setInputText(event.target.value);
-    };
+    const handleGenerateSuggestion = () => {
+        // Todo: get new suggestion from the server
+        setChosenRank(undefined);
+        setSuggestion('I want to give you another suggestion... ' + Math.random())
+    }
 
     return (
         <Box sx={styles.container}>
+            <Typography sx={styles.title}>Did you do something <br></br>relaxing today?</Typography>
             <TextField
-                placeholder="Did you do something relaxing today?"
-                multiline
-                rows={4}
-                value={inputText}
-                onChange={handleInputChange}
-                variant="outlined"
-                fullWidth
-                inputProps={{ style: { direction: 'ltr', textAlign: 'left' } }}
-                InputLabelProps={{ shrink: true, style: { display: 'none' } }}
-            />
-            <Box display="flex" justifyContent="center" marginTop="1rem">
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleAskForSuggestion}
-                >
-                    ASK FOR SUGGESTION
-                </Button>
-            </Box>
-            {suggestion && (
-                <Card style={{ marginTop: '1rem' }}>
-                    <CardContent>
-                        <Typography>{suggestion}</Typography>
-                        <Box display="flex" justifyContent="center" gap="0.5rem">
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleLike}
-                            >
-                                Like
-                            </Button>
-                            <Button variant="contained" color="secondary" onClick={handleReplaceSuggestion}>
-                                Replace Suggestion
-                            </Button>
-                        </Box>
-                    </CardContent>
+                value={dailySharing}
+                rows={2}
+                multiline={true}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => setDailySharing(event.target.value)}
+                onKeyDown={handleAddDailySharing}
+                sx={styles.dailySharingText}>
+            </TextField>
+            {suggestion &&
+                <Card sx={styles.suggestionCard}>
+                    <Typography sx={styles.suggestionText}>{suggestion}</Typography>
+                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                        <Button
+                            onClick={() => handleChangeRank(SuggestionRank.LIKE)}
+                            sx={{
+                                ...styles.suggestionButton,
+                                border: chosenRank === SuggestionRank.LIKE ? '1.5px solid #3A3A3A' : 'none'
+                            }}>I liked it!</Button>
+                        <Button
+                            onClick={() => handleChangeRank(SuggestionRank.DID_NOT_HELP)}
+                            sx={{
+                                ...styles.suggestionButton,
+                                border: chosenRank === SuggestionRank.DID_NOT_HELP ? '1.5px solid #3A3A3A' : 'none'
+                            }}>It didn't help</Button>
+                        <Button
+                            onClick={() => handleChangeRank(SuggestionRank.DID_NOT_LIKE)}
+                            sx={{
+                                ...styles.suggestionButton,
+                                border: chosenRank === SuggestionRank.DID_NOT_LIKE ? '1.5px solid #3A3A3A' : 'none'
+                            }}>I didn't liked it</Button>
+                        <Button
+                            onClick={() => handleGenerateSuggestion()}
+                            sx={styles.suggestionButton}>Generate another</Button>
+                    </Box>
                 </Card>
-            )}
-            {accordionItems.map((item, index) => (
-                <Accordion key={index} style={{ marginTop: '20px' }}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Box>
-                            <Typography sx={styles.dateField}>{item.date.toLocaleString()}</Typography>
-                            <Typography sx={styles.dailySharingField}>{item.dailySharing}</Typography>
-                        </Box>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <Typography sx={{ fontWeight: 'bold' }}>Suggestion:</Typography>
-                        <Typography>
-                            {item.suggestion}
-                        </Typography>
-                    </AccordionDetails>
-                </Accordion>
-            ))}
+            }
+            <Box sx={styles.listContainer}>
+                {dailySharings.map((item =>
+                    <Card sx={styles.dailySharingCard}>{item}</Card>
+                ))}
+            </Box>
         </Box>
     );
 };
