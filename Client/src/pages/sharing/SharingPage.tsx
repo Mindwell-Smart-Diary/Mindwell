@@ -1,20 +1,44 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import { TextField, Button, Card, Typography, Box } from '@mui/material';
 import * as styles from "./styles";
 import { SuggestionRank } from '@/types/enums/SuggestionRank';
+import { DailySharing } from '@/types/DailySharing';
 
 const SuggestionPage: React.FC = () => {
     const [dailySharing, setDailySharing] = useState<string>('');
-    const [dailySharings, setDailySharings] = useState<string[]>([]);
+    const [dailySharings, setDailySharings] = useState<DailySharing[]>([]);
     const [suggestion, setSuggestion] = useState<string>('');
     const [chosenRank, setChosenRank] = useState<SuggestionRank>();
 
+    useEffect(() => {
+        // Todo: get dailySharings of today
+        const events: DailySharing[] = [];
+
+        setDailySharings(events);
+
+        if (events.length) {
+            // Todo: getLastSuggestion
+            const lastSuggestion = "";
+            setSuggestion(lastSuggestion)
+        }
+
+    }, []);
+
     const handleAddDailySharing = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (event.key === 'Enter' && dailySharing.trim().length) {
-            // Todo: create daily sharing and get the suggestion and the current mood
-            setDailySharings([dailySharing, ...dailySharings])
+            // Todo: create daily sharing and get the suggestion and the dailySharing object (with mood)
+            const newDailySharing: DailySharing = {
+                id: 12,
+                userId: 15,
+                content: dailySharing,
+                date: new Date(),
+                mood: "happy"
+            };
+            const newSuggestion = 'Your suggestion is...';
+
+            setDailySharings([newDailySharing, ...dailySharings])
+            setSuggestion(newSuggestion);
             setDailySharing('')
-            setSuggestion('Your suggestion is...');
             setChosenRank(undefined);
             event.preventDefault()
         }
@@ -72,7 +96,7 @@ const SuggestionPage: React.FC = () => {
             }
             <Box sx={styles.listContainer}>
                 {dailySharings.map((item =>
-                    <Card sx={styles.dailySharingCard}>{item}</Card>
+                    <Card sx={styles.dailySharingCard}>{item.content}</Card>
                 ))}
             </Box>
         </Box>
