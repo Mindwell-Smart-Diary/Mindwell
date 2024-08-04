@@ -1,4 +1,4 @@
-// import { ThemeProvider } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import { useThemeMode } from "./hooks/ThemeModeContext";
 import LoginPage from "./pages/login/Login";
 import SignUpPage from "./pages/signup/Signup";
@@ -10,7 +10,7 @@ const App = () => {
   const { theme } = useThemeMode();
 
   return (
-    // <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
        <BrowserRouter>
           <Routes>
             <Route path="/signup" element={<SignUpPage />} />
@@ -20,7 +20,7 @@ const App = () => {
 
           </Routes>
        </BrowserRouter>
-    // </ThemeProvider>
+    </ThemeProvider>
   );
 };
 
