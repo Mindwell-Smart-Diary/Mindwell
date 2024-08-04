@@ -4,7 +4,6 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import "./Login.css"
 import Box from '@mui/material/Box';
 import { useThemeMode } from '@/hooks/ThemeModeContext';
 import { useState } from 'react';
@@ -13,7 +12,7 @@ import { Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
-  
+
   const { theme } = useThemeMode();
 
   const [username, setUsername] = useState('');
@@ -25,7 +24,7 @@ export default function LoginPage() {
   const handleRedirect = () => {
     navigate('/signup'); // Adjust the path to match your login route
   };
-  
+
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -74,9 +73,9 @@ export default function LoginPage() {
             <Typography component="h1" variant="h2">
               Login
             </Typography>
-            </Grid>
-          <Box component="form" noValidate autoComplete="off" 
-          sx={{ width: '100%', maxWidth: 350 }} onSubmit={handleLogin}>
+          </Grid>
+          <Box component="form" noValidate autoComplete="off"
+            sx={{ width: '100%', maxWidth: 350 }} onSubmit={handleLogin}>
             <Grid item xs={11} style={{ marginBottom: '16px' }}>
               <TextField
                 fullWidth
@@ -116,7 +115,7 @@ export default function LoginPage() {
                 </Button>
               </Grid>
               <Grid item xs={4}>
-                <Button variant="outlined" color="primary" fullWidth  onClick={handleRedirect}>
+                <Button variant="outlined" color="primary" fullWidth onClick={handleRedirect}>
                   Sign Up
                 </Button>
               </Grid>
