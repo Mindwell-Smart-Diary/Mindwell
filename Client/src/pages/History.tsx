@@ -20,10 +20,12 @@ export const History = () => {
   }, [selectedYear, selectedMonth]);
 
   return (
-    <>
-      <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 5 }}>
-        <YearInput sx={{ maxWidth: '50%', m: 2 }} year={selectedYear} setYear={(year: number) => setSelectedYear(year)} />
-        <MonthInput sx={{ maxWidth: '50%', m: 2 }} month={selectedMonth} setMonth={(month: Month) => setSelectedMonth(month)} />
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <Box sx={{ my: 5, width: '600px' }}>
+        <Box sx={{ my: 2, width: '100%', display: 'flex', gap: 2, justifyContent: 'space-between', alignItems: 'center' }}>
+          <YearInput year={selectedYear} setYear={(year: number) => setSelectedYear(year)} />
+          <MonthInput month={selectedMonth} setMonth={(month: Month) => setSelectedMonth(month)} />
+        </Box>
         <Calendar
           month={selectedMonth}
           year={selectedYear}
@@ -32,6 +34,6 @@ export const History = () => {
           setYear={(year) => setSelectedYear(year)}
         />
       </Box>
-    </>
+    </Box>
   );
 };
