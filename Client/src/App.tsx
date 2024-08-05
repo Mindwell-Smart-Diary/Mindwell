@@ -21,8 +21,8 @@ const App = () => {
           <Routes>
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/historySuggestions" element={<HistoryOfSuggestionsPage />} />
+            <Route path="/calendar" element={<History />} />
+            <Route path="/history" element={<HistoryOfSuggestionsPage />} />
           </Routes>
        </BrowserRouter>
     </ThemeProvider>

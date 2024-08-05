@@ -6,27 +6,35 @@ import HistoryIcon from '@mui/icons-material/History';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { styled } from '@mui/system';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = {
   root: {
     flexGrow: 1,
   },
   menuButton: {
-    margin: '0 16px', // Equal spacing between icons
+    margin: '0 16px',
     position: 'relative',
   },
   iconSize: {
-    fontSize: '2rem', // Increase icon size
+    fontSize: '2rem',
   },
 };
 
 const ActiveUnderline = styled('div')(({ theme }) => ({
   position: 'absolute',
-  bottom: -13, // Position the underline directly on the AppBar line
+  bottom: -14,
   left: 0,
   right: 0,
   height: 4,
   backgroundColor: theme.palette.primary.main,
+}));
+
+const GlassAppBar = styled(AppBar)(({ theme }) => ({
+  backdropFilter: 'blur(10px)',
+  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  WebkitBackdropFilter: 'blur(10px)', // Ensure compatibility with Safari
+  boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
 }));
 
 interface AppBarComponentProps {
@@ -35,9 +43,11 @@ interface AppBarComponentProps {
 
 const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleTabClick = (tabName: string) => {
+  const handleTabClick = (tabName: string, path: string) => {
     setActiveTab(tabName);
+    navigate(path);
   };
 
   const iconStyle = (tabName: string) => ({
@@ -45,7 +55,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
   });
 
   return (
-    <AppBar position="static" sx={{ bgcolor: 'white', color: 'black', position: 'relative' }}>
+    <GlassAppBar position="sticky" sx={{ color: 'black'}}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Box
           component="img"
@@ -59,35 +69,100 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
         />
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
           <Tooltip title="Diary" arrow>
-            <IconButton sx={{ ...useStyles.menuButton, ...useStyles.iconSize }} color="inherit" aria-label="diary" onClick={() => handleTabClick('diary')}>
-              <BookIcon sx={iconStyle('diary')} />
+            <Button
+              sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
+              color="inherit"
+              aria-label="diary"
+              onClick={() => handleTabClick('diary', '/diary')}
+            >
+              <Box
+                component="img"
+                sx={{
+                  height: 24,
+                  width: 24,
+                }}
+                src="src\assets\icons\diary.png"
+                alt=""
+              />
               {activeTab === 'diary' && <ActiveUnderline />}
-            </IconButton>
+            </Button>
           </Tooltip>
           <Tooltip title="Calendar" arrow>
-            <IconButton sx={{ ...useStyles.menuButton, ...useStyles.iconSize }} color="inherit" aria-label="calendar" onClick={() => handleTabClick('calendar')}>
-              <CalendarTodayIcon sx={iconStyle('calendar')} />
+            
+            <Button
+              sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
+              color="inherit"
+              aria-label="calendar"
+              onClick={() => handleTabClick('calendar', '/calendar')}
+            >
+              {/* <CalendarTodayIcon sx={iconStyle('calendar')} /> */}
+              <Box
+                component="img"
+                sx={{
+                  height: 24,
+                  width: 24,
+                }}
+                src="src\assets\icons\calendar.png"
+                alt=""
+              />
+
               {activeTab === 'calendar' && <ActiveUnderline />}
-            </IconButton>
+            </Button>
           </Tooltip>
           <Tooltip title="History" arrow>
-            <IconButton sx={{ ...useStyles.menuButton, ...useStyles.iconSize }} color="inherit" aria-label="history" onClick={() => handleTabClick('history')}>
-              <HistoryIcon sx={iconStyle('history')} />
+            <Button
+              sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
+              color="inherit"
+              aria-label="history"
+              onClick={() => handleTabClick('history', '/history')}
+            >
+              <Box
+                component="img"
+                sx={{
+                  height: 24,
+                  width: 24,
+                }}
+                src="src\assets\icons\history.png"
+                alt=""
+              />
               {activeTab === 'history' && <ActiveUnderline />}
-            </IconButton>
+            </Button>
           </Tooltip>
           <Tooltip title="Profile" arrow>
-            <IconButton sx={{ ...useStyles.menuButton, ...useStyles.iconSize }} color="inherit" aria-label="profile" onClick={() => handleTabClick('profile')}>
-              <AccountCircleIcon sx={iconStyle('profile')} />
+            <Button
+              sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
+              color="inherit"
+              aria-label="profile"
+              onClick={() => handleTabClick('profile', '/profile')}
+            >
+              <Box
+                component="img"
+                sx={{
+                  height: 24,
+                  width: 24,
+                }}
+                src="src\assets\icons\user.png"
+                alt=""
+              />
               {activeTab === 'profile' && <ActiveUnderline />}
-            </IconButton>
+            </Button>
           </Tooltip>
         </Box>
-        <Button color="inherit" startIcon={<ExitToAppIcon />} onClick={handleLogout}>
-          Logout
+        <Tooltip title="Logout" arrow>
+        <Button color="inherit" onClick={handleLogout}>
+        <Box
+                component="img"
+                sx={{
+                  height: 24,
+                  width: 24,
+                }}  
+                src="src\assets\icons\logout.png"
+                alt=""
+              />
         </Button>
+        </Tooltip>
       </Toolbar>
-    </AppBar>
+    </GlassAppBar>
   );
 };
 
