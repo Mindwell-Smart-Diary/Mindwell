@@ -4,10 +4,9 @@ import { testAxios } from "../../testUtils/axiosInstance";
 import { StatusCodes } from "http-status-codes";
 import { prisma } from "../../prisma/prismaClient";
 import { Chance } from "chance";
-import { createUser } from "../../testUtils/entityBuilders/users";
 import { createEvent } from "../../testUtils/entityBuilders/events";
 import { events, users } from "@prisma/client";
-import { USER_ID } from "./eventsRouterTestData";
+import { LOGGED_IN_USER_ID } from "../../../vitest-api-setup";
 
 const { PORT } = Configuration.getInstance();
 
@@ -66,27 +65,21 @@ describe("Events router", () => {
       let preMadeEvents: events[];
 
       beforeEach(async () => {
-        [preMadeUser, ...preMadeEvents] = await prisma.$transaction([
-          createUser({ id: USER_ID }),
-          ...[...Array(200)].map(() =>
-            createEvent(USER_ID, {
+        preMadeEvents = await prisma.$transaction(
+          [...Array(200)].map(() =>
+            createEvent(LOGGED_IN_USER_ID, {
               date: chance.date({ american: false, year: 2024 }) as Date,
             })
-          ),
-        ]);
+          )
+        );
       });
 
       afterEach(async () => {
-        await prisma.$transaction([
-          prisma.events.deleteMany({
-            where: { user_id: USER_ID },
-          }),
-          prisma.users.delete({
-            where: {
-              id: USER_ID,
-            },
-          }),
-        ]);
+        prisma.users.delete({
+          where: {
+            id: LOGGED_IN_USER_ID,
+          },
+        });
       });
 
       it("Should return correct events", async () => {

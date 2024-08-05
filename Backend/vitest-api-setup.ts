@@ -6,6 +6,8 @@ import { Configuration } from "./src/config/Configuration";
 
 let killServer: () => Promise<void>;
 
+export const LOGGED_IN_USER_ID = 0;
+
 beforeAll(async () => {
   const { PORT } = Configuration.getInstance();
 

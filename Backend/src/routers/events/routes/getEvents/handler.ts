@@ -2,7 +2,6 @@ import { Response, NextFunction } from "express";
 import { AuthRequest } from "../../../../middleware/auth";
 import { queryParamsSchema } from "./schema";
 import { validateData } from "../../../../middleware/zodValidate";
-import { USER_ID } from "../../eventsRouterTestData";
 import { getEvents } from "../../../../services/events.service";
 import { prisma } from "../../../../prisma/prismaClient";
 
@@ -11,7 +10,7 @@ export const getEventsHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userId } = { userId: USER_ID }; // req.user;
+  const { userId } = req.user;
 
   try {
     const options = validateData(

@@ -5,7 +5,7 @@ import { jwtVerify } from "../utils/jwtPromises";
 import { Configuration } from "../config/Configuration";
 
 export interface AuthRequest extends Request {
-  user?: { userId: string };
+  user?: { id: number };
 }
 
 export const authorizeUser = async (
@@ -18,9 +18,9 @@ export const authorizeUser = async (
   const token = authHeader && authHeader.split(" ")[1]; // Bearer <token>
   try {
     if (token == null) throw new UnauthorizedError("Missing access token");
-
     const user = await jwtVerify(token, JWT_SECRET!);
-    req.user = user as { userId: string };
+    console.log(user);
+    req.user = user as { id: number };
 
     next();
   } catch (err) {

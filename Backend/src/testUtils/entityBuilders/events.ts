@@ -12,7 +12,6 @@ export const createEvent = (userId: number, base: Partial<events> = {}) => {
       content: chance.paragraph(),
       date: chance.date({ american: false }),
       mood: chance.pickone(Object.values(Mood)),
-      title: chance.sentence(),
       ...base,
     },
   });

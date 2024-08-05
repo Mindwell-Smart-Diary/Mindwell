@@ -27,7 +27,7 @@ export class Configuration {
   }
 
   get JWT_EXPIRATION(): number {
-    return Number(this.env.JWT_EXPIRATION || "60");
+    return Number(this.env.JWT_EXPIRATION || "60000");
   }
 
   public static getInstance(

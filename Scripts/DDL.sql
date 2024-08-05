@@ -26,7 +26,6 @@ CREATE TABLE user_refresh_tokens (
 CREATE TABLE events (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL,
-  title TEXT NOT NULL,
   content TEXT NOT NULL,
   date DATE NOT NULL,
   mood TEXT,

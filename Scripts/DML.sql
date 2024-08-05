@@ -1,5 +1,9 @@
+
+
+INSERT INTO users (id, first_name, last_name, gender, birthdate, email, password) VALUES
+(0, 'John', 'Doe', 'male', '1980-01-01', 'john.doe@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'); -- password123
+
 INSERT INTO users (first_name, last_name, gender, birthdate, email, password) VALUES
-('John', 'Doe', 'male', '1980-01-01', 'john.doe@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'), -- password123
 ('Jane', 'Smith', 'female', '1990-02-02', 'jane.smith@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
 ('Michael', 'Brown', 'male', '1985-03-03', 'michael.brown@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
 ('Emily', 'Davis', 'female', '1992-04-04', 'emily.davis@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
@@ -13,16 +17,8 @@ DECLARE
   event_id INTEGER;
 BEGIN 
   FOR i IN 1..6 LOOP 
-    INSERT INTO events (user_id, title, content, date, mood) VALUES 
+    INSERT INTO events (user_id, content, date, mood) VALUES 
     (user_id, 
-    CASE i
-      WHEN 1 THEN 'Morning Jog'
-      WHEN 2 THEN 'Project Meeting'
-      WHEN 3 THEN 'Doctor Appointment'
-      WHEN 4 THEN 'Dinner with Friends'
-      WHEN 5 THEN 'Weekend Hike'
-      WHEN 6 THEN 'Book Club Meeting'
-    END,
     CASE i
       WHEN 1 THEN 'Went for a 5km jog in the park. Felt great!'
       WHEN 2 THEN 'Discussed the upcoming project deliverables and deadlines.'
