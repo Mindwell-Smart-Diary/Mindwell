@@ -1,9 +1,5 @@
 import { PrismaClient, events } from "@prisma/client";
-import {
-  eventsAndMoods,
-  getEventsByDates,
-  getUserLastDaysEventsAndMoodsFromDB,
-} from "../repository/events.repository";
+import { findEvents } from "../repository/events.repository";
 import { Mood } from "../models/enums/mood.enum";
 import { DateTime } from "luxon";
 import { getUserAge, getUserById } from "./users.service";
@@ -20,34 +16,37 @@ export const getEventById = async (
     },
   });
 
-export const getUserLastDaysEventsAndMoods = async (
-  prisma: PrismaClient,
-  userId: number,
-  numOfDays: number
-): Promise<eventsAndMoods[]> =>
-  getUserLastDaysEventsAndMoodsFromDB(prisma, userId, numOfDays);
-
 export const getEvents = async (
   prisma: PrismaClient,
   userId: number,
-  options: { date: number }
+  options: { date?: number; withSuggestions?: boolean }
 ) => {
-  const { date } = options;
+  const { date, withSuggestions } = options;
+  const findOptions: any = {};
 
-  const startDate =
-    DateTime.fromMillis(date).startOf("day").toString().split("+")[0] + "Z";
-  const endDate =
-    DateTime.fromMillis(date)
-      .plus({ day: 1 })
-      .startOf("day")
-      .toString()
-      .split("+")[0] + "Z";
+  if (withSuggestions) {
+    findOptions.withSuggestions = true;
+  }
+  if (date) {
+    const startDate =
+      DateTime.fromMillis(date).startOf("day").toString().split("+")[0] + "Z";
+    const endDate =
+      DateTime.fromMillis(date)
+        .plus({ day: 1 })
+        .startOf("day")
+        .toString()
+        .split("+")[0] + "Z";
 
-  const matchingEvents: events[] = await getEventsByDates(
+    findOptions.dates = {
+      startDate,
+      endDate,
+    };
+  }
+
+  const matchingEvents: events[] = await findEvents(
     prisma,
     userId,
-    startDate,
-    endDate
+    findOptions
   );
 
   return matchingEvents;

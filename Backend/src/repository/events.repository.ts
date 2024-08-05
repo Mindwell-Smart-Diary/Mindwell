@@ -1,51 +1,38 @@
 import { PrismaClient, events } from "@prisma/client";
 export type eventsAndMoods = {
-  title: string;
+  content: string;
   mood: string;
 };
 
-export const getUserLastDaysEventsAndMoodsFromDB = async (
+export const findEvents = (
   prisma: PrismaClient,
   userId: number,
-  numOfDays: number
-): Promise<eventsAndMoods[]> => {
-  try {
-    const lastDaysAgo = new Date();
-    lastDaysAgo.setDate(lastDaysAgo.getDate() - numOfDays);
-
-    const events = await prisma.events.findMany({
-      where: {
-        user_id: userId,
-        date: {
-          gte: lastDaysAgo,
-        },
-      },
-      select: {
-        title: true,
-        mood: true,
-      },
-    });
-
-    return events;
-  } catch (err) {
-    console.error(err);
-    throw err;
+  options?: {
+    withSuggestions?: boolean;
+    dates?: {
+      startDate: string;
+      endDate: string;
+    };
   }
-};
-
-export const getEventsByDates = (
-  prisma: PrismaClient,
-  userId: number,
-  startDate: string,
-  endDate: string
 ): Promise<events[]> => {
+  const { withSuggestions = false, dates } = options ?? {};
+  const whereDates = !dates
+    ? {}
+    : {
+        date: {
+          gte: dates.startDate,
+          lt: dates.endDate,
+        },
+      };
+
+  console.log(withSuggestions);
   return prisma.events.findMany({
     where: {
       user_id: userId,
-      date: {
-        gte: startDate,
-        lt: endDate,
-      },
+      ...whereDates,
+    },
+    include: {
+      suggestions: withSuggestions,
     },
   });
 };

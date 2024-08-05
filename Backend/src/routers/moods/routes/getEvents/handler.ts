@@ -10,7 +10,7 @@ export const getMoodsCalendarHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userId } = req.user;
+  const { id: userId } = req.user;
 
   try {
     const data = validateData(
