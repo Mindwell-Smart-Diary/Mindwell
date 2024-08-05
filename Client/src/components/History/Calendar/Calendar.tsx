@@ -26,8 +26,9 @@ const MonthDays = ({ days }: { days: CalendarDay[] }) => {
                         <ButtonBase
                             className={styles.day}
                             sx={{
-                                height: '100%',
-                                width: '80%',
+                                borderRadius: '50%',
+                                maxWidth: '90%',
+                                width: 27,
                                 bgcolor: `${mood ? MOOD_GROUP_COLORS[mood] : MOOD_GROUP_COLORS[MoodGroup.Regular]}`
                             }}
                         >
@@ -36,7 +37,7 @@ const MonthDays = ({ days }: { days: CalendarDay[] }) => {
                     </li>
                 ))
             }
-        </ul>
+        </ul >
     )
 }
 

@@ -21,7 +21,7 @@ export const History = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <Box sx={{ my: 5, width: '600px' }}>
+      <Box sx={{ m: 5, maxWidth: '600px' }}>
         <Box sx={{ my: 2, width: '100%', display: 'flex', gap: 2, justifyContent: 'space-between', alignItems: 'center' }}>
           <YearInput year={selectedYear} setYear={(year: number) => setSelectedYear(year)} />
           <MonthInput month={selectedMonth} setMonth={(month: Month) => setSelectedMonth(month)} />

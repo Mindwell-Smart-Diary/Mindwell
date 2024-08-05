@@ -1,11 +1,14 @@
 :root {
+  overflow: scroll;
+
   font-family: Alef, Miriam Libre, Arimo, Inter, system-ui, Avenir, Helvetica,
     Arial, sans-serif;
 }
 
 body {
+  overflow: scroll;
   margin: 0;
-  width: 100vw;
+  min-width: 100vw;
 }
 
 * {
@@ -13,12 +16,12 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 3px;
-  height: 2px;
-  border-radius: 2px;
+  width: 4px;
+  height: 3px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #e6e6e6;
-  border-radius: 2px;
+  border-radius: 3px;
 }
