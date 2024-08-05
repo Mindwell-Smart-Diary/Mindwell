@@ -24,7 +24,7 @@ export const registerHandler = async (
       firstName,
       lastName,
       gender,
-      birthdate
+      new Date(birthdate)
     );
 
     res.status(StatusCodes.CREATED).json(tokensWithId);

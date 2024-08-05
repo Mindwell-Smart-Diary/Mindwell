@@ -15,12 +15,17 @@ const { PORT } = Configuration.getInstance();
 const getMoodsCalendar = async (queryParams: Record<string, string>) => {
   const queryParamsString = new URLSearchParams(queryParams).toString();
   const res = await testAxios.get(
-    `http://localhost:${PORT}/moods/calendar?${queryParamsString}`
+    `http://localhost:${PORT}/moods/calendar?${queryParamsString}`,
+    {
+      headers: {
+        Authorization: "Bearer " + process.env.TESTS_ACCESS_TOKEN,
+      },
+    }
   );
 
   return {
     status: res.status,
-    data: JSON.parse(res.data),
+    data: res.data,
   };
 };
 

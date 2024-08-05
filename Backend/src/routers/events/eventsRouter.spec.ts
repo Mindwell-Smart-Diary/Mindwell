@@ -14,12 +14,17 @@ const { PORT } = Configuration.getInstance();
 const getEvents = async (queryParams: Record<string, string>) => {
   const queryParamsString = new URLSearchParams(queryParams).toString();
   const res = await testAxios.get(
-    `http://localhost:${PORT}/events?${queryParamsString}`
+    `http://localhost:${PORT}/events?${queryParamsString}`,
+    {
+      headers: {
+        Authorization: "Bearer " + process.env.TESTS_ACCESS_TOKEN,
+      },
+    }
   );
 
   return {
     status: res.status,
-    data: JSON.parse(res.data),
+    data: res.data,
   };
 };
 

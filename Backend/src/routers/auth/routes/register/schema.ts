@@ -6,5 +6,5 @@ export const registerSchema = z.object({
   email: z.string(),
   password: z.string(),
   gender: z.enum(["male", "female", "other"]),
-  birthdate: z.date(),
+  birthdate: z.string(),
 });

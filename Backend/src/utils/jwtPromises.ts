@@ -1,8 +1,4 @@
-import jwt, {
-  JwtPayload,
-  Secret,
-  VerifyErrors
-} from "jsonwebtoken";
+import jwt, { JwtPayload, Secret, VerifyErrors } from "jsonwebtoken";
 
 export const jwtVerify = (token: string, secret: Secret) =>
   new Promise((resolve, reject) => {

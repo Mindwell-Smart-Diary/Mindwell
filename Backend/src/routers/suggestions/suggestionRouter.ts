@@ -7,7 +7,7 @@ export const buildSuggestionRouter = () => {
   const router = Router();
 
   router.post(
-    "/suggestions",
+    "/",
     validateDataMiddleware(suggestionSchema),
     generateSuggestionHandler
   );

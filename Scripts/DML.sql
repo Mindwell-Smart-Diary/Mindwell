@@ -1,10 +1,10 @@
 INSERT INTO users (first_name, last_name, gender, birthdate, email, password) VALUES
-('John', 'Doe', 'male', '1980-01-01', 'john.doe@example.com', 'password123'),
-('Jane', 'Smith', 'female', '1990-02-02', 'jane.smith@example.com', 'password123'),
-('Michael', 'Brown', 'male', '1985-03-03', 'michael.brown@example.com', 'password123'),
-('Emily', 'Davis', 'female', '1992-04-04', 'emily.davis@example.com', 'password123'),
-('David', 'Wilson', 'male', '1983-05-05', 'david.wilson@example.com', 'password123'),
-('Sarah', 'Taylor', 'female', '1988-06-06', 'sarah.taylor@example.com', 'password123');
+('John', 'Doe', 'male', '1980-01-01', 'john.doe@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'), -- password123
+('Jane', 'Smith', 'female', '1990-02-02', 'jane.smith@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
+('Michael', 'Brown', 'male', '1985-03-03', 'michael.brown@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
+('Emily', 'Davis', 'female', '1992-04-04', 'emily.davis@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
+('David', 'Wilson', 'male', '1983-05-05', 'david.wilson@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
+('Sarah', 'Taylor', 'female', '1988-06-06', 'sarah.taylor@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO');
 
 -- Insert events and suggestions for user 1
 DO $$ 

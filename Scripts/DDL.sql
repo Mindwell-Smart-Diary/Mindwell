@@ -16,11 +16,11 @@ CREATE TABLE users (
 );
 
 CREATE TABLE user_refresh_tokens (
-  token_id SERIAL PRIMARY KEY
-  user_id NUMBER NOT NULL,
+  token_id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL,
   refresh_token TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-)
+);
 
 -- Create the events table
 CREATE TABLE events (

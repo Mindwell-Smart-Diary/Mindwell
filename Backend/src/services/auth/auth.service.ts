@@ -1,5 +1,5 @@
 import { JwtPayload, Secret } from "jsonwebtoken";
-import { Gender, PrismaClient, users } from "@prisma/client";
+import { PrismaClient, users } from "@prisma/client";
 import { ApiError } from "../../errors/ApiError";
 import { BadRequestError } from "../../errors/BadRequestError";
 import { UnauthorizedError } from "../../errors/UnauthorizedError";
@@ -16,6 +16,7 @@ import { TokenPair, TokenPairWithId } from "./types";
 import bcrypt from "bcrypt";
 import { ConflictError } from "../../errors/ConflictError";
 import { jwtVerify } from "../../utils/jwtVerify";
+import { Configuration } from "../../config/Configuration";
 
 export const loginUser = async (
   email: string,
@@ -46,14 +47,11 @@ export const registerUser = async (
   password: string,
   firstName: string,
   lastName: string,
-  gender: Gender,
+  gender: string,
   birthdate: Date
 ): Promise<TokenPairWithId> => {
-  try {
-    findByEmail(prismaClient, email);
-    throw new ConflictError("username already exists");
-  } catch (e) {
-    if (!(e instanceof ConflictError)) throw e;
+  if ((await findByEmail(prismaClient, email)) !== null) {
+    throw new ConflictError("Email is already taken");
   }
 
   // Save the new user
@@ -82,13 +80,15 @@ export const logoutUser = async (
   prismaClient: PrismaClient,
   refreshToken: string
 ): Promise<void> => {
+  const { JWT_REFRESH_SECRET } = Configuration.getInstance();
+
   if (!refreshToken) {
     throw new BadRequestError("Missing Authorization header");
   }
 
   const userInfo = (await jwtVerify(
     refreshToken,
-    process.env.JWT_REFRESH_SECRET as Secret
+    JWT_REFRESH_SECRET as Secret
   )) as JwtPayload;
 
   const userId: number = (userInfo as JwtPayload).id;
@@ -116,13 +116,15 @@ export const refreshAccessTokens = async (
   prismaClient: PrismaClient,
   refreshToken: string
 ): Promise<TokenPair> => {
+  const { JWT_REFRESH_SECRET } = Configuration.getInstance();
+
   if (!refreshToken) {
     throw new BadRequestError("Missing Authorization header");
   }
 
   const userInfo = (await jwtVerify(
     refreshToken,
-    process.env.JWT_REFRESH_SECRET as Secret
+    JWT_REFRESH_SECRET as Secret
   )) as JwtPayload;
 
   const userId: number = (userInfo as JwtPayload).id;

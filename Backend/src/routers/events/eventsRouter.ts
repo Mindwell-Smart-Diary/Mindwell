@@ -5,7 +5,7 @@ export const buildEventsRouter = () => {
   const router = Router();
 
   // TODO: add authorizeUser middleware
-  router.get("/events", getEventsHandler);
+  router.get("/", getEventsHandler);
 
   return router;
 };
