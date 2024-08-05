@@ -4,6 +4,7 @@ import LoginPage from "./pages/login/Login";
 import SignUpPage from "./pages/signup/Signup";
 import { History } from "./pages/History";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
+import SharingPage from "./pages/sharing/SharingPage";
 
 const App = () => {
   const { theme } = useThemeMode();
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/history" element={<History />} />
+          <Route path="/sharing/:year/:month/:day" element={<SharingPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

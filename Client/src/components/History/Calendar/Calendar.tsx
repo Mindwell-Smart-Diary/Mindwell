@@ -6,6 +6,7 @@ import { CalendarDay } from '@/types/CalendarDay';
 import { CalendarHeader } from './CalendarHeader/CalendarHeader';
 import { ButtonBase } from '@mui/material';
 import { MOOD_GROUP_COLORS, MoodGroup } from '@/types/enums/MoodGroup';
+import { useNavigate } from 'react-router-dom';
 
 const CalendarWeekDays = () => {
     return (
@@ -17,13 +18,15 @@ const CalendarWeekDays = () => {
     )
 }
 
-const MonthDays = ({ days }: { days: CalendarDay[] }) => {
+const MonthDays = ({ days, handleDayClick }: { days: CalendarDay[], handleDayClick: (day: number) => void }) => {
+
     return (
         <ul className={styles.days}>
             {
                 days.map(({ date, mood }, index) => (
                     <li style={{ opacity: `${date == -1 ? 0 : 1}` }} key={`${date}_${index}`}>
                         <ButtonBase
+                            onClick={() => handleDayClick(date)}
                             className={styles.day}
                             sx={{
                                 borderRadius: '50%',
@@ -50,11 +53,21 @@ interface CalendarProps {
 }
 
 export const Calendar = (props: CalendarProps) => {
+    const navigate = useNavigate();
+
+    const handleDayClick = (year: number, month: number, day: number) => {
+        navigate(`/sharing/${year}/${month}/${day}`);
+    };
+
+
     return (
         <div className={styles.calendar}>
             <CalendarHeader {...props} />
             <CalendarWeekDays />
-            <MonthDays days={props.monthDays} />
+            <MonthDays
+                days={props.monthDays}
+                handleDayClick={(day: number) => handleDayClick(props.year, props.month, day)}
+            />
         </div>
     );
 }

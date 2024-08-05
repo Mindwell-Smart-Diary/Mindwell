@@ -1,7 +1,8 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import { TextField, Button, Card, CardContent, Typography, Accordion, AccordionSummary, AccordionDetails, Box } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import * as styles from "./styles";
+import { useParams } from 'react-router-dom';
 
 interface AccordionItem {
     dailySharing: string;
@@ -13,6 +14,12 @@ const SuggestionPage: React.FC = () => {
     const [inputText, setInputText] = useState<string>('');
     const [suggestion, setSuggestion] = useState<string>('');
     const [accordionItems, setAccordionItems] = useState<AccordionItem[]>([]);
+
+    const { year, month, day } = useParams();
+    useEffect(() => {
+        console.log({ year, month, day })
+    }, [year, month, day])
+
 
     const handleAskForSuggestion = () => {
         // Generate a suggestion
