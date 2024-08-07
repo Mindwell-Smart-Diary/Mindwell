@@ -2,6 +2,7 @@ import {  ThemeProvider } from "@mui/material";
 import { useThemeMode } from "./hooks/ThemeModeContext";
 import LoginPage from "./pages/login/Login";
 import SignUpPage from "./pages/signup/Signup";
+import SharingPage from "./pages/sharing/SharingPage";
 import { History } from "./pages/History";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import HistoryOfSuggestionsPage from "./pages/suggestionHistory/suggestionHistory";
@@ -21,8 +22,9 @@ const App = () => {
           <Routes>
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/calendar" element={<History />} />
-            <Route path="/history" element={<HistoryOfSuggestionsPage />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/historySuggestions" element={<HistoryOfSuggestionsPage />} />
+            <Route path="/sharing/:year/:month/:day" element={<SharingPage />} />
           </Routes>
        </BrowserRouter>
     </ThemeProvider>
