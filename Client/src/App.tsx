@@ -2,7 +2,7 @@ import { ThemeProvider } from "@mui/material";
 import { useThemeMode } from "./hooks/ThemeModeContext";
 import LoginPage from "./pages/login/Login";
 import SignUpPage from "./pages/signup/Signup";
-import { History } from "./pages/History";
+import { History } from "./pages/history/History";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import SharingPage from "./pages/sharing/SharingPage";
 

@@ -8,7 +8,6 @@ import { Calendar, SearchInput } from "@/components/History";
 import { useThemeMode } from "@/hooks/ThemeModeContext";
 
 export const History = () => {
-
   const currentDate = new Date();
   const currentYear: number = currentDate.getFullYear();
   const currentMonth: Month = currentDate.getMonth() + 1;

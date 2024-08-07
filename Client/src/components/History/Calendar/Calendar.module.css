@@ -72,8 +72,6 @@ ul {
 
 .days li .day {
   padding: 5px;
-  /* background: #1abc9c; */
-  color: white !important;
 }
 
 /* Add media queries for smaller screens */

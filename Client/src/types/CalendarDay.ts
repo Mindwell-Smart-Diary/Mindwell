@@ -1,8 +1,7 @@
-import { Day } from "./enums/Day"
-import { MoodGroup } from "./enums/MoodGroup"
+import { Day } from "./enums/Day";
 
 export type CalendarDay = {
-    day: Day,
-    date: number,
-    mood?: MoodGroup,
-}
+  day: Day;
+  date: number;
+  moodColor?: string;
+};

@@ -5,8 +5,13 @@ import { CalendarDay } from '@/types/CalendarDay';
 
 import { CalendarHeader } from './CalendarHeader/CalendarHeader';
 import { ButtonBase } from '@mui/material';
-import { MOOD_GROUP_COLORS, MoodGroup } from '@/types/enums/MoodGroup';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
+import { Mood } from '@/types/enums/Moods';
+import { NON_MOOD_COLOR } from '@/constants/MoodColor';
+import { averageMoodColor } from '@/utilities/MoodUtils';
+import { getReadableTextColor } from '@/utilities/ColorUtils';
 
 const CalendarWeekDays = () => {
     return (
@@ -23,7 +28,7 @@ const MonthDays = ({ days, handleDayClick }: { days: CalendarDay[], handleDayCli
     return (
         <ul className={styles.days}>
             {
-                days.map(({ date, mood }, index) => (
+                days.map(({ date, moodColor }, index) => (
                     <li style={{ opacity: `${date == -1 ? 0 : 1}` }} key={`${date}_${index}`}>
                         <ButtonBase
                             onClick={() => handleDayClick(date)}
@@ -32,7 +37,8 @@ const MonthDays = ({ days, handleDayClick }: { days: CalendarDay[], handleDayCli
                                 borderRadius: '50%',
                                 maxWidth: '90%',
                                 width: 27,
-                                bgcolor: `${mood ? MOOD_GROUP_COLORS[mood] : MOOD_GROUP_COLORS[MoodGroup.Regular]}`
+                                bgcolor: moodColor ?? NON_MOOD_COLOR,
+                                color: getReadableTextColor(moodColor ?? NON_MOOD_COLOR),
                             }}
                         >
                             {date > 0 ? date : ''}
@@ -55,9 +61,36 @@ interface CalendarProps {
 export const Calendar = (props: CalendarProps) => {
     const navigate = useNavigate();
 
+    const [dayMoods, setDaysMoods] = useState<Record<number, Mood[]>>()
+
     const handleDayClick = (year: number, month: number, day: number) => {
         navigate(`/sharing/${year}/${month}/${day}`);
     };
+
+    useEffect(() => {
+        const fetchMoods = async () => {
+            const response = await axios.get('http://localhost:3000/moods/calendar', {
+                params: {
+                    year: props.year,
+                    month: props.month,
+                }
+            });
+            setDaysMoods(response.data);
+        };
+
+        fetchMoods();
+    }, [props.year, props.month]);
+
+    const monthDays = useMemo<CalendarDay[]>(() =>
+        props.monthDays?.map(day => {
+            return {
+                ...day,
+                moodColor: (dayMoods && dayMoods[day.date]?.length > 0) ?
+                    averageMoodColor(dayMoods[day.date]) :
+                    NON_MOOD_COLOR
+            }
+        })
+        , [props.monthDays, dayMoods])
 
 
     return (
@@ -65,7 +98,7 @@ export const Calendar = (props: CalendarProps) => {
             <CalendarHeader {...props} />
             <CalendarWeekDays />
             <MonthDays
-                days={props.monthDays}
+                days={monthDays}
                 handleDayClick={(day: number) => handleDayClick(props.year, props.month, day)}
             />
         </div>
