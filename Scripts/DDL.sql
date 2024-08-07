@@ -32,6 +32,13 @@ CREATE TABLE events (
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
+CREATE TABLE event_keywords (
+  event_id INTEGER,
+  keyword TEXT,
+  PRIMARY KEY (event_id, keyword),
+  FOREIGN KEY (event_id) REFERENCES events (id) ON DELETE CASCADE
+);
+
 -- Create the suggestions table
 CREATE TABLE suggestions (
   id SERIAL PRIMARY KEY,

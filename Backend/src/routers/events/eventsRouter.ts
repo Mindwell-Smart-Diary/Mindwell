@@ -4,6 +4,7 @@ import { saveNewEvent } from "./routes/saveEvent/handler";
 import { validateDataMiddleware } from "../../middleware/zodValidate";
 import { createEventSchema } from "./routes/saveEvent/schema";
 import { getEventSuggestionsHandler } from "./routes/getEventSuggestions/handler";
+import { getEventsByKeywords } from "./routes/getEventsByKeywords/handler";
 
 export const buildEventsRouter = () => {
   const router = Router();
@@ -11,6 +12,7 @@ export const buildEventsRouter = () => {
   router.get("/", getEventsHandler);
   router.post("/", validateDataMiddleware(createEventSchema), saveNewEvent);
   router.get("/:id/suggestions", getEventSuggestionsHandler);
+  router.get("/keywords", getEventsByKeywords);
 
   return router;
 };

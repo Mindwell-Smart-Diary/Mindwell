@@ -93,7 +93,11 @@ describe("Events router", () => {
           }));
 
         expect(response.status).toBe(StatusCodes.OK);
-        expect(response.data).toStrictEqual(EXPECTED);
+        expect(
+          response.data.map(
+            ({ keywords, ...rest }: { keywords: string[] }) => rest
+          )
+        ).toStrictEqual(EXPECTED);
       });
     });
   });
