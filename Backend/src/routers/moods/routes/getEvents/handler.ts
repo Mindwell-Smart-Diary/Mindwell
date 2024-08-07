@@ -4,14 +4,13 @@ import { AuthRequest } from "../../../../middleware/auth";
 import { validateData } from "../../../../middleware/zodValidate";
 import { prisma } from "../../../../prisma/prismaClient";
 import { getMoodsByMonth } from "../../../../services/mood/moods.service";
-import { USER_ID } from "../../moodRouterTestData";
 
 export const getMoodsCalendarHandler = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const { userId } = { userId: USER_ID }; // req.user;
+  const { id: userId } = req.user;
 
   try {
     const data = validateData(

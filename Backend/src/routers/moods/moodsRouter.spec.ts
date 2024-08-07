@@ -8,19 +8,24 @@ import { createUser } from "../../testUtils/entityBuilders/users";
 import { createEvent } from "../../testUtils/entityBuilders/events";
 import { events, users } from "@prisma/client";
 import { Mood } from "../../models/enums/mood.enum";
-import { USER_ID } from "./moodRouterTestData";
+import { LOGGED_IN_USER_ID } from "../../../vitest-api-setup";
 
 const { PORT } = Configuration.getInstance();
 
 const getMoodsCalendar = async (queryParams: Record<string, string>) => {
   const queryParamsString = new URLSearchParams(queryParams).toString();
   const res = await testAxios.get(
-    `http://localhost:${PORT}/moods/calendar?${queryParamsString}`
+    `http://localhost:${PORT}/moods/calendar?${queryParamsString}`,
+    {
+      headers: {
+        Authorization: "Bearer " + process.env.TESTS_ACCESS_TOKEN,
+      },
+    }
   );
 
   return {
     status: res.status,
-    data: JSON.parse(res.data),
+    data: res.data,
   };
 };
 
@@ -89,14 +94,12 @@ describe("Moods router", () => {
     });
 
     describe("Should return data", () => {
-      let preMadeUser: users;
       let preMadeEvents: events[];
 
       beforeEach(async () => {
-        [preMadeUser, ...preMadeEvents] = await prisma.$transaction([
-          createUser({ id: USER_ID }),
+        preMadeEvents = await prisma.$transaction([
           ...[...Array(200)].map(() =>
-            createEvent(USER_ID, {
+            createEvent(LOGGED_IN_USER_ID, {
               date: chance.date({ american: false, year: 2024 }) as Date,
             })
           ),
@@ -104,16 +107,11 @@ describe("Moods router", () => {
       });
 
       afterEach(async () => {
-        await prisma.$transaction([
-          prisma.events.deleteMany({
-            where: { user_id: USER_ID },
-          }),
-          prisma.users.delete({
-            where: {
-              id: USER_ID,
-            },
-          }),
-        ]);
+        await prisma.events.deleteMany({
+          where: {
+            user_id: LOGGED_IN_USER_ID,
+          },
+        });
       });
 
       it("Should return correct moods", async () => {

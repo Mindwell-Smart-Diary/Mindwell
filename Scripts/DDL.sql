@@ -15,15 +15,28 @@ CREATE TABLE users (
   password TEXT NOT NULL
 );
 
+CREATE TABLE user_refresh_tokens (
+  token_id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  refresh_token TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
 -- Create the events table
 CREATE TABLE events (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL,
-  title TEXT NOT NULL,
   content TEXT NOT NULL,
   date DATE NOT NULL,
   mood TEXT,
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE TABLE event_keywords (
+  event_id INTEGER,
+  keyword TEXT,
+  PRIMARY KEY (event_id, keyword),
+  FOREIGN KEY (event_id) REFERENCES events (id) ON DELETE CASCADE
 );
 
 -- Create the suggestions table

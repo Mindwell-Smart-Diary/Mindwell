@@ -2,7 +2,6 @@ import { Response, NextFunction } from "express";
 import { AuthRequest } from "../../../../middleware/auth";
 import { queryParamsSchema } from "./schema";
 import { validateData } from "../../../../middleware/zodValidate";
-import { USER_ID } from "../../eventsRouterTestData";
 import { getEvents } from "../../../../services/events.service";
 import { prisma } from "../../../../prisma/prismaClient";
 
@@ -11,12 +10,13 @@ export const getEventsHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userId } = { userId: USER_ID }; // req.user;
+  const { id: userId } = req.user;
 
   try {
     const options = validateData(
       queryParamsSchema,
       {
+        withSuggestions: req.query.withSuggestions === "true",
         date: isNaN(Number(req.query.date))
           ? req.query.date
           : Number(req.query.date),
@@ -24,8 +24,10 @@ export const getEventsHandler = async (
       "Invalid query params"
     );
 
+    console.log(options);
     const events = await getEvents(prisma, userId, {
       date: options.date,
+      withSuggestions: options.withSuggestions,
     });
 
     res.json(events);
