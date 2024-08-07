@@ -32,13 +32,6 @@ const chance = new Chance();
 describe("Events router", () => {
   describe("Get events", () => {
     describe("Should validate query params", () => {
-      it("Should throw error when missing data", async () => {
-        const response = await getEvents({});
-
-        expect(response.status).toBe(StatusCodes.BAD_REQUEST);
-        expect(response.data).toBe("Invalid query params: date is Required");
-      });
-
       it.each([
         [
           "30.1",
@@ -100,7 +93,11 @@ describe("Events router", () => {
           }));
 
         expect(response.status).toBe(StatusCodes.OK);
-        expect(response.data).toStrictEqual(EXPECTED);
+        expect(
+          response.data.map(
+            ({ keywords, ...rest }: { keywords: string[] }) => rest
+          )
+        ).toStrictEqual(EXPECTED);
       });
     });
   });

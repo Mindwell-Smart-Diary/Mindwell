@@ -3,7 +3,7 @@ import { llmGenerate } from "../generative-ai.service";
 import { PromptPart } from "../../models/prompt-parts.model";
 import { DateTime } from "luxon";
 import { PrismaClient, events } from "@prisma/client";
-import { getEventsByDates } from "../../repository/events.repository";
+import { findEvents } from "../../repository/events.repository";
 
 const generateMoodPrompt = (
   userInformation: { age: number; gender: string },
@@ -61,12 +61,13 @@ export const getMoodsByMonth = async (
       .startOf("month")
       .toString()
       .split("+")[0] + "Z";
-  const matchingEvents: events[] = await getEventsByDates(
-    prisma,
-    userId,
-    startDate,
-    endDate
-  );
+
+  const matchingEvents: events[] = await findEvents(prisma, userId, {
+    dates: {
+      endDate,
+      startDate,
+    },
+  });
 
   return matchingEvents.reduce<Record<string, Mood[]>>(
     (finalRes, currEvent) => {

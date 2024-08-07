@@ -1,51 +1,58 @@
 import { PrismaClient, events } from "@prisma/client";
 export type eventsAndMoods = {
-  title: string;
+  content: string;
   mood: string;
 };
 
-export const getUserLastDaysEventsAndMoodsFromDB = async (
+export const findEvents = async (
   prisma: PrismaClient,
   userId: number,
-  numOfDays: number
-): Promise<eventsAndMoods[]> => {
-  try {
-    const lastDaysAgo = new Date();
-    lastDaysAgo.setDate(lastDaysAgo.getDate() - numOfDays);
+  options?: {
+    withSuggestions?: boolean;
+    dates?: {
+      startDate: string;
+      endDate: string;
+    };
+    keywords?: string[];
+  }
+) => {
+  const { withSuggestions = false, dates, keywords } = options ?? {};
+  const whereDates = !dates
+    ? {}
+    : {
+        date: {
+          gte: dates.startDate,
+          lt: dates.endDate,
+        },
+      };
 
-    const events = await prisma.events.findMany({
+  const whereKeywords =
+    Array.isArray(keywords) && keywords.length > 0
+      ? {
+          keywords: {
+            some: {
+              keyword: {
+                in: keywords,
+              },
+            },
+          },
+        }
+      : {};
+
+  return (
+    await prisma.events.findMany({
       where: {
         user_id: userId,
-        date: {
-          gte: lastDaysAgo,
-        },
+        ...whereKeywords,
+        ...whereDates,
       },
-      select: {
-        title: true,
-        mood: true,
+      include: {
+        suggestions: withSuggestions,
+        keywords: true,
       },
-    });
-
-    return events;
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
-};
-
-export const getEventsByDates = (
-  prisma: PrismaClient,
-  userId: number,
-  startDate: string,
-  endDate: string
-): Promise<events[]> => {
-  return prisma.events.findMany({
-    where: {
-      user_id: userId,
-      date: {
-        gte: startDate,
-        lt: endDate,
-      },
-    },
-  });
+    })
+  ).map(({ keywords, ...rest }) => ({
+    ...rest,
+    keywords: keywords.map(({ keyword }) => keyword),
+  }));
 };
