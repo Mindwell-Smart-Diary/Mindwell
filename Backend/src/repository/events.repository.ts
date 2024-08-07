@@ -4,7 +4,7 @@ export type eventsAndMoods = {
   mood: string;
 };
 
-export const findEvents = (
+export const findEvents = async (
   prisma: PrismaClient,
   userId: number,
   options?: {
@@ -13,9 +13,10 @@ export const findEvents = (
       startDate: string;
       endDate: string;
     };
+    keywords?: string[];
   }
-): Promise<events[]> => {
-  const { withSuggestions = false, dates } = options ?? {};
+) => {
+  const { withSuggestions = false, dates, keywords } = options ?? {};
   const whereDates = !dates
     ? {}
     : {
@@ -25,14 +26,33 @@ export const findEvents = (
         },
       };
 
-  console.log(withSuggestions);
-  return prisma.events.findMany({
-    where: {
-      user_id: userId,
-      ...whereDates,
-    },
-    include: {
-      suggestions: withSuggestions,
-    },
-  });
+  const whereKeywords =
+    Array.isArray(keywords) && keywords.length > 0
+      ? {
+          keywords: {
+            some: {
+              keyword: {
+                in: keywords,
+              },
+            },
+          },
+        }
+      : {};
+
+  return (
+    await prisma.events.findMany({
+      where: {
+        user_id: userId,
+        ...whereKeywords,
+        ...whereDates,
+      },
+      include: {
+        suggestions: withSuggestions,
+        keywords: true,
+      },
+    })
+  ).map(({ keywords, ...rest }) => ({
+    ...rest,
+    keywords: keywords.map(({ keyword }) => keyword),
+  }));
 };
