@@ -61,13 +61,13 @@ const router = createHashRouter([
       },
       {
         path: "/",
-        element: <Navigate to="/home" />,
+        element: <Navigate to="/login" />,
       },
     ],
   },
   {
     path: "*",
-    element: <Navigate to="/home" />,
+    element: <Navigate to="/login" />,
   },
 ]);
 
