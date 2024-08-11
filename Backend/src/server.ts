@@ -8,11 +8,15 @@ import { buildMoodsRouter } from "./routers/moods/moodsRouter";
 import { buildEventsRouter } from "./routers/events/eventsRouter";
 import { buildAuthRouter } from "./routers/auth/authRouter";
 import { authorizeUser } from "./middleware/auth";
+import cors from 'cors';
+
 
 export const initServer = () => {
   const { PORT } = Configuration.getInstance();
 
   const app = express();
+  app.use(cors())
+
   app.use(bodyParser.json());
 
   app.use("/auth", buildAuthRouter());
