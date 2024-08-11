@@ -6,15 +6,22 @@ import { errorHandler } from "./middleware/errorMiddleware";
 import bodyParser from "body-parser";
 import { buildMoodsRouter } from "./routers/moods/moodsRouter";
 import { buildEventsRouter } from "./routers/events/eventsRouter";
+import { buildAuthRouter } from "./routers/auth/authRouter";
+import { authorizeUser } from "./middleware/auth";
 
 export const initServer = () => {
   const { PORT } = Configuration.getInstance();
 
   const app = express();
   app.use(bodyParser.json());
-  app.use(buildSuggestionRouter());
-  app.use(buildMoodsRouter());
-  app.use(buildEventsRouter());
+
+  app.use("/auth", buildAuthRouter());
+
+  app.use(authorizeUser);
+
+  app.use("/suggestions", buildSuggestionRouter());
+  app.use("/moods", buildMoodsRouter());
+  app.use("/events", buildEventsRouter());
 
   app.use(errorHandler);
 

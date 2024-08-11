@@ -1,25 +1,97 @@
-import { PrismaClient, users } from '@prisma/client';
-import { Mood } from '../models/enums/mood.enum';
+import { PrismaClient, PrismaPromise, users } from "@prisma/client";
 
 export type suggestionByMood = {
   id: number;
   title: string;
   rank: number;
   execution_date: Date;
-}
+};
 
-export const getUserFromDB = async(prisma: PrismaClient, userId: number): 
-  Promise<users> => {
-    try {
-      const user = await prisma.users.findUnique({
+export const getUser = async (prisma: PrismaClient, userId: number) => {
+  try {
+    const user = await prisma.users.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        refresh_tokens: true,
+      },
+    });
+
+    return user;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const findByEmail = async (prisma: PrismaClient, email: string) => {
+  try {
+    const user = await prisma.users.findUnique({
+      where: {
+        email,
+      },
+      include: {
+        refresh_tokens: true,
+      },
+    });
+
+    return user;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const updateRefreshToken = async (
+  prismaClient: PrismaClient,
+  userId: number,
+  refreshToken: string,
+  oldRefreshToken?: string
+) => {
+  const actions: PrismaPromise<any>[] = [
+    prismaClient.user_refresh_tokens.create({
+      data: {
+        user_id: userId,
+        refresh_token: refreshToken,
+      },
+    }),
+  ];
+
+  if (oldRefreshToken) {
+    actions.push(
+      prismaClient.user_refresh_tokens.deleteMany({
         where: {
-          id: userId,
+          user_id: userId,
+          refresh_token: oldRefreshToken,
         },
       })
-      
-      return user;
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-}
+    );
+  }
+
+  await prismaClient.$transaction(actions);
+};
+
+export const revokeRefreshToken = async (
+  prismaClient: PrismaClient,
+  userId: number,
+  refreshToken: string
+) => {
+  await prismaClient.user_refresh_tokens.deleteMany({
+    where: {
+      user_id: userId,
+      refresh_token: refreshToken,
+    },
+  });
+};
+
+export const resetRefreshTokens = async (
+  prismaClient: PrismaClient,
+  userId: number
+) => {
+  await prismaClient.user_refresh_tokens.deleteMany({
+    where: {
+      user_id: userId,
+    },
+  });
+};

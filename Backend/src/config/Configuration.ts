@@ -18,6 +18,18 @@ export class Configuration {
     return this.env.LLM_MODEL || "gemini-1.5-flash";
   }
 
+  get JWT_SECRET(): string {
+    return this.env.JWT_SECRET;
+  }
+
+  get JWT_REFRESH_SECRET(): string {
+    return this.env.JWT_REFRESH_SECRET;
+  }
+
+  get JWT_EXPIRATION(): number {
+    return Number(this.env.JWT_EXPIRATION || "60000");
+  }
+
   public static getInstance(
     env: NodeJS.ProcessEnv = process.env
   ): Configuration {

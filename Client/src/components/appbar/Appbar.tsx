@@ -93,7 +93,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
               sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
               color="inherit"
               aria-label="calendar"
-              onClick={() => handleTabClick('calendar', '/calendar')}
+              onClick={() => handleTabClick('calendar', '/history')}
             >
               {/* <CalendarTodayIcon sx={iconStyle('calendar')} /> */}
               <Box
@@ -114,7 +114,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
               sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
               color="inherit"
               aria-label="history"
-              onClick={() => handleTabClick('history', '/history')}
+              onClick={() => handleTabClick('history', '/historySuggestions')}
             >
               <Box
                 component="img"

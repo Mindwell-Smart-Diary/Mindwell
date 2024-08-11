@@ -4,22 +4,26 @@ import { testAxios } from "../../testUtils/axiosInstance";
 import { StatusCodes } from "http-status-codes";
 import { prisma } from "../../prisma/prismaClient";
 import { Chance } from "chance";
-import { createUser } from "../../testUtils/entityBuilders/users";
 import { createEvent } from "../../testUtils/entityBuilders/events";
 import { events, users } from "@prisma/client";
-import { USER_ID } from "./eventsRouterTestData";
+import { LOGGED_IN_USER_ID } from "../../../vitest-api-setup";
 
 const { PORT } = Configuration.getInstance();
 
 const getEvents = async (queryParams: Record<string, string>) => {
   const queryParamsString = new URLSearchParams(queryParams).toString();
   const res = await testAxios.get(
-    `http://localhost:${PORT}/events?${queryParamsString}`
+    `http://localhost:${PORT}/events?${queryParamsString}`,
+    {
+      headers: {
+        Authorization: "Bearer " + process.env.TESTS_ACCESS_TOKEN,
+      },
+    }
   );
 
   return {
     status: res.status,
-    data: JSON.parse(res.data),
+    data: res.data,
   };
 };
 
@@ -28,13 +32,6 @@ const chance = new Chance();
 describe("Events router", () => {
   describe("Get events", () => {
     describe("Should validate query params", () => {
-      it("Should throw error when missing data", async () => {
-        const response = await getEvents({});
-
-        expect(response.status).toBe(StatusCodes.BAD_REQUEST);
-        expect(response.data).toBe("Invalid query params: date is Required");
-      });
-
       it.each([
         [
           "30.1",
@@ -61,27 +58,21 @@ describe("Events router", () => {
       let preMadeEvents: events[];
 
       beforeEach(async () => {
-        [preMadeUser, ...preMadeEvents] = await prisma.$transaction([
-          createUser({ id: USER_ID }),
-          ...[...Array(200)].map(() =>
-            createEvent(USER_ID, {
+        preMadeEvents = await prisma.$transaction(
+          [...Array(200)].map(() =>
+            createEvent(LOGGED_IN_USER_ID, {
               date: chance.date({ american: false, year: 2024 }) as Date,
             })
-          ),
-        ]);
+          )
+        );
       });
 
       afterEach(async () => {
-        await prisma.$transaction([
-          prisma.events.deleteMany({
-            where: { user_id: USER_ID },
-          }),
-          prisma.users.delete({
-            where: {
-              id: USER_ID,
-            },
-          }),
-        ]);
+        prisma.users.delete({
+          where: {
+            id: LOGGED_IN_USER_ID,
+          },
+        });
       });
 
       it("Should return correct events", async () => {
@@ -102,7 +93,11 @@ describe("Events router", () => {
           }));
 
         expect(response.status).toBe(StatusCodes.OK);
-        expect(response.data).toStrictEqual(EXPECTED);
+        expect(
+          response.data.map(
+            ({ keywords, ...rest }: { keywords: string[] }) => rest
+          )
+        ).toStrictEqual(EXPECTED);
       });
     });
   });

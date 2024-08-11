@@ -1,6 +1,6 @@
 import { useThemeMode } from '@/hooks/ThemeModeContext';
 import { ThemeProvider, Container, Grid, Typography, Card, CardContent, Rating, IconButton, Collapse, Box, Divider } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
@@ -63,6 +63,14 @@ const suggestions: Suggestion[] = [
 ];
 
 const HistoryOfSuggestionsPage: React.FC = () => {
+  const [suggestions, setSuggestios] = useState<Suggestion[]>([]);
+
+  useEffect(() => {
+      // Todo: get dailySharings of today
+      const events: Suggestion[] = [];
+
+      setSuggestios(events);
+  }, []);
   const customIcons = {
     [MoodCategory.Negative]: {
       icon: <SentimentDissatisfiedIcon style={{ color: '#FF4136' }} />,
