@@ -37,6 +37,11 @@ interface AppBarComponentProps {
 }
 
 const AppBarComponent: React.FC<AppBarComponentProps> = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -64,7 +69,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
               sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
               color="inherit"
               aria-label="diary"
-              onClick={() => handleTabClick('diary', '/diary')}
+              onClick={() => handleTabClick('diary', `/sharing/${year}/${month}/${day}`)}
             >
               <Box
                 component="img"
@@ -103,7 +108,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
               sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
               color="inherit"
               aria-label="history"
-              onClick={() => handleTabClick('history', '/historySuggestions')}
+              onClick={() => handleTabClick('history', '/history-suggestions')}
             >
               <Box
                 component="img"
@@ -138,7 +143,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
           </Tooltip>
         </Box>
         <Tooltip title="Logout" arrow>
-          <Button color="inherit">
+          <Button color="inherit" onClick={() => navigate('/login')}>
             <Box
               component="img"
               sx={{

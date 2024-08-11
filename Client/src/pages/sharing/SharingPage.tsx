@@ -3,12 +3,18 @@ import { TextField, Button, Card, Typography, Box } from '@mui/material';
 import * as styles from "./styles";
 import { SuggestionRank } from '@/types/enums/SuggestionRank';
 import { DailySharing } from '@/types/DailySharing';
+import { useParams } from 'react-router-dom';
 
 const SuggestionPage: React.FC = () => {
     const [dailySharing, setDailySharing] = useState<string>('');
     const [dailySharings, setDailySharings] = useState<DailySharing[]>([]);
     const [suggestion, setSuggestion] = useState<string>('');
     const [chosenRank, setChosenRank] = useState<SuggestionRank>();
+
+    const { year, month, day } = useParams();
+    useEffect(() => {
+        console.log({ year, month, day })
+    }, [year, month, day])
 
     useEffect(() => {
         // Todo: get dailySharings of today
