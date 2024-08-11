@@ -1,14 +1,10 @@
-
 import { useThemeMode } from '@/hooks/ThemeModeContext';
-import { ThemeProvider, Container, Grid, Typography, Card, CardContent, Rating, IconButton, Collapse, Box } from '@mui/material';
-import React, { useState } from 'react';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
-import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import { ThemeProvider, Container, Grid, Typography, Card, CardContent, Rating, IconButton, Collapse, Box, Divider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
-
 
 interface Suggestion {
   title: string;
@@ -66,12 +62,17 @@ const suggestions: Suggestion[] = [
   // Add more suggestions as needed
 ];
 
-
 const HistoryOfSuggestionsPage: React.FC = () => {
+  const [suggestions, setSuggestios] = useState<Suggestion[]>([]);
 
+  useEffect(() => {
+      // Todo: get dailySharings of today
+      const events: Suggestion[] = [];
+
+      setSuggestios(events);
+  }, []);
   const customIcons = {
     [MoodCategory.Negative]: {
-      // icon: <SentimentDissatisfiedIcon style={{ color: 'red', marginLeft: 8, marginBottom: -4}} />,
       icon: <SentimentDissatisfiedIcon style={{ color: '#FF4136' }} />,
       label: 'Dissatisfied',
     },
@@ -98,70 +99,61 @@ const HistoryOfSuggestionsPage: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container>
-      <Box mt={4} mb={2}>
-          <Typography component="h1" variant="h2" gutterBottom align="center" color="primary" sx={{ fontWeight: 'bold' }}>
+      <Container maxWidth="md">
+        <Box mt={4} mb={2}>
+          <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold' }}>
             History of Suggestions
           </Typography>
         </Box>
         <Grid container spacing={0.5} direction="column">
           {suggestions.map((suggestion, index) => (
-            <Grid item xs={12} key={index}>
-              <Card style={{ position: 'relative' }}>
-                <CardContent>
-                  <Grid container justifyContent="space-between">
-                    <Grid item xs={8}>
-                      <Typography variant="h6" component="div">
-                        {suggestion.eventTitle}
-                        {/* {getMoodIcon(suggestion.eventMoodCategory).icon}   */}
-                        <IconButton size="small" onClick={() => handleExpandClick(index)}>
-                          {getMoodIcon(suggestion.eventMoodCategory).icon}  
-                        </IconButton>                      
-                        {/* <IconButton size="small" onClick={() => handleExpandClick(index)}>
-                          {expanded[index] ? <UnfoldLessIcon /> : <UnfoldMoreIcon />}
-                        </IconButton> */}
-                      </Typography>
-                      <Collapse in={expanded[index]} timeout="auto" unmountOnExit>
-                        <Typography color="text.secondary" gutterBottom>
-                        Your personal share: {suggestion.eventContent}
+            <React.Fragment key={index}>
+              <Grid item xs={12}>
+                <Card style={{ position: 'relative', backgroundColor: 'inherit', boxShadow: 'none' }}>
+                  <CardContent>
+                    <Grid container justifyContent="space-between">
+                      <Grid item xs={8}>
+                        <Typography variant="h6" component="div">
+                          {suggestion.eventTitle}
+                          <IconButton  style={{ marginLeft: '10px' }} size="small" onClick={() => handleExpandClick(index)}>
+                            {getMoodIcon(suggestion.eventMoodCategory).icon}
+                          </IconButton>
                         </Typography>
-                      </Collapse>
-                      {/* <Typography variant="h6" component="div">
-                        {suggestion.title}
-                      </Typography> */}
-                      <Typography color="text.secondary" gutterBottom>
-                        Our recommendation: {suggestion.title}, {suggestion.content}
-                      </Typography>
-                      <Grid container alignItems="center" justifyContent="space-between">
-                        <Rating value={suggestion.rank} readOnly size="large" max={3}/>
-                      </Grid>
-                    </Grid>
-                    <Grid item>
-                      <Grid container alignItems="center" spacing={1}>
-                        <Grid item>
-                          <CalendarTodayIcon fontSize="medium" />
-                        </Grid>
-                        <Grid item>
-                          <Typography color="text.secondary" variant="body1">
-                            {new Date(suggestion.date).toLocaleDateString()}
+                        <Collapse in={expanded[index]} timeout="auto" unmountOnExit>
+                          <Typography color="text.secondary" gutterBottom>
+                            Your personal share: {suggestion.eventContent}
                           </Typography>
+                        </Collapse>
+                        <Typography color="text.secondary" gutterBottom>
+                          Our recommendation: {suggestion.title}, {suggestion.content}
+                        </Typography>
+                        <Grid container alignItems="center" justifyContent="space-between">
+                          <Rating value={suggestion.rank} readOnly size="large" max={3}/>
                         </Grid>
                       </Grid>
-                      {/* <Grid container alignItems="center" spacing={1}>
-                        <Grid item>
+                      <Grid item>
+                        <Grid container alignItems="center" spacing={1}>
+                          <Grid item>
+                            <CalendarTodayIcon fontSize="medium" />
+                          </Grid>
+                          <Grid item>
+                            <Typography color="text.secondary" variant="body1">
+                              {new Date(suggestion.date).toLocaleDateString()}
+                            </Typography>
+                          </Grid>
                         </Grid>
-                      </Grid> */}
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
+              {index < suggestions.length - 1 && <Divider />}
+            </React.Fragment>
           ))}
         </Grid>
       </Container>
     </ThemeProvider>
   );
 };
-
 
 export default HistoryOfSuggestionsPage;
