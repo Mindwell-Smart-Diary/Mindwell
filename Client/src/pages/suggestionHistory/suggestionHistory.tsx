@@ -22,7 +22,7 @@ enum MoodCategory {
   Regular = "Regular",
 }
 
-const suggestions: Suggestion[] = [
+const suggestionsList: Suggestion[] = [
   {
     eventTitle: "Morning Jog",
     eventContent: "Went for a 5km jog in the park. Felt great.",
@@ -66,10 +66,10 @@ const HistoryOfSuggestionsPage: React.FC = () => {
   const [suggestions, setSuggestios] = useState<Suggestion[]>([]);
 
   useEffect(() => {
-      // Todo: get dailySharings of today
-      const events: Suggestion[] = [];
+    // Todo: get dailySharings of today
+    // const events: Suggestion[] = [];
 
-      setSuggestios(events);
+    setSuggestios(suggestionsList);
   }, []);
   const customIcons = {
     [MoodCategory.Negative]: {
@@ -77,11 +77,11 @@ const HistoryOfSuggestionsPage: React.FC = () => {
       label: 'Dissatisfied',
     },
     [MoodCategory.Regular]: {
-      icon: <SentimentSatisfiedIcon style={{ color: '#FF851B' }}/>,
+      icon: <SentimentSatisfiedIcon style={{ color: '#FF851B' }} />,
       label: 'Neutral',
     },
     [MoodCategory.Positive]: {
-      icon: <SentimentSatisfiedAltIcon style={{ color: '#3D9970' }}/>,
+      icon: <SentimentSatisfiedAltIcon style={{ color: '#3D9970' }} />,
       label: 'Satisfied',
     }
   };
@@ -109,13 +109,13 @@ const HistoryOfSuggestionsPage: React.FC = () => {
           {suggestions.map((suggestion, index) => (
             <React.Fragment key={index}>
               <Grid item xs={12}>
-                <Card style={{ position: 'relative', backgroundColor: 'inherit', boxShadow: 'none' }}>
+                <Card sx={{ position: 'relative', my: 1, }} elevation={1}>
                   <CardContent>
                     <Grid container justifyContent="space-between">
                       <Grid item xs={8}>
                         <Typography variant="h6" component="div">
                           {suggestion.eventTitle}
-                          <IconButton  style={{ marginLeft: '10px' }} size="small" onClick={() => handleExpandClick(index)}>
+                          <IconButton style={{ marginLeft: '10px' }} size="small" onClick={() => handleExpandClick(index)}>
                             {getMoodIcon(suggestion.eventMoodCategory).icon}
                           </IconButton>
                         </Typography>
@@ -128,7 +128,7 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                           Our recommendation: {suggestion.title}, {suggestion.content}
                         </Typography>
                         <Grid container alignItems="center" justifyContent="space-between">
-                          <Rating value={suggestion.rank} readOnly size="large" max={3}/>
+                          <Rating value={suggestion.rank} readOnly size="large" max={3} />
                         </Grid>
                       </Grid>
                       <Grid item>
@@ -147,7 +147,7 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                   </CardContent>
                 </Card>
               </Grid>
-              {index < suggestions.length - 1 && <Divider />}
+              {/* {index < suggestions.length - 1 && <Divider />} */}
             </React.Fragment>
           ))}
         </Grid>
