@@ -78,12 +78,6 @@ const HistoryOfSuggestionsPage: React.FC = () => {
   };
   const { theme } = useThemeMode();
 
-  const [expanded, setExpanded] = useState<Record<number, boolean>>({});
-
-  const handleExpandClick = (index: number) => {
-    setExpanded((prevState) => ({ ...prevState, [index]: !prevState[index] }));
-  };
-
   const getMoodCategory = (mood: Mood): MoodCategory => {
     for (const category in MOOD_CATEGORIES) {
       if (MOOD_CATEGORIES[category as MoodCategory].includes(mood)) {
