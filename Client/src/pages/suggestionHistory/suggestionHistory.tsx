@@ -55,6 +55,7 @@ const HistoryOfSuggestionsPage: React.FC = () => {
           }))
         );
 
+        flatEvents.sort((a, b) => new Date(b.suggestionExecutionDate).getTime() - new Date(a.suggestionExecutionDate).getTime());
         setSuggestios(flatEvents);
       }
   
@@ -112,15 +113,13 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                       <Grid item xs={8}>
                         <Typography variant="h6" component="div">
                           {suggestion.suggestionTitle}
-                          <IconButton  style={{ marginLeft: '10px' }} size="small" onClick={() => handleExpandClick(index)}>
+                          <IconButton  style={{ marginLeft: '10px' }} size="small">
                             {getMoodIcon(getMoodCategory(suggestion.mood)).icon}
                           </IconButton>
                         </Typography>
-                        <Collapse in={expanded[index]} timeout="auto" unmountOnExit>
-                          <Typography color="text.secondary" gutterBottom>
-                            Your personal share: {suggestion.eventContent}
-                          </Typography>
-                        </Collapse>
+                        <Typography color="text.secondary" gutterBottom>
+                          Your personal share: {suggestion.eventContent}
+                        </Typography>
                         <Typography color="text.secondary" gutterBottom>
                           Our recommendation: {suggestion.suggestionContent}
                         </Typography>
@@ -143,8 +142,8 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                     </Grid>
                   </CardContent>
                 </Card>
+                {index < suggestions.length - 1 && <Divider />}
               </Grid>
-              {index < suggestions.length - 1 && <Divider />}
             </React.Fragment>
           ))}
         </Grid>

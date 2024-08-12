@@ -10,16 +10,14 @@ import { buildEventsRouter } from "./routers/events/eventsRouter";
 import { buildAuthRouter } from "./routers/auth/authRouter";
 import { authorizeUser } from "./middleware/auth";
 
+
 export const initServer = () => {
   const { PORT } = Configuration.getInstance();
 
   const app = express();
-  app.use(bodyParser.json());
+  app.use(cors())
 
-  app.use(cors({
-    origin: '*',
-    allowedHeaders: ['Authorization', 'Content-Type']
-  }));
+  app.use(bodyParser.json());
   app.use("/auth", buildAuthRouter());
 
   app.use(authorizeUser);

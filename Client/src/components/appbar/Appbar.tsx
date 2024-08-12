@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Box, Button, Tooltip } from '@mui/material';
-import BookIcon from '@mui/icons-material/Book';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import HistoryIcon from '@mui/icons-material/History';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { AppBar, Toolbar, Box, Button, Tooltip } from '@mui/material';
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
+import { useThemeMode } from '@/hooks/ThemeModeContext';
 
 const useStyles = {
   root: {
@@ -33,15 +29,19 @@ const ActiveUnderline = styled('div')(({ theme }) => ({
 const GlassAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: 'blur(10px)',
   backgroundColor: 'rgba(255, 255, 255, 0.5)',
-  WebkitBackdropFilter: 'blur(10px)', // Ensure compatibility with Safari
+  WebkitBackdropFilter: 'blur(10px)',
   boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
 }));
 
 interface AppBarComponentProps {
-  handleLogout: () => void;
 }
 
-const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
+const AppBarComponent: React.FC<AppBarComponentProps> = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -50,12 +50,8 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
     navigate(path);
   };
 
-  const iconStyle = (tabName: string) => ({
-    color: activeTab === tabName ? 'primary.main' : 'inherit',
-  });
-
   return (
-    <GlassAppBar position="sticky" sx={{ color: 'black'}}>
+    <GlassAppBar position="sticky" sx={{ color: 'black', maxWidth: '100vw' }}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Box
           component="img"
@@ -73,7 +69,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
               sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
               color="inherit"
               aria-label="diary"
-              onClick={() => handleTabClick('diary', '/diary')}
+              onClick={() => handleTabClick('diary', `/sharing/${year}/${month}/${day}`)}
             >
               <Box
                 component="img"
@@ -88,14 +84,13 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
             </Button>
           </Tooltip>
           <Tooltip title="Calendar" arrow>
-            
+
             <Button
               sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
               color="inherit"
               aria-label="calendar"
               onClick={() => handleTabClick('calendar', '/history')}
             >
-              {/* <CalendarTodayIcon sx={iconStyle('calendar')} /> */}
               <Box
                 component="img"
                 sx={{
@@ -105,7 +100,6 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
                 src="src\assets\icons\calendar.png"
                 alt=""
               />
-
               {activeTab === 'calendar' && <ActiveUnderline />}
             </Button>
           </Tooltip>
@@ -114,7 +108,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
               sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
               color="inherit"
               aria-label="history"
-              onClick={() => handleTabClick('history', '/historySuggestions')}
+              onClick={() => handleTabClick('history', '/history-suggestions')}
             >
               <Box
                 component="img"
@@ -149,17 +143,17 @@ const AppBarComponent: React.FC<AppBarComponentProps> = ({ handleLogout }) => {
           </Tooltip>
         </Box>
         <Tooltip title="Logout" arrow>
-        <Button color="inherit" onClick={handleLogout}>
-        <Box
-                component="img"
-                sx={{
-                  height: 24,
-                  width: 24,
-                }}  
-                src="src\assets\icons\logout.png"
-                alt=""
-              />
-        </Button>
+          <Button color="inherit" onClick={() => navigate('/login')}>
+            <Box
+              component="img"
+              sx={{
+                height: 24,
+                width: 24,
+              }}
+              src="src\assets\icons\logout.png"
+              alt=""
+            />
+          </Button>
         </Tooltip>
       </Toolbar>
     </GlassAppBar>

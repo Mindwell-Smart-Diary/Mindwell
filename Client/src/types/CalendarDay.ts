@@ -5,4 +5,5 @@ export type CalendarDay = {
     day: Day,
     date: number,
     mood?: MoodCategory,
+    moodColor?: string,
 }
