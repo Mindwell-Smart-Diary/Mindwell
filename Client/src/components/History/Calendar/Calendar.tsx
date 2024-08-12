@@ -5,7 +5,7 @@ import { CalendarDay } from '@/types/CalendarDay';
 
 import { CalendarHeader } from './CalendarHeader/CalendarHeader';
 import { ButtonBase } from '@mui/material';
-import { MOOD_GROUP_COLORS, MoodGroup } from '@/types/enums/MoodGroup';
+import { MOOD_GROUP_COLORS, MoodCategory } from '@/types/enums/MoodGroup';
 
 const CalendarWeekDays = () => {
     return (
@@ -28,7 +28,7 @@ const MonthDays = ({ days }: { days: CalendarDay[] }) => {
                             sx={{
                                 height: '100%',
                                 width: '80%',
-                                bgcolor: `${mood ? MOOD_GROUP_COLORS[mood] : MOOD_GROUP_COLORS[MoodGroup.Regular]}`
+                                bgcolor: `${mood ? MOOD_GROUP_COLORS[mood] : MOOD_GROUP_COLORS[MoodCategory.Regular]}`
                             }}
                         >
                             {date > 0 ? date : ''}

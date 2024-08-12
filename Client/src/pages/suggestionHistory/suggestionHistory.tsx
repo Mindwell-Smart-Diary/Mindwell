@@ -5,71 +5,61 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import { Mood } from '@/types/enums/Moods';
+import { MOOD_CATEGORIES, MoodCategory } from '@/types/enums/MoodGroup';
 
-interface Suggestion {
-  title: string;
-  content: string;
-  rank: number;
-  date: Date;
-  eventTitle: string;
+interface FlatEvent {
+  eventId: number;
+  userId: number;
   eventContent: string;
-  eventMoodCategory: MoodCategory;
+  eventDate: string; 
+  mood: Mood;
+  suggestionId: number;
+  suggestionTitle: string;
+  suggestionContent: string;
+  suggestionRank: number; 
+  suggestionExecutionDate: string;
+  // keywords: [];
 }
-
-enum MoodCategory {
-  Positive = "Positive",
-  Negative = "Negative",
-  Regular = "Regular",
-}
-
-const suggestions: Suggestion[] = [
-  {
-    eventTitle: "Morning Jog",
-    eventContent: "Went for a 5km jog in the park. Felt great.",
-    title: "Stretching",
-    content: "Do some stretching exercises to cool down.",
-    rank: 2,
-    date: new Date(),
-    eventMoodCategory: MoodCategory.Positive
-  },
-  {
-    eventTitle: "Evening Walk",
-    eventContent: "Had a relaxing walk in the neighborhood.",
-    title: "Hydrate",
-    content: "Drink plenty of water after your walk.",
-    rank: 3,
-    date: new Date(),
-    eventMoodCategory: MoodCategory.Regular
-  },
-  {
-    eventTitle: "Evening Walk",
-    eventContent: "Had a relaxing walk in the neighborhood.",
-    title: "Hydrate",
-    content: "Drink plenty of water after your walk.",
-    rank: 1,
-    date: new Date(),
-    eventMoodCategory: MoodCategory.Negative
-  },
-  {
-    eventTitle: "Evening Walk",
-    eventContent: "Had a relaxing walk in the neighborhood.",
-    title: "Hydrate",
-    content: "Drink plenty of water after your walk.",
-    rank: 3,
-    date: new Date(),
-    eventMoodCategory: MoodCategory.Regular
-  },
-  // Add more suggestions as needed
-];
 
 const HistoryOfSuggestionsPage: React.FC = () => {
-  const [suggestions, setSuggestios] = useState<Suggestion[]>([]);
+  const [suggestions, setSuggestios] = useState<FlatEvent[]>([]);
 
   useEffect(() => {
-      // Todo: get dailySharings of today
-      const events: Suggestion[] = [];
+      async function fetchMyAPI() {
+        // TODO: Update to SERVER_URL
+        const response = await fetch('http://localhost:3000/events/?withSuggestions=true', {
+          method: 'GET',
+          headers: {
+            // TODO: Update to user token
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwiaWF0IjoxNzIzNDg0NTc2LCJleHAiOjE3MjM1ODQ1NzZ9.1L_d4V7cGS7izOSuRlBi-6jO9JGGitkh44nALyePIDs',
+            'Content-Type': 'application/json',
+          },
+        });        
 
-      setSuggestios(events);
+        const result = await response.json();
+
+        const flatEvents : FlatEvent[] = result.flatMap((event: any)  =>
+          event.suggestions.map((suggestion: any) => ({
+              eventId: event.id,
+              userId: event.user_id,
+              eventContent: event.content,
+              eventDate: event.date,
+              mood: event.mood,
+              suggestionId: suggestion.id,
+              suggestionTitle: suggestion.title,
+              suggestionContent: suggestion.content,
+              suggestionRank: suggestion.rank,
+              suggestionExecutionDate: suggestion.execution_date,
+              // keywords: event.keywords
+          }))
+        );
+
+        setSuggestios(flatEvents);
+      }
+  
+      fetchMyAPI();
+
   }, []);
   const customIcons = {
     [MoodCategory.Negative]: {
@@ -93,9 +83,16 @@ const HistoryOfSuggestionsPage: React.FC = () => {
     setExpanded((prevState) => ({ ...prevState, [index]: !prevState[index] }));
   };
 
-  const getMoodIcon = (mood: MoodCategory) => {
-    return customIcons[mood];
+  const getMoodCategory = (mood: Mood): MoodCategory => {
+    for (const category in MOOD_CATEGORIES) {
+      if (MOOD_CATEGORIES[category as MoodCategory].includes(mood)) {
+        return category as MoodCategory;
+      }
+    }
+    return MoodCategory.Regular;
   };
+  
+  const getMoodIcon = (mood: MoodCategory) => customIcons[mood];
 
   return (
     <ThemeProvider theme={theme}>
@@ -114,9 +111,9 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                     <Grid container justifyContent="space-between">
                       <Grid item xs={8}>
                         <Typography variant="h6" component="div">
-                          {suggestion.eventTitle}
+                          {suggestion.suggestionTitle}
                           <IconButton  style={{ marginLeft: '10px' }} size="small" onClick={() => handleExpandClick(index)}>
-                            {getMoodIcon(suggestion.eventMoodCategory).icon}
+                            {getMoodIcon(getMoodCategory(suggestion.mood)).icon}
                           </IconButton>
                         </Typography>
                         <Collapse in={expanded[index]} timeout="auto" unmountOnExit>
@@ -125,10 +122,10 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                           </Typography>
                         </Collapse>
                         <Typography color="text.secondary" gutterBottom>
-                          Our recommendation: {suggestion.title}, {suggestion.content}
+                          Our recommendation: {suggestion.suggestionContent}
                         </Typography>
                         <Grid container alignItems="center" justifyContent="space-between">
-                          <Rating value={suggestion.rank} readOnly size="large" max={3}/>
+                          <Rating value={suggestion.suggestionRank} readOnly size="large" max={3}/>
                         </Grid>
                       </Grid>
                       <Grid item>
@@ -138,7 +135,7 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                           </Grid>
                           <Grid item>
                             <Typography color="text.secondary" variant="body1">
-                              {new Date(suggestion.date).toLocaleDateString()}
+                              {new Date(suggestion.suggestionExecutionDate).toLocaleDateString()}
                             </Typography>
                           </Grid>
                         </Grid>

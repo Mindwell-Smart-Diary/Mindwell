@@ -1,4 +1,5 @@
 import express from "express";
+import cors from 'cors';
 import { Server } from "http";
 import { Configuration } from "./config/Configuration";
 import { buildSuggestionRouter } from "./routers/suggestions/suggestionRouter";
@@ -15,6 +16,10 @@ export const initServer = () => {
   const app = express();
   app.use(bodyParser.json());
 
+  app.use(cors({
+    origin: '*',
+    allowedHeaders: ['Authorization', 'Content-Type']
+  }));
   app.use("/auth", buildAuthRouter());
 
   app.use(authorizeUser);

@@ -12,6 +12,8 @@ export const getEventsHandler = async (
 ) => {
   const { id: userId } = req.user;
 
+  console.log("req.query.withSuggestions: "+ req.query.withSuggestions)
+  console.log("userId: "+ userId)
   try {
     const options = validateData(
       queryParamsSchema,
