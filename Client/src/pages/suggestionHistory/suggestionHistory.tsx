@@ -7,8 +7,9 @@ import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import { Mood } from '@/types/enums/Moods';
 import { MOOD_CATEGORIES, MoodCategory } from '@/types/enums/MoodGroup';
+import axios from 'axios';
 
-interface FlatEvent {
+interface FlatEventWithSuggestion {
   eventId: number;
   userId: number;
   eventContent: string;
@@ -23,23 +24,21 @@ interface FlatEvent {
 }
 
 const HistoryOfSuggestionsPage: React.FC = () => {
-  const [suggestions, setSuggestios] = useState<FlatEvent[]>([]);
+  const [suggestions, setSuggestios] = useState<FlatEventWithSuggestion[]>([]);
 
   useEffect(() => {
       async function fetchMyAPI() {
         // TODO: Update to SERVER_URL
-        const response = await fetch('http://localhost:3000/events/?withSuggestions=true', {
-          method: 'GET',
+        const response = await axios.get('http://localhost:3000/events', {
+          params: {
+            withSuggestions: "true",
+          }, 
           headers: {
-            // TODO: Update to user token
             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwiaWF0IjoxNzIzNDg0NTc2LCJleHAiOjE3MjM1ODQ1NzZ9.1L_d4V7cGS7izOSuRlBi-6jO9JGGitkh44nALyePIDs',
-            'Content-Type': 'application/json',
-          },
-        });        
+          }
+        });
 
-        const result = await response.json();
-
-        const flatEvents : FlatEvent[] = result.flatMap((event: any)  =>
+        const flatEvents : FlatEventWithSuggestion[] = response.data.flatMap((event: any)  =>
           event.suggestions.map((suggestion: any) => ({
               eventId: event.id,
               userId: event.user_id,
