@@ -1,52 +1,80 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent, useEffect, useMemo } from 'react';
 import { TextField, Button, Card, Typography, Box } from '@mui/material';
 import * as styles from "./styles";
 import { SuggestionRank } from '@/types/enums/SuggestionRank';
 import { DailySharing } from '@/types/DailySharing';
 import { useParams } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getDateByYearMonthDay } from '@/utilities/DateUtils';
+import { backendAxiosInstance } from '@/axios/backendInstance';
 
 const SuggestionPage: React.FC = () => {
     const [dailySharing, setDailySharing] = useState<string>('');
-    const [dailySharings, setDailySharings] = useState<DailySharing[]>([]);
-    const [suggestion, setSuggestion] = useState<string>('');
+    // const [dailySharings, setDailySharings] = useState<DailySharing[]>([]);
+    // const [suggestion, setSuggestion] = useState<string>('');
     const [chosenRank, setChosenRank] = useState<SuggestionRank>();
 
     const { year, month, day } = useParams();
+
+    const queryClient = useQueryClient();
+
+    const time = useMemo(() =>
+        getDateByYearMonthDay(Number(year), Number(month), Number(day)).getTime(),
+        [year, month, day]);
+
+    const {
+        data: dailySharings,
+        isLoading: isDailySharingsLoading,
+        isError: isDailySharingsError,
+    } = useQuery<DailySharing[]>({
+        initialData: [],
+        queryKey: ["events", { date: time }],
+        queryFn: async () => {
+            const events: DailySharing[] = (await backendAxiosInstance.get("/events", {
+                params: {
+                    date: time
+                }
+            })).data;
+
+            return events.sort((a, b) => a.date.getTime() - b.date.getTime());
+        },
+    });
+
+    const {
+        data: suggestion,
+        isLoading: isSuggestionLoading,
+        isError: isSuggestionError,
+    } = useQuery<string>({
+        enabled: dailySharings.length > 0,
+        queryKey: ["events", dailySharings[-1]?.id, "suggestions"],
+        queryFn: async () => (await backendAxiosInstance.get(`/events/${dailySharings[-1]?.id}/suggestions`)).data.suggestion,
+    });
+
+    const postDailySharingMutation = useMutation({
+        mutationFn: (e: React.KeyboardEvent<HTMLDivElement>) => handleAddDailySharing(e),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["events", { date: time }] });
+            queryClient.invalidateQueries({ queryKey: ["events", dailySharings[-1].id, "suggestions"] });
+            setDailySharing('')
+            setChosenRank(undefined);
+            // event.preventDefault()
+        },
+    });
+
     useEffect(() => {
         console.log({ year, month, day })
     }, [year, month, day])
 
-    useEffect(() => {
-        // Todo: get dailySharings of today
-        const events: DailySharing[] = [];
-
-        setDailySharings(events);
-
-        if (events.length) {
-            // Todo: getLastSuggestion
-            const lastSuggestion = "";
-            setSuggestion(lastSuggestion)
-        }
-
-    }, []);
-
-    const handleAddDailySharing = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const handleAddDailySharing = async (event: React.KeyboardEvent<HTMLDivElement>) => {
         if (event.key === 'Enter' && dailySharing.trim().length) {
-            // Todo: create daily sharing and get the suggestion and the dailySharing object (with mood)
-            const newDailySharing: DailySharing = {
-                id: 12,
-                userId: 15,
-                content: dailySharing,
-                date: new Date(),
-                mood: "happy"
-            };
-            const newSuggestion = 'Your suggestion is...';
+            const postDailySharingResponse = await backendAxiosInstance.post("/events", { event: dailySharing });
+            if (postDailySharingResponse.status === 201) {
+                await backendAxiosInstance.post("/suggestions", { eventId: postDailySharingResponse.data.id });
+            }
 
-            setDailySharings([newDailySharing, ...dailySharings])
-            setSuggestion(newSuggestion);
-            setDailySharing('')
-            setChosenRank(undefined);
-            event.preventDefault()
+            // setDailySharing('')
+            // setChosenRank(undefined);
+            // event.preventDefault()
         }
     }
 
@@ -58,7 +86,7 @@ const SuggestionPage: React.FC = () => {
     const handleGenerateSuggestion = () => {
         // Todo: get new suggestion from the server
         setChosenRank(undefined);
-        setSuggestion('I want to give you another suggestion... ' + Math.random())
+        // setSuggestion('I want to give you another suggestion... ' + Math.random())
     }
 
     return (
@@ -69,7 +97,7 @@ const SuggestionPage: React.FC = () => {
                 rows={2}
                 multiline={true}
                 onChange={(event: ChangeEvent<HTMLInputElement>) => setDailySharing(event.target.value)}
-                onKeyDown={handleAddDailySharing}
+                onKeyDown={(event) => postDailySharingMutation.mutate(event)}
                 sx={styles.dailySharingText}>
             </TextField>
             {suggestion &&
@@ -101,8 +129,8 @@ const SuggestionPage: React.FC = () => {
                 </Card>
             }
             <Box sx={styles.listContainer}>
-                {dailySharings.map((item =>
-                    <Card sx={styles.dailySharingCard}>{item.content}</Card>
+                {dailySharings?.map((item =>
+                    <Card key={item.id} sx={styles.dailySharingCard}>{item.content}</Card>
                 ))}
             </Box>
         </Box>
