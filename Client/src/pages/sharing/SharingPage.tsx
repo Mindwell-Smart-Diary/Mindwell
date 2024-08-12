@@ -57,7 +57,6 @@ const SuggestionPage: React.FC = () => {
             queryClient.invalidateQueries({ queryKey: ["events", dailySharings[-1].id, "suggestions"] });
             setDailySharing('')
             setChosenRank(undefined);
-            // event.preventDefault()
         },
     });
 
@@ -71,10 +70,6 @@ const SuggestionPage: React.FC = () => {
             if (postDailySharingResponse.status === 201) {
                 await backendAxiosInstance.post("/suggestions", { eventId: postDailySharingResponse.data.id });
             }
-
-            // setDailySharing('')
-            // setChosenRank(undefined);
-            // event.preventDefault()
         }
     }
 
