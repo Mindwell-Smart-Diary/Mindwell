@@ -11,7 +11,7 @@ backendAxiosInstance.interceptors.request.use(
     //   "accessToken"
     // )}`;
 
-    config.headers["Authorization"] = `Barear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwiaWF0IjoxNzIzNDgyMzU3LCJleHAiOjE3MjM1ODIzNTd9.VEftwVppTTCuXm1h_aNdk2AQaVly7fwRkV1sabDH8Wo`;
+    config.headers["Authorization"] = `b eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIzNjUxMzQxLCJleHAiOjE3MjM3NTEzNDF9.jNNXgyKqcEwPJwmRlDjiJ1Qy0MQaVPFkXgo5VbrugvA`;
 
     return config;
   },
