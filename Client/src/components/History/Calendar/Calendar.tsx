@@ -6,12 +6,12 @@ import { CalendarDay } from '@/types/CalendarDay';
 import { CalendarHeader } from './CalendarHeader/CalendarHeader';
 import { ButtonBase } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
-import { Mood } from '@/types/enums/Moods';
+import { useMemo } from 'react';
 import { NON_MOOD_COLOR } from '@/constants/MoodColor';
 import { averageMoodColor } from '@/utilities/MoodUtils';
 import { getReadableTextColor } from '@/utilities/ColorUtils';
+import { backendAxiosInstance } from '@/axios/backendInstance';
+import { useQuery } from '@tanstack/react-query';
 
 const CalendarWeekDays = () => {
     return (
@@ -61,25 +61,21 @@ interface CalendarProps {
 export const Calendar = (props: CalendarProps) => {
     const navigate = useNavigate();
 
-    const [dayMoods, setDaysMoods] = useState<Record<number, Mood[]>>()
-
     const handleDayClick = (year: number, month: number, day: number) => {
         navigate(`/sharing/${year}/${month}/${day}`);
     };
 
-    useEffect(() => {
-        const fetchMoods = async () => {
-            const response = await axios.get('http://localhost:3000/moods/calendar', {
+    const { data: dayMoods } = useQuery(
+        {
+            queryKey: ['moods', "calendar", { year: props.year, month: props.month }],
+            queryFn: async () => (await backendAxiosInstance.get('/moods/calendar', {
                 params: {
                     year: props.year,
                     month: props.month,
                 }
-            });
-            setDaysMoods(response.data);
-        };
-
-        fetchMoods();
-    }, [props.year, props.month]);
+            })).data
+        }
+    )
 
     const monthDays = useMemo<CalendarDay[]>(() =>
         props.monthDays?.map(day => {
@@ -91,7 +87,6 @@ export const Calendar = (props: CalendarProps) => {
             }
         })
         , [props.monthDays, dayMoods])
-
 
     return (
         <div className={styles.calendar}>
