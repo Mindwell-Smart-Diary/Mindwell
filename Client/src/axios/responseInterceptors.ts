@@ -18,7 +18,7 @@ export const getErrorInterceptor = () => {
     };
 
     if (
-      error.response.status === HttpStatusCode.Unauthorized &&
+      error?.response?.status === HttpStatusCode.Unauthorized &&
       !originalRequest._retry &&
       originalRequest.url !== REFRESH_ENDPOINT
     ) {

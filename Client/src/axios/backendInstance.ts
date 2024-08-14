@@ -2,7 +2,7 @@ import axios from "axios";
 import { getErrorInterceptor } from "./responseInterceptors";
 
 export const backendAxiosInstance = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "http://localhost:3000",
 });
 
 backendAxiosInstance.interceptors.request.use(
@@ -11,7 +11,7 @@ backendAxiosInstance.interceptors.request.use(
     //   "accessToken"
     // )}`;
 
-    config.headers["Authorization"] = `b eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIzNjUxMzQxLCJleHAiOjE3MjM3NTEzNDF9.jNNXgyKqcEwPJwmRlDjiJ1Qy0MQaVPFkXgo5VbrugvA`;
+    config.headers["Authorization"] = `b eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzIzNjY5MDg1LCJleHAiOjE3MjM3MjkwODV9.IH-RRvv1E3khk5nUY_WjxoFNr0T1P-NFGeEFxvfg6aI`;
 
     return config;
   },
