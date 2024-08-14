@@ -5,6 +5,12 @@ import { MonthCalendar } from "../types/MonthCalendar";
 
 export const YEARS: number[] = [2024, 2025, 2026, 2027, 2028, 2029];
 
+export const getDateByYearMonthDay = (year: number, month: number, day: number): Date => {
+    // Subtract 1 from the month to convert to zero-based index
+    const date = new Date(year, month - 1, day);
+    return date;
+}
+
 export const splitDaysIntoWeeks = (days: CalendarDay[]): CalendarDay[][] => {
     const weeks: CalendarDay[][] = [];
     for (let i = 0; i < days.length; i += 7) {

@@ -1,5 +1,6 @@
 export enum SuggestionRank {
-    LIKE = 1,
-    DID_NOT_HELP = 2,
-    DID_NOT_LIKE = 3
-};
+    LIKE = 4,
+    DID_NOT_HELP = 3,
+    DID_NOT_LIKE = 2,
+    NEW_SUGGESTION = 1,
+}

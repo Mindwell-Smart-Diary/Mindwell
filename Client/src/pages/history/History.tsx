@@ -1,11 +1,10 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { useMemo, useState } from "react";
 
 import { Month } from "@/types/enums/Month";
 import { CalendarDay } from "@/types/CalendarDay";
 import { getMonthCalendar } from "@/utilities/DateUtils";
 import { Calendar, SearchInput } from "@/components/History";
-import { useThemeMode } from "@/hooks/ThemeModeContext";
 
 export const History = () => {
   const currentDate = new Date();
@@ -19,11 +18,8 @@ export const History = () => {
     return getMonthCalendar(selectedMonth, selectedYear).days;
   }, [selectedYear, selectedMonth]);
 
-  const { toggleDarkMode } = useThemeMode();
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <Button onClick={toggleDarkMode}>dark mode</Button>
       <Box sx={{ m: 5, maxWidth: '600px' }}>
         <SearchInput />
         <Calendar
