@@ -27,7 +27,7 @@ CREATE TABLE events (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL,
   content TEXT NOT NULL,
-  date DATE NOT NULL,
+  date TIMESTAMP NOT NULL,
   mood TEXT,
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
