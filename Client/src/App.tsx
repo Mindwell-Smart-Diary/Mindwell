@@ -37,7 +37,7 @@ const router = createBrowserRouter([
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("accessToken");
 
-        // return redirect("/login");
+        return redirect("/login");
       }
 
       return null;
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Navigate to="/history" />,
+    element: <Navigate to="/login" />,
   },
 ]);
 
