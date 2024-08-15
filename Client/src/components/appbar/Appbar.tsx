@@ -108,7 +108,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
               sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
               color="inherit"
               aria-label="history"
-              onClick={() => handleTabClick('history', '/history-suggestions')}
+              onClick={() => handleTabClick('history', '/historySuggestions')}
             >
               <Box
                 component="img"

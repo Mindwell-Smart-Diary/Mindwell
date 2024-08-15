@@ -1,13 +1,14 @@
 import { useThemeMode } from '@/hooks/ThemeModeContext';
 import { ThemeProvider, Container, Grid, Typography, Card, CardContent, Rating, IconButton, Collapse, Box, Divider } from '@mui/material';
-import React, { useEffect, useState } from 'react';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import { Mood } from '@/types/enums/Moods';
 import { MOOD_CATEGORIES, MoodCategory } from '@/types/enums/MoodGroup';
-import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { backendAxiosInstance } from '@/axios/backendInstance';
+import React from 'react';
 
 interface FlatEventWithSuggestion {
   eventId: number;
@@ -23,44 +24,40 @@ interface FlatEventWithSuggestion {
   // keywords: [];
 }
 
+const fetchEventsWithSuggestions = async (): Promise<FlatEventWithSuggestion[]> => {
+  const response = await backendAxiosInstance.get('/events', {
+    params: {
+      withSuggestions: "true",
+    }
+  });
+
+  const flatEvents: FlatEventWithSuggestion[] = response.data.flatMap((event: any) =>
+    event.suggestions.map((suggestion: any) => ({
+      eventId: event.id,
+      userId: event.user_id,
+      eventContent: event.content,
+      eventDate: event.date,
+      mood: event.mood,
+      suggestionId: suggestion.id,
+      suggestionTitle: suggestion.title,
+      suggestionContent: suggestion.content,
+      suggestionRank: suggestion.rank,
+      suggestionExecutionDate: suggestion.execution_date,
+    }))
+  );
+
+  flatEvents.sort((a, b) => new Date(b.suggestionExecutionDate).getTime() - new Date(a.suggestionExecutionDate).getTime());
+  return flatEvents;
+};
+
 const HistoryOfSuggestionsPage: React.FC = () => {
-  const [suggestions, setSuggestios] = useState<FlatEventWithSuggestion[]>([]);
+  const { data: suggestions } = useQuery(
+    {
+      queryKey: ['eventsWithSuggestions'],
+      queryFn: fetchEventsWithSuggestions
+    }
+  )
 
-  useEffect(() => {
-      async function fetchMyAPI() {
-        // TODO: Update to SERVER_URL
-        const response = await axios.get('http://localhost:3000/events', {
-          params: {
-            withSuggestions: "true",
-          }, 
-          headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwiaWF0IjoxNzIzNDg0NTc2LCJleHAiOjE3MjM1ODQ1NzZ9.1L_d4V7cGS7izOSuRlBi-6jO9JGGitkh44nALyePIDs',
-          }
-        });
-
-        const flatEvents : FlatEventWithSuggestion[] = response.data.flatMap((event: any)  =>
-          event.suggestions.map((suggestion: any) => ({
-              eventId: event.id,
-              userId: event.user_id,
-              eventContent: event.content,
-              eventDate: event.date,
-              mood: event.mood,
-              suggestionId: suggestion.id,
-              suggestionTitle: suggestion.title,
-              suggestionContent: suggestion.content,
-              suggestionRank: suggestion.rank,
-              suggestionExecutionDate: suggestion.execution_date,
-              // keywords: event.keywords
-          }))
-        );
-
-        flatEvents.sort((a, b) => new Date(b.suggestionExecutionDate).getTime() - new Date(a.suggestionExecutionDate).getTime());
-        setSuggestios(flatEvents);
-      }
-  
-      fetchMyAPI();
-
-  }, []);
   const customIcons = {
     [MoodCategory.Negative]: {
       icon: <SentimentDissatisfiedIcon style={{ color: '#FF4136' }} />,
@@ -93,11 +90,11 @@ const HistoryOfSuggestionsPage: React.FC = () => {
       <Container maxWidth="md">
         <Box mt={4} mb={2}>
           <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold' }}>
-            History of Suggestions
+            History of Suggestions 
           </Typography>
         </Box>
         <Grid container spacing={0.5} direction="column">
-          {suggestions.map((suggestion, index) => (
+          {suggestions?.map((suggestion, index) => (
             <React.Fragment key={index}>
               <Grid item xs={12}>
                 <Card style={{ position: 'relative', backgroundColor: 'inherit', boxShadow: 'none' }}>
