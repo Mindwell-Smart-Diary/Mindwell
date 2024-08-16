@@ -1,46 +1,48 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import { useThemeMode } from "@/hooks/ThemeModeContext";
-import { useState } from "react";
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import { Alert } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import { useThemeMode } from '@/hooks/ThemeModeContext';
+import { useState } from 'react';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
+
   const { theme } = useThemeMode();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
   const handleRedirect = () => {
-    navigate("/signup"); // Adjust the path to match your login route
+    navigate('/signup'); // Adjust the path to match your login route
   };
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!email || !password) {
-      setError("Please fill in both fields.");
+    if (!username || !password) {
+      setError('Please fill in both fields.');
       return;
     }
 
-    setError("");
+    setError('');
 
-    const data = { email, password };
+    const data = { username, password };
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
-        method: "POST",
+      // TODO: send to server currectly
+      const response = await fetch('BACKENDURL/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
@@ -48,22 +50,12 @@ export default function LoginPage() {
       const result = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("accessToken", result.accessToken);
-        localStorage.setItem("refreshToken", result.refreshToken);
-
-        const today = new Date();
-
-        console.log(today);
-        navigate(
-          `/sharing/${today.getFullYear()}/${
-            today.getMonth() + 1
-          }/${today.getDate()}`
-        );
+        console.log('Login successful', result);
       } else {
-        setError(result.message || "Login failed");
+        setError(result.message || 'Login failed');
       }
     } catch (error) {
-      setError("An error occurred. Please try again later.");
+      setError('An error occurred. Please try again later.');
     }
   };
 
@@ -75,31 +67,26 @@ export default function LoginPage() {
           direction="column"
           justifyContent="center"
           alignItems="center"
-          style={{ minHeight: "100vh" }}
+          style={{ minHeight: '100vh' }}
         >
-          <Grid item xs={11} style={{ marginBottom: "16px" }}>
+          <Grid item xs={11} style={{ marginBottom: '16px' }}>
             <Typography component="h1" variant="h2">
               Login
             </Typography>
           </Grid>
-          <Box
-            component="form"
-            noValidate
-            autoComplete="off"
-            sx={{ width: "100%", maxWidth: 350 }}
-            onSubmit={handleLogin}
-          >
-            <Grid item xs={11} style={{ marginBottom: "16px" }}>
+          <Box component="form" noValidate autoComplete="off"
+            sx={{ width: '100%', maxWidth: 350 }} onSubmit={handleLogin}>
+            <Grid item xs={11} style={{ marginBottom: '16px' }}>
               <TextField
                 fullWidth
-                id="email"
-                label="Email"
+                id="username"
+                label="Username"
                 variant="outlined"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </Grid>
-            <Grid item xs={11} style={{ marginBottom: "16px" }}>
+            <Grid item xs={11} style={{ marginBottom: '16px' }}>
               <TextField
                 fullWidth
                 id="password"
@@ -111,7 +98,7 @@ export default function LoginPage() {
               />
             </Grid>
             {error && (
-              <Grid item xs={11} style={{ marginBottom: "16px" }}>
+              <Grid item xs={11} style={{ marginBottom: '16px' }}>
                 <Alert severity="error">{error}</Alert>
               </Grid>
             )}
@@ -123,22 +110,12 @@ export default function LoginPage() {
               justifyContent="space-between"
             >
               <Grid item xs={7}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                >
+                <Button type="submit" variant="contained" color="primary" fullWidth>
                   Login
                 </Button>
               </Grid>
               <Grid item xs={4}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  fullWidth
-                  onClick={handleRedirect}
-                >
+                <Button variant="outlined" color="primary" fullWidth onClick={handleRedirect}>
                   Sign Up
                 </Button>
               </Grid>
