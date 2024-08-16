@@ -15,6 +15,22 @@ const SuggestionPage: React.FC = () => {
 
     const { year, month, day } = useParams();
 
+    const isToday = useMemo(() => {
+        const today = new Date();
+        const todayYear = today.getFullYear();
+        const todayMonth = today.getMonth() + 1;
+        const todayDay = today.getDate();
+
+        return todayDay === Number(day) && todayMonth === Number(month) && todayYear === Number(year)
+    }, [year, month, day])
+
+    const isDayPass = useMemo(() => {
+        const today = new Date();
+        const targetDate = new Date(Number(year), Number(month) - 1, Number(day));
+
+        return targetDate < today;
+    }, [year, month, day]);
+
     const queryClient = useQueryClient();
 
     const time = useMemo(() =>
@@ -101,15 +117,20 @@ const SuggestionPage: React.FC = () => {
 
     return (
         <Box sx={styles.container}>
-            <Typography sx={styles.title}>Did you do something <br></br>relaxing today?</Typography>
-            <TextField
-                value={dailySharing}
-                rows={2}
-                multiline={true}
-                onChange={(event: ChangeEvent<HTMLInputElement>) => setDailySharing(event.target.value)}
-                onKeyDown={(event) => (event.key === 'Enter' && dailySharing.trim().length) && postDailySharingMutation.mutate(event)}
-                sx={styles.dailySharingText}>
-            </TextField>
+            {
+                isToday &&
+                <>
+                    <Typography sx={styles.title}>Did you do something <br></br>relaxing today?</Typography>
+                    <TextField
+                        value={dailySharing}
+                        rows={2}
+                        multiline={true}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => setDailySharing(event.target.value)}
+                        onKeyDown={(event) => (event.key === 'Enter' && dailySharing.trim().length) && postDailySharingMutation.mutate(event)}
+                        sx={styles.dailySharingText}>
+                    </TextField>
+                </>
+            }
             {suggestion &&
                 <Card sx={styles.suggestionCard}>
                     <Typography sx={styles.suggestionText}>{suggestion.content}</Typography>
@@ -139,11 +160,22 @@ const SuggestionPage: React.FC = () => {
                 </Card>
             }
             <Box sx={styles.listContainer}>
-                {dailySharings?.map((item =>
-                    <Card key={item.id} sx={styles.dailySharingCard}>{item.content}</Card>
-                ))}
+                {
+                    dailySharings?.length > 0 ?
+                        dailySharings.map((item =>
+                            <Card key={item.id} sx={styles.dailySharingCard}>{item.content}</Card>
+                        )) :
+                        !isToday &&
+                        <>{isDayPass ?
+                            <Typography variant='h2'>
+                                No sharings found on {day}/{month}/{year}.
+                            </Typography> : <Typography variant='h2'>
+                                The day {day}/{month}/{year} has not occurred yet.
+                            </Typography>
+                        }</>
+                }
             </Box>
-        </Box>
+        </Box >
     );
 };
 
