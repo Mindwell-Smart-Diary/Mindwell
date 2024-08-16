@@ -14,12 +14,12 @@ interface FlatEventWithSuggestion {
   eventId: number;
   userId: number;
   eventContent: string;
-  eventDate: string; 
+  eventDate: string;
   mood: Mood;
   suggestionId: number;
   suggestionTitle: string;
   suggestionContent: string;
-  suggestionRank: number; 
+  suggestionRank: number;
   suggestionExecutionDate: string;
   // keywords: [];
 }
@@ -53,7 +53,7 @@ const fetchEventsWithSuggestions = async (): Promise<FlatEventWithSuggestion[]> 
 const HistoryOfSuggestionsPage: React.FC = () => {
   const { data: suggestions } = useQuery(
     {
-      queryKey: ['eventsWithSuggestions'],
+      queryKey: ['events', { withSuggestions: "true", }],
       queryFn: fetchEventsWithSuggestions
     }
   )
@@ -64,11 +64,11 @@ const HistoryOfSuggestionsPage: React.FC = () => {
       label: 'Dissatisfied',
     },
     [MoodCategory.Regular]: {
-      icon: <SentimentSatisfiedIcon style={{ color: '#FF851B' }}/>,
+      icon: <SentimentSatisfiedIcon style={{ color: '#FF851B' }} />,
       label: 'Neutral',
     },
     [MoodCategory.Positive]: {
-      icon: <SentimentSatisfiedAltIcon style={{ color: '#3D9970' }}/>,
+      icon: <SentimentSatisfiedAltIcon style={{ color: '#3D9970' }} />,
       label: 'Satisfied',
     }
   };
@@ -82,7 +82,7 @@ const HistoryOfSuggestionsPage: React.FC = () => {
     }
     return MoodCategory.Regular;
   };
-  
+
   const getMoodIcon = (mood: MoodCategory) => customIcons[mood];
 
   return (
@@ -90,7 +90,7 @@ const HistoryOfSuggestionsPage: React.FC = () => {
       <Container maxWidth="md">
         <Box mt={4} mb={2}>
           <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold' }}>
-            History of Suggestions 
+            History of Suggestions
           </Typography>
         </Box>
         <Grid container spacing={0.5} direction="column">
@@ -103,7 +103,7 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                       <Grid item xs={8}>
                         <Typography variant="h6" component="div">
                           {suggestion.suggestionTitle}
-                          <IconButton  style={{ marginLeft: '10px' }} size="small">
+                          <IconButton style={{ marginLeft: '10px' }} size="small">
                             {getMoodIcon(getMoodCategory(suggestion.mood)).icon}
                           </IconButton>
                         </Typography>
@@ -114,7 +114,7 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                           Our recommendation: {suggestion.suggestionContent}
                         </Typography>
                         <Grid container alignItems="center" justifyContent="space-between">
-                          <Rating value={suggestion.suggestionRank} readOnly size="large" max={3}/>
+                          <Rating value={suggestion.suggestionRank} readOnly size="large" max={3} />
                         </Grid>
                       </Grid>
                       <Grid item>
