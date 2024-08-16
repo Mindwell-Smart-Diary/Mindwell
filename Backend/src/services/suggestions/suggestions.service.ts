@@ -12,7 +12,8 @@ const generateSuggestionPrompt = (
   dailySharing: string,
   mood: Mood,
   likedSuggetionsHistoryInCurrMode: string[],
-  dislikedSuggestionsHistoryInCurrMode: string[]
+  dislikedSuggestionsHistoryInCurrMode: string[],
+  pastSuggestionsForEvent: string[]
 ): PromptPart[] => {
   const parts: PromptPart[] = [
     {
@@ -30,6 +31,11 @@ const generateSuggestionPrompt = (
         ".\n"
       )}`,
     },
+    {
+      text: `The previous suggestions you gave for this event are: ${pastSuggestionsForEvent.join(
+        ".\n"
+      )}. So avoid those.`,
+    },
     { text: `Age:  ${userInformation.age}` },
     { text: `Gender: ${userInformation.gender}` },
     { text: "Suggestion: " },
@@ -43,14 +49,16 @@ export const suggestionPromptFunction = async (
   dailySharing: string,
   mood: Mood,
   likedSuggetionsHistoryInCurrMode: string[],
-  dislikedSuggestionsHistoryInCurrMode: string[]
+  dislikedSuggestionsHistoryInCurrMode: string[],
+  pastSuggestionsForEvent: string[]
 ): Promise<string> => {
   const prompt = generateSuggestionPrompt(
     userInformation,
     dailySharing,
     mood,
     likedSuggetionsHistoryInCurrMode,
-    dislikedSuggestionsHistoryInCurrMode
+    dislikedSuggestionsHistoryInCurrMode,
+    pastSuggestionsForEvent
   );
   const response = await llmGenerate(prompt);
   const suggestion = response.trim() as string;
