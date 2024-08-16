@@ -5,6 +5,7 @@ import { CalendarDay } from '@/types/CalendarDay';
 
 import { CalendarHeader } from './CalendarHeader/CalendarHeader';
 import { ButtonBase } from '@mui/material';
+import { MOOD_GROUP_COLORS, MoodCategory } from '@/types/enums/MoodGroup';
 import { useNavigate } from 'react-router-dom';
 import { useMemo } from 'react';
 import { NON_MOOD_COLOR } from '@/constants/MoodColor';

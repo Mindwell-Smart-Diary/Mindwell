@@ -1,4 +1,5 @@
 import express from "express";
+import cors from 'cors';
 import { Server } from "http";
 import { Configuration } from "./config/Configuration";
 import { buildSuggestionRouter } from "./routers/suggestions/suggestionRouter";
@@ -8,7 +9,6 @@ import { buildMoodsRouter } from "./routers/moods/moodsRouter";
 import { buildEventsRouter } from "./routers/events/eventsRouter";
 import { buildAuthRouter } from "./routers/auth/authRouter";
 import { authorizeUser } from "./middleware/auth";
-import cors from 'cors';
 
 
 export const initServer = () => {
@@ -18,7 +18,6 @@ export const initServer = () => {
   app.use(cors())
 
   app.use(bodyParser.json());
-
   app.use("/auth", buildAuthRouter());
 
   app.use(authorizeUser);
