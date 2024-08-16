@@ -1,16 +1,18 @@
 import axios from "axios";
 
-export const REFRESH_ENDPOINT = "/api/auth/refresh";
+export const REFRESH_ENDPOINT = "http:/localhost:3000/auth/refresh";
 
 export const refreshToken = async (): Promise<void> => {
-  const { accessToken, refreshToken } = (
-    await axios.get(REFRESH_ENDPOINT, {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("refreshToken"),
-      },
-    })
-  ).data;
+  const res = await axios.get(REFRESH_ENDPOINT, {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("refreshToken"),
+    },
+  })
 
-  localStorage.setItem("accessToken", accessToken);
-  localStorage.setItem("refreshToken", refreshToken);
+  const { accessToken, refreshToken } = res.data
+
+  if (accessToken) {
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+  }
 };
