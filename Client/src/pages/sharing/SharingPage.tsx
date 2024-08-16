@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect, useMemo } from 'react';
+import React, { useState, ChangeEvent, useMemo } from 'react';
 import { TextField, Button, Card, Typography, Box } from '@mui/material';
 import * as styles from "./styles";
 import { SuggestionRank } from '@/types/enums/SuggestionRank';
@@ -11,7 +11,6 @@ import { Suggestion } from '@/types/Suggestion';
 
 const SuggestionPage: React.FC = () => {
     const [dailySharing, setDailySharing] = useState<string>('');
-    const [chosenRank, setChosenRank] = useState<SuggestionRank>();
 
     const { year, month, day } = useParams();
 
@@ -37,11 +36,7 @@ const SuggestionPage: React.FC = () => {
         getDateByYearMonthDay(Number(year), Number(month), Number(day)).getTime(),
         [year, month, day]);
 
-    const {
-        data: dailySharings,
-        isLoading: isDailySharingsLoading,
-        isError: isDailySharingsError,
-    } = useQuery<DailySharing[]>({
+    const { data: dailySharings } = useQuery<DailySharing[]>({
         initialData: [],
         queryKey: ["events", { date: time }],
         queryFn: async () => {
@@ -55,11 +50,7 @@ const SuggestionPage: React.FC = () => {
         },
     });
 
-    const {
-        data: suggestion,
-        isLoading: isSuggestionLoading,
-        isError: isSuggestionError,
-    } = useQuery<Suggestion>({
+    const { data: suggestion } = useQuery<Suggestion>({
         enabled: dailySharings.length > 0,
         queryKey: ["events", dailySharings[0]?.id, "suggestions"],
         queryFn: async () => {
@@ -68,51 +59,54 @@ const SuggestionPage: React.FC = () => {
         }
     });
 
+    const generateSuggestionMutation = useMutation({
+        mutationFn: (id: number) => handleGenerrateSuggetion(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["events", dailySharings[0].id, "suggestions"] });
+        },
+    });
+
     const postDailySharingMutation = useMutation({
         mutationFn: (e: React.KeyboardEvent<HTMLDivElement>) => handleAddDailySharing(e),
-        onSuccess: () => {
+        onSuccess: async (res) => {
             setDailySharing('')
-            setChosenRank(undefined);
             queryClient.invalidateQueries({ queryKey: ["events", { date: time }] });
-            queryClient.invalidateQueries({ queryKey: ["events", dailySharings[0].id, "suggestions"] });
+            if (res.status === 200 || res.status === 201) {
+                await generateSuggestionMutation.mutate(res.data.id);
+            }
         },
     });
-
-    const generateSuggestionMutation = useMutation({
-        mutationFn: async () => await backendAxiosInstance.post("/suggestions", { eventId: dailySharings[0]?.id }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["events", dailySharings[0].id, "suggestions"] });
-        },
-    });
-
-    const updateSuggestionMutation = useMutation({
-        mutationFn: async (rank: SuggestionRank) =>
-            await backendAxiosInstance.patch(`/suggestions/${suggestion?.id}`, { rank })
-    });
-
-    useEffect(() => {
-        console.log({ year, month, day })
-    }, [year, month, day])
 
     const handleAddDailySharing = async (event: React.KeyboardEvent<HTMLDivElement>) => {
         event.preventDefault();
-
-        const postDailySharingResponse = await backendAxiosInstance.post("/events", { event: dailySharing });
-        if (postDailySharingResponse.status === 200) {
-            await backendAxiosInstance.post("/suggestions", { eventId: postDailySharingResponse.data.id });
-            setDailySharing('')
-            setChosenRank(undefined);
-        }
+        return await backendAxiosInstance.post("/events", { event: dailySharing });
     }
+
+    const handleGenerrateSuggetion = async (id: number) => {
+        return await backendAxiosInstance.post("/suggestions", { eventId: id })
+    }
+
+    const updateSuggestionMutation = useMutation({
+        mutationFn: async (rank: SuggestionRank) => await backendAxiosInstance.patch(`/suggestions/${suggestion?.id}`, { rank }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["events", dailySharings[0].id, "suggestions"] });
+        },
+    });
 
     const handleChangeRank = (rank: SuggestionRank) => {
         updateSuggestionMutation.mutate(rank);
-        setChosenRank(rank);
     }
 
     const handleGenerateNewSuggestion = () => {
         handleChangeRank(SuggestionRank.NEW_SUGGESTION);
-        generateSuggestionMutation.mutate();
+        generateSuggestionMutation.mutate(dailySharings[0]?.id);
+    }
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>
+    ) => {
+        if (event.key === 'Enter' && dailySharing.trim().length && !postDailySharingMutation.isPending) {
+            postDailySharingMutation.mutate(event)
+        }
     }
 
     return (
@@ -125,8 +119,8 @@ const SuggestionPage: React.FC = () => {
                         value={dailySharing}
                         rows={2}
                         multiline={true}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => setDailySharing(event.target.value)}
-                        onKeyDown={(event) => (event.key === 'Enter' && dailySharing.trim().length) && postDailySharingMutation.mutate(event)}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => !postDailySharingMutation.isPending && setDailySharing(event.target.value)}
+                        onKeyDown={handleKeyDown}
                         sx={styles.dailySharingText}>
                     </TextField>
                 </>
@@ -139,19 +133,19 @@ const SuggestionPage: React.FC = () => {
                             onClick={() => handleChangeRank(SuggestionRank.LIKE)}
                             sx={{
                                 ...styles.suggestionButton,
-                                border: chosenRank === SuggestionRank.LIKE ? '1.5px solid #3A3A3A' : 'none'
+                                border: suggestion.rank === SuggestionRank.LIKE ? '1.5px solid #3A3A3A' : 'none'
                             }}>I liked it!</Button>
                         <Button
                             onClick={() => handleChangeRank(SuggestionRank.DID_NOT_HELP)}
                             sx={{
                                 ...styles.suggestionButton,
-                                border: chosenRank === SuggestionRank.DID_NOT_HELP ? '1.5px solid #3A3A3A' : 'none'
+                                border: suggestion.rank === SuggestionRank.DID_NOT_HELP ? '1.5px solid #3A3A3A' : 'none'
                             }}>It didn't help</Button>
                         <Button
                             onClick={() => handleChangeRank(SuggestionRank.DID_NOT_LIKE)}
                             sx={{
                                 ...styles.suggestionButton,
-                                border: chosenRank === SuggestionRank.DID_NOT_LIKE ? '1.5px solid #3A3A3A' : 'none'
+                                border: suggestion.rank === SuggestionRank.DID_NOT_LIKE ? '1.5px solid #3A3A3A' : 'none'
                             }}>I didn't liked it</Button>
                         <Button
                             onClick={() => handleGenerateNewSuggestion()}
