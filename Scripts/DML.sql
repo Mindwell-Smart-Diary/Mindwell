@@ -8,6 +8,7 @@ INSERT INTO users (first_name, last_name, gender, birthdate, email, password) VA
 ('Michael', 'Brown', 'male', '1985-03-03', 'michael.brown@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
 ('Emily', 'Davis', 'female', '1992-04-04', 'emily.davis@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
 ('David', 'Wilson', 'male', '1983-05-05', 'david.wilson@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
+('Amit', 'Keinan', 'male', '2000-10-14', 'amit.keinan@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO'),
 ('Sarah', 'Taylor', 'female', '1988-06-06', 'sarah.taylor@example.com', '$2b$10$m.EaY8mgNZJtu0s6SqufauO/UwoTs65vfUS5BeZgqfNAaMMVsvFuO');
 
 -- Insert events and suggestions for user 1
@@ -64,16 +65,8 @@ DECLARE
   event_id INTEGER;
 BEGIN 
   FOR i IN 1..6 LOOP 
-    INSERT INTO events (user_id, title, content, date, mood) VALUES 
+    INSERT INTO events (user_id, content, date, mood) VALUES 
     (user_id, 
-    CASE i
-      WHEN 1 THEN 'Yoga Class'
-      WHEN 2 THEN 'Client Call'
-      WHEN 3 THEN 'Grocery Shopping'
-      WHEN 4 THEN 'Movie Night'
-      WHEN 5 THEN 'Cycling Trip'
-      WHEN 6 THEN 'Family Picnic'
-    END,
     CASE i
       WHEN 1 THEN 'Attended a relaxing yoga class in the morning.'
       WHEN 2 THEN 'Had a productive call with a client about the new contract.'
@@ -118,16 +111,8 @@ DECLARE
   event_id INTEGER;
 BEGIN 
   FOR i IN 1..6 LOOP 
-    INSERT INTO events (user_id, title, content, date, mood) VALUES 
+    INSERT INTO events (user_id, content, date, mood) VALUES 
     (user_id, 
-    CASE i
-      WHEN 1 THEN 'Gym Workout'
-      WHEN 2 THEN 'Team Lunch'
-      WHEN 3 THEN 'Dentist Appointment'
-      WHEN 4 THEN 'Concert'
-      WHEN 5 THEN 'Art Exhibition'
-      WHEN 6 THEN 'Cooking Class'
-    END,
     CASE i
       WHEN 1 THEN 'Intense workout session at the gym.'
       WHEN 2 THEN 'Enjoyed a nice lunch with the team at a local bistro.'
@@ -171,16 +156,8 @@ DECLARE
   event_id INTEGER;
 BEGIN 
   FOR i IN 1..6 LOOP 
-    INSERT INTO events (user_id, title, content, date, mood) VALUES 
+    INSERT INTO events (user_id, content, date, mood) VALUES 
     (user_id, 
-    CASE i
-      WHEN 1 THEN 'Business Trip'
-      WHEN 2 THEN 'Spa Day'
-      WHEN 3 THEN 'Volunteer Work'
-      WHEN 4 THEN 'Cooking Competition'
-      WHEN 5 THEN 'Fishing Trip'
-      WHEN 6 THEN 'Gaming Night'
-    END,
     CASE i
       WHEN 1 THEN 'Traveled to another city for a business meeting.'
       WHEN 2 THEN 'Relaxed at the spa with a massage and facial.'
@@ -224,16 +201,8 @@ DECLARE
   event_id INTEGER;
 BEGIN 
   FOR i IN 1..6 LOOP 
-    INSERT INTO events (user_id, title, content, date, mood) VALUES 
+    INSERT INTO events (user_id, content, date, mood) VALUES 
     (user_id, 
-    CASE i
-      WHEN 1 THEN 'Tech Conference'
-      WHEN 2 THEN 'Garden Work'
-      WHEN 3 THEN 'Photography Session'
-      WHEN 4 THEN 'Dinner Party'
-      WHEN 5 THEN 'Library Visit'
-      WHEN 6 THEN 'Beach Day'
-    END,
     CASE i
       WHEN 1 THEN 'Attended a tech conference to learn about new innovations.'
       WHEN 2 THEN 'Spent the day working on the garden, planting new flowers.'
@@ -277,16 +246,8 @@ DECLARE
   event_id INTEGER;
 BEGIN 
   FOR i IN 1..6 LOOP 
-    INSERT INTO events (user_id, title, content, date, mood) VALUES 
+    INSERT INTO events (user_id, content, date, mood) VALUES 
     (user_id, 
-    CASE i
-      WHEN 1 THEN 'Cooking Workshop'
-      WHEN 2 THEN 'Hiking Adventure'
-      WHEN 3 THEN 'Art Class'
-      WHEN 4 THEN 'Coffee with Friends'
-      WHEN 5 THEN 'Music Festival'
-      WHEN 6 THEN 'Board Game Night'
-    END,
     CASE i
       WHEN 1 THEN 'Learned new cooking techniques at the workshop.'
       WHEN 2 THEN 'Went on a hiking adventure in the mountains.'

@@ -46,6 +46,6 @@ CREATE TABLE suggestions (
   title TEXT NOT NULL,
   content TEXT NOT NULL,
   rank INTEGER,
-  execution_date DATE,
+  execution_date TIMESTAMP,
   FOREIGN KEY (event_id) REFERENCES events (id) ON DELETE CASCADE
 );

@@ -107,11 +107,14 @@ export const saveEvent = async (
 
   const keywords: string[] = await generateKeywords(event);
 
+  // const d = new Date
+  console.log(DateTime.now().toISO());
+
   const savedEvent = await prisma.events.create({
     data: {
       content: event,
       mood,
-      date: new Date(),
+      date: DateTime.now().toISO().split("+")[0] + "Z",
       user_id: userId,
     },
   });
@@ -124,7 +127,7 @@ export const saveEvent = async (
   });
 
   return {
-    date: savedEvent.date,
+    date: new Date(savedEvent.date),
     content: savedEvent.content,
     mood: savedEvent.mood,
     id: savedEvent.id,
