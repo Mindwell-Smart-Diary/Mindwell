@@ -7,11 +7,9 @@ export const backendAxiosInstance = axios.create({
 
 backendAxiosInstance.interceptors.request.use(
   (config) => {
-    // config.headers["Authorization"] = `Bearer ${localStorage.getItem(
-    //   "accessToken"
-    // )}`;
-
-    config.headers["Authorization"] = `b eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwiaWF0IjoxNzIzNzQ0NTI1LCJleHAiOjE3MjM4NDQ1MjV9.w3tlRQWMLA1KGcAUgxk-fQGlTQ8_jv2ITPjIj3iQbNc`;
+    config.headers["Authorization"] = `Bearer ${localStorage.getItem(
+      "accessToken"
+    )}`;
 
     return config;
   },

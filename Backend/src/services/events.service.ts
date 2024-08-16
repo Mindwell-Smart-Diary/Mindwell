@@ -44,11 +44,15 @@ export const getKeywordsByPrefix = async (
 
 export const getEventById = async (
   prisma: PrismaClient,
-  eventId: number
-): Promise<events> =>
+  eventId: number,
+  includeSuggestions = false
+) =>
   prisma.events.findUnique({
     where: {
       id: eventId,
+    },
+    include: {
+      suggestions: includeSuggestions,
     },
   });
 
