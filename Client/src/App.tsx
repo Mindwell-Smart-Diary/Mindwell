@@ -30,8 +30,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     loader: () => {
       const hasTokens =
-        localStorage.getItem("refreshToken") &&
-        localStorage.getItem("accessToken");
+        !!localStorage.getItem("refreshToken") &&
+        !!localStorage.getItem("accessToken");
 
       if (!hasTokens) {
         localStorage.removeItem("refreshToken");

@@ -38,11 +38,11 @@ export const getErrorInterceptor = () => {
 
         return result;
       } catch (e) {
-        if (isAxiosError(e) && e.status === HttpStatusCode.Unauthorized) {
+        if (isAxiosError(e) && e?.response?.status === HttpStatusCode.Unauthorized) {
           localStorage.removeItem("refreshToken");
           localStorage.removeItem("accessToken");
 
-          redirect("/login");
+          window.location.href = '/login';
         }
       }
     }
