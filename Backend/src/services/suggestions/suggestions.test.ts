@@ -40,7 +40,8 @@ describe("suggestionPromptFunction", () => {
       dailySharing,
       mood,
       likedSuggestionsHistory,
-      dislikedSuggestionsHistory
+      dislikedSuggestionsHistory,
+      []
     );
 
     expect(result).toBe(expectedSuggestion);
@@ -57,7 +58,8 @@ describe("suggestionPromptFunction", () => {
         dailySharing,
         mood,
         likedSuggestionsHistory,
-        dislikedSuggestionsHistory
+        dislikedSuggestionsHistory,
+        []
       )
     ).rejects.toThrow("No suggestion received");
   });

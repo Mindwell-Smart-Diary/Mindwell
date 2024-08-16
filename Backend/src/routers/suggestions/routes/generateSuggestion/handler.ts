@@ -21,7 +21,7 @@ export const generateSuggestionHandler = async (
   const { eventId } = suggestionSchema.parse(req.body);
 
   try {
-    const event = await getEventById(prisma, eventId);
+    const event = await getEventById(prisma, eventId, true);
 
     if (!event || event.user_id !== userId) {
       throw new NotFoundError("Cannot find event");
@@ -42,7 +42,8 @@ export const generateSuggestionHandler = async (
       eventContent,
       mood as Mood,
       historyByMood.filter(({ rank }) => rank >= 2).map(({ title }) => title),
-      historyByMood.filter(({ rank }) => rank === 1).map(({ title }) => title)
+      historyByMood.filter(({ rank }) => rank === 1).map(({ title }) => title),
+      event.suggestions.map((suggestion) => suggestion.content)
     );
 
     await saveNewSuggestion(prisma, suggestion, event.id);
