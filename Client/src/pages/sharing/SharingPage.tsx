@@ -8,8 +8,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getDateByYearMonthDay } from '@/utilities/DateUtils';
 import { backendAxiosInstance } from '@/axios/backendInstance';
 import { Suggestion } from '@/types/Suggestion';
+import { useThemeMode } from '@/hooks/ThemeModeContext';
 
 const SuggestionPage: React.FC = () => {
+    const { theme } = useThemeMode();
+
     const [dailySharing, setDailySharing] = useState<string>('');
 
     const { year, month, day } = useParams();
@@ -114,40 +117,47 @@ const SuggestionPage: React.FC = () => {
             {
                 isToday &&
                 <>
-                    <Typography sx={styles.title}>Did you do something <br></br>relaxing today?</Typography>
+                    <Typography variant='h3' fontWeight='bold'>Did you do something <br></br>relaxing today?</Typography>
                     <TextField
                         value={dailySharing}
-                        rows={2}
+                        maxRows={6}
                         multiline={true}
                         onChange={(event: ChangeEvent<HTMLInputElement>) => !postDailySharingMutation.isPending && setDailySharing(event.target.value)}
                         onKeyDown={handleKeyDown}
-                        sx={styles.dailySharingText}>
-                    </TextField>
+                    />
                 </>
             }
             {suggestion &&
-                <Card sx={styles.suggestionCard}>
+                <Card sx={{ ...styles.suggestionCard, bgcolor: theme.palette.primary.main }} >
                     <Typography sx={styles.suggestionText}>{suggestion.content}</Typography>
                     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                         <Button
+                            variant='contained'
+                            color='secondary'
                             onClick={() => handleChangeRank(SuggestionRank.LIKE)}
                             sx={{
                                 ...styles.suggestionButton,
-                                border: suggestion.rank === SuggestionRank.LIKE ? '1.5px solid #3A3A3A' : 'none'
+                                border: suggestion.rank === SuggestionRank.LIKE ? '2.5px solid #3A3A3A' : 'none'
                             }}>I liked it!</Button>
                         <Button
+                            variant='contained'
+                            color='secondary'
                             onClick={() => handleChangeRank(SuggestionRank.DID_NOT_HELP)}
                             sx={{
                                 ...styles.suggestionButton,
-                                border: suggestion.rank === SuggestionRank.DID_NOT_HELP ? '1.5px solid #3A3A3A' : 'none'
+                                border: suggestion.rank === SuggestionRank.DID_NOT_HELP ? '2.5px solid #3A3A3A' : 'none'
                             }}>It didn't help</Button>
                         <Button
+                            variant='contained'
+                            color='secondary'
                             onClick={() => handleChangeRank(SuggestionRank.DID_NOT_LIKE)}
                             sx={{
                                 ...styles.suggestionButton,
-                                border: suggestion.rank === SuggestionRank.DID_NOT_LIKE ? '1.5px solid #3A3A3A' : 'none'
+                                border: suggestion.rank === SuggestionRank.DID_NOT_LIKE ? '2.5px solid #3A3A3A' : 'none'
                             }}>I didn't liked it</Button>
                         <Button
+                            variant='contained'
+                            color='secondary'
                             onClick={() => handleGenerateNewSuggestion()}
                             sx={styles.suggestionButton}>Generate another</Button>
                     </Box>
@@ -157,7 +167,9 @@ const SuggestionPage: React.FC = () => {
                 {
                     dailySharings?.length > 0 ?
                         dailySharings.map((item =>
-                            <Card key={item.id} sx={styles.dailySharingCard}>{item.content}</Card>
+                            <Card key={item.id} sx={{ ...styles.dailySharingCard, bgcolor: theme.palette.primary.main }}>
+                                {item.content}
+                            </Card>
                         )) :
                         !isToday &&
                         <>{isDayPass ?
