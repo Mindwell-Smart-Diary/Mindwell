@@ -90,7 +90,7 @@ const EditField: React.FC<EditFieldProps> = ({
                             </FormControl>
                         ) : (
                             <TextField
-                                type={isPassword ? "password" : ""}
+                                type={isPassword ? "password" : "text"}
                                 variant="standard"
                                 value={editedValue}
                                 onChange={(e) => setEditedValue(e.target.value)}

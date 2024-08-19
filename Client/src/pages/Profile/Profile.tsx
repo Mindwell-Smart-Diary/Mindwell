@@ -5,10 +5,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Gender } from "@/types/enums/Gender";
 import { UserDTO } from "@/types/user";
 import { Box, Card, Typography } from "@mui/material"
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const Profile = () => {
     const { userId } = useAuth();
+    const queryClient = useQueryClient()
 
     const { data: user } = useQuery<UserDTO>({
         queryKey: ["users", userId],
@@ -24,9 +25,23 @@ export const Profile = () => {
         }
     });
 
-    const handleSave = (s, b) => {
+    const upadteUserMutation = useMutation({
+        mutationFn: async (updateBody: { field: string, value: string }) => await backendAxiosInstance.patch(`/users/${userId}`,
+            {
+                [updateBody.field]: updateBody.value
 
-    }
+            }
+        ),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['users', userId] })
+        }
+    })
+
+    const handleSave = async (field: string, value: string) => {
+        if (value) {
+            upadteUserMutation.mutate({ field, value })
+        }
+    };
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', my: 2 }}>
@@ -55,12 +70,12 @@ export const Profile = () => {
                 <EditField
                     label="first name"
                     value={user?.firstName ?? ""}
-                    onSave={(value) => handleSave("firstName", value)}
+                    onSave={(value) => handleSave("first_name", value)}
                 />
                 <EditField
                     label="last name"
                     value={user?.lastName ?? ""}
-                    onSave={(value) => handleSave("lastName", value)}
+                    onSave={(value) => handleSave("last_name", value)}
                 />
                 <EditField
                     label="email"
@@ -77,7 +92,7 @@ export const Profile = () => {
                     isDate
                     label="birthdate"
                     value={user?.birthdate?.toLocaleString() ?? ""}
-                    onSave={(value) => handleSave("birthDate", value)}
+                    onSave={(value) => handleSave("birthdate", value)}
                 />
                 <EditField
                     value={user?.gender}

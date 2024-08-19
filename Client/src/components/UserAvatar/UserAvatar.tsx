@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Gender } from "../../types/enums/Gender";
 import { Avatar, SxProps } from "@mui/material";
 
