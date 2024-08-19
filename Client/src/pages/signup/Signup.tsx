@@ -13,7 +13,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { useThemeMode } from "@/hooks/ThemeModeContext";
+import { useThemeMode } from "@/contexts/ThemeModeContext";
 import { useNavigate } from "react-router-dom";
 
 const SignUpPage: React.FC = () => {

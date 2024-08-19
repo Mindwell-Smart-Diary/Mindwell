@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getDateByYearMonthDay } from '@/utilities/DateUtils';
 import { backendAxiosInstance } from '@/axios/backendInstance';
 import { Suggestion } from '@/types/Suggestion';
-import { useThemeMode } from '@/hooks/ThemeModeContext';
+import { useThemeMode } from '@/contexts/ThemeModeContext';
 
 const SuggestionPage: React.FC = () => {
     const { theme } = useThemeMode();
