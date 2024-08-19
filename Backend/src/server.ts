@@ -1,5 +1,5 @@
 import express from "express";
-import cors from 'cors';
+import cors from "cors";
 import { Server } from "http";
 import { Configuration } from "./config/Configuration";
 import { buildSuggestionRouter } from "./routers/suggestions/suggestionRouter";
@@ -9,13 +9,13 @@ import { buildMoodsRouter } from "./routers/moods/moodsRouter";
 import { buildEventsRouter } from "./routers/events/eventsRouter";
 import { buildAuthRouter } from "./routers/auth/authRouter";
 import { authorizeUser } from "./middleware/auth";
-
+import { buildUsersRouter } from "./routers/users/usersRouter";
 
 export const initServer = () => {
   const { PORT } = Configuration.getInstance();
 
   const app = express();
-  app.use(cors())
+  app.use(cors());
 
   app.use(bodyParser.json());
   app.use("/auth", buildAuthRouter());
@@ -25,6 +25,7 @@ export const initServer = () => {
   app.use("/suggestions", buildSuggestionRouter());
   app.use("/moods", buildMoodsRouter());
   app.use("/events", buildEventsRouter());
+  app.use("/users", buildUsersRouter());
 
   app.use(errorHandler);
 
