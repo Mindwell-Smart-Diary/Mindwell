@@ -9,26 +9,10 @@ export const container: SxProps = {
     gap: '1.5rem'
 }
 
-export const title: SxProps = {
-    fontSize: '2rem',
-    color: '#3A3A3A',
-    fontWeight: 'bold'
-}
-
-export const dailySharingText: SxProps = {
-    '& .MuiOutlinedInput-root': {
-        '&.Mui-focused fieldset': {
-            borderColor: 'inherit',
-            borderWidth: '1px'
-        },
-    },
-}
-
 export const suggestionCard: SxProps = {
     display: 'flex',
     flexDirection: 'column',
-    bgcolor: '#AFDCBE',
-    color: '#555555',
+    color: '#fff',
     p: '1rem',
     gap: '0.5rem',
     borderRadius: '1rem',
@@ -37,16 +21,13 @@ export const suggestionCard: SxProps = {
 }
 
 export const suggestionText: SxProps = {
-    color: '#555555',
     display: 'inline-block',
     wordWrap: 'break-word',
     maxWidth: '100%',
 }
 
 export const suggestionButton: SxProps = {
-    bgcolor: '#7EC796',
     fontWeight: 'bold',
-    color: 'white',
     p: '0.5rem 1rem',
     borderRadius: '1rem',
 }
@@ -60,7 +41,6 @@ export const listContainer: SxProps = {
     maxWidth: '90%'
 }
 export const dailySharingCard: SxProps = {
-    bgcolor: '#7EC796',
     color: 'white',
     p: '1rem',
     borderRadius: '1rem',
