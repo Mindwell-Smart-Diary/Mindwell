@@ -36,6 +36,7 @@ export const getEventsHandler = async (
 
     const allKeywords = [
       ...(keywords?.split(",") ?? []),
+      ...(keywordsPrefix?.split(",") ?? []),
       ...(await Promise.all(
         (keywordsPrefix?.split(",") ?? []).map((prefix) =>
           getKeywordsByPrefix(userId, prefix)
