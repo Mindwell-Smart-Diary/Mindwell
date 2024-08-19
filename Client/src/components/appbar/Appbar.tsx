@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Box, Button, Tooltip } from '@mui/material';
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
-import { useThemeMode } from '@/hooks/ThemeModeContext';
+import { useThemeMode } from '@/contexts/ThemeModeContext';
 
 const useStyles = {
   root: {

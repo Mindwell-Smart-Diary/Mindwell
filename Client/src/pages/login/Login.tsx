@@ -5,14 +5,17 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import { useThemeMode } from "@/hooks/ThemeModeContext";
+import { useThemeMode } from "@/contexts/ThemeModeContext";
 import { useState } from "react";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoginResultDto } from "@/types/LoginResultDto";
 
 export default function LoginPage() {
   const { theme } = useThemeMode();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,8 +51,7 @@ export default function LoginPage() {
       const result = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("accessToken", result.accessToken);
-        localStorage.setItem("refreshToken", result.refreshToken);
+        login(result as LoginResultDto)
 
         const today = new Date();
 

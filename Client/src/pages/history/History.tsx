@@ -7,7 +7,7 @@ import { getMonthCalendar } from "@/utilities/DateUtils";
 import { Calendar, SearchInput } from "@/components/History";
 import { useQuery } from "@tanstack/react-query";
 import { backendAxiosInstance } from "@/axios/backendInstance";
-import { useThemeMode } from "@/hooks/ThemeModeContext";
+import { useThemeMode } from "@/contexts/ThemeModeContext";
 import { DailySharing } from "@/types/DailySharing";
 import { KeywordsDay } from "@/components/History/KeywordDay/Keyworday";
 
