@@ -138,7 +138,7 @@ const SuggestionPage: React.FC = () => {
                             sx={{
                                 ...styles.suggestionButton,
                                 border: suggestion.rank === SuggestionRank.LIKE ? '2.5px solid #3A3A3A' : 'none'
-                            }}>I liked it!</Button>
+                            }}>I like it!</Button>
                         <Button
                             variant='contained'
                             color='secondary'
