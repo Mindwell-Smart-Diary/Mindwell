@@ -20,8 +20,13 @@ export const KeywordsDay = ({ keyword, date }: {
     };
 
     return (
-        <ButtonBase onClick={() => handleDayClick(year, month + 1, day)} sx={{ borderRadius: 5 }}>
-            <Card sx={{ display: 'flex', alignItems: 'center', width: '290px', borderRadius: 5 }}>
+        <ButtonBase onClick={() => handleDayClick(year, month + 1, day)} sx={{
+            borderRadius: 5,
+            py: '5px'
+
+
+        }}>
+            <Card sx={{ display: 'flex', alignItems: 'stretch', width: '290px', borderRadius: 5, m: 0, boxShadow: 'none' }}>
                 <Box
                     sx={{
                         bgcolor: theme.palette.primary.main,
@@ -30,8 +35,8 @@ export const KeywordsDay = ({ keyword, date }: {
                         flexDirection: 'column',
                         alignItems: 'center',
                         padding: 1,
-                        marginRight: 2,
-                        height: '100%'
+                        marginRight: 1,
+                        justifyContent: 'center'
                     }}
                 >
                     <Typography variant="h6" component="div" sx={{ borderBottom: '1px solid #ccc', paddingBottom: '8px' }}>
@@ -41,7 +46,7 @@ export const KeywordsDay = ({ keyword, date }: {
                         {year}
                     </Typography>
                 </Box>
-                <Typography variant="body1" component="div">
+                <Typography variant="body1" component="div" sx={{ m: '8px', flex: 1, alignSelf: 'center', textAlign: 'left' }}>
                     {keyword}
                 </Typography>
             </Card>

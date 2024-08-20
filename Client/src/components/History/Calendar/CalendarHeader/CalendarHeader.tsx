@@ -20,7 +20,7 @@ export const CalendarHeader = (props: CalendarHeaderProps) => {
     const { theme } = useThemeMode();
 
     const handlePrevMonth = () => {
-        if (month === 0) {
+        if (month === 1) {
             setMonth(11);
             setYear(year - 1);
         } else {
@@ -29,8 +29,8 @@ export const CalendarHeader = (props: CalendarHeaderProps) => {
     };
 
     const handleNextMonth = () => {
-        if (month === 11) {
-            setMonth(0);
+        if (month === 12) {
+            setMonth(1);
             setYear(year + 1);
         } else {
             setMonth(month + 1);

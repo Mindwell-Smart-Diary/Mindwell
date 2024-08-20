@@ -115,19 +115,19 @@ const SuggestionPage: React.FC = () => {
     return (
         <Box sx={styles.container}>
             {
-                isToday &&
-                <>
-                    <Typography variant='h3' fontWeight='bold'>Did you do something <br></br>relaxing today?</Typography>
-                    <TextField
-                        value={dailySharing}
-                        maxRows={6}
-                        multiline={true}
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => !postDailySharingMutation.isPending && setDailySharing(event.target.value)}
-                        onKeyDown={handleKeyDown}
-                    />
-                </>
+                isToday ?
+                    (<>
+                        <Typography variant='h3' fontWeight='bold'>Did you do something <br></br>relaxing today?</Typography>
+                        <TextField
+                            value={dailySharing}
+                            maxRows={6}
+                            multiline={true}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) => !postDailySharingMutation.isPending && setDailySharing(event.target.value)}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </>) : (<Typography sx={{ alignSelf: 'center' }} variant='h4'>{day}/{month}/{year} Events</Typography>)
             }
-            {suggestion &&
+            {suggestion && isToday &&
                 <Card sx={{ ...styles.suggestionCard, bgcolor: theme.palette.primary.main }} >
                     <Typography sx={styles.suggestionText}>{suggestion.content}</Typography>
                     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
@@ -172,13 +172,9 @@ const SuggestionPage: React.FC = () => {
                             </Card>
                         )) :
                         !isToday &&
-                        <>{isDayPass ?
-                            <Typography variant='h2'>
-                                No sharings found on {day}/{month}/{year}.
-                            </Typography> : <Typography variant='h2'>
-                                The day {day}/{month}/{year} has not occurred yet.
-                            </Typography>
-                        }</>
+                        <Typography variant='h4'>
+                            No sharings found on {day}/{month}/{year}.
+                        </Typography>
                 }
             </Box>
         </Box >

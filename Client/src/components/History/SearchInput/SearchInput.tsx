@@ -16,7 +16,7 @@ export const SearchInput = (props: { setValue: (val: string) => void }) => {
     return (
         <Paper
             component="form"
-            sx={{ my: 2, p: '4px', display: 'flex', borderRadius: 5, alignItems: 'center', width: '100%' }}
+            sx={{ my: 2, p: '4px', display: 'flex', borderRadius: 5, alignItems: 'center', width: '100%', boxShadow: 'none' }}
         >
             <InputBase
                 value={value}

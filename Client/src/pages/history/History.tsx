@@ -82,7 +82,7 @@ export const History = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
             }}>
               {
                 keyWordsByDate.length > 0 ?
