@@ -90,7 +90,11 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {error && <Alert severity="error">{error}</Alert>}
+        {error && (
+          <Alert severity="error" variant="filled">
+            {error}
+          </Alert>
+        )}
         <Box display="flex" flexDirection="row" gap={"10px"}>
           <Button
             sx={{ flexBasis: "66%" }}
@@ -103,7 +107,7 @@ export default function LoginPage() {
           </Button>
           <Button
             sx={{ flexBasis: "33%" }}
-            variant="outlined"
+            variant="text"
             color="primary"
             fullWidth
             onClick={handleRedirect}

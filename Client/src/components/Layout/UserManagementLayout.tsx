@@ -4,7 +4,7 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import { useThemeMode } from "@/hooks/ThemeModeContext";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import logo from "../../assets/logo-full.jpg";
+import logo from "../../assets/logo-full.png";
 
 export default function UserManagementLayout({
   children,
@@ -54,7 +54,7 @@ export default function UserManagementLayout({
           }}
         >
           <svg
-            viewBox="-304.643 71.0319 1184.1211 284.1101"
+            viewBox="-304.643 71.0319 1184.1211 280.1101"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
