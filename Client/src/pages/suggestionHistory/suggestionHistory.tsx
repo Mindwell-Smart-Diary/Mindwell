@@ -1,14 +1,14 @@
+import React from 'react';
 import { useThemeMode } from '@/contexts/ThemeModeContext';
-import { ThemeProvider, Container, Grid, Typography, Card, CardContent, Rating, IconButton, Collapse, Box, Divider } from '@mui/material';
+import { ThemeProvider, Container, Grid, Typography, Card, CardContent, Rating, IconButton, Box, Divider } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import { Mood } from '@/types/enums/Moods';
 import { MOOD_CATEGORIES, MoodCategory } from '@/types/enums/MoodGroup';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { backendAxiosInstance } from '@/axios/backendInstance';
-import React from 'react';
 
 interface FlatEventWithSuggestion {
   eventId: number;
@@ -21,7 +21,6 @@ interface FlatEventWithSuggestion {
   suggestionContent: string;
   suggestionRank: number;
   suggestionExecutionDate: string;
-  // keywords: [];
 }
 
 const fetchEventsWithSuggestions = async (): Promise<FlatEventWithSuggestion[]> => {
@@ -50,13 +49,26 @@ const fetchEventsWithSuggestions = async (): Promise<FlatEventWithSuggestion[]> 
   return flatEvents;
 };
 
+const updateSuggestionRank = async (params: { suggestionId: number; rank: number }) => {
+  const { suggestionId, rank } = params;
+  await backendAxiosInstance.patch(`/suggestions/${suggestionId}`, { rank });
+};
+
 const HistoryOfSuggestionsPage: React.FC = () => {
-  const { data: suggestions } = useQuery(
-    {
-      queryKey: ['events', { withSuggestions: "true", }],
-      queryFn: fetchEventsWithSuggestions
-    }
-  )
+  const { data: suggestions } = useQuery({
+    queryKey: ['events', { withSuggestions: "true" }],
+    queryFn: fetchEventsWithSuggestions
+  });
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: updateSuggestionRank,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+    },
+  });
+
+  const { theme } = useThemeMode();
 
   const customIcons = {
     [MoodCategory.Negative]: {
@@ -72,7 +84,6 @@ const HistoryOfSuggestionsPage: React.FC = () => {
       label: 'Satisfied',
     }
   };
-  const { theme } = useThemeMode();
 
   const getMoodCategory = (mood: Mood): MoodCategory => {
     for (const category in MOOD_CATEGORIES) {
@@ -84,6 +95,12 @@ const HistoryOfSuggestionsPage: React.FC = () => {
   };
 
   const getMoodIcon = (mood: MoodCategory) => customIcons[mood];
+
+  const handleRankChange = (newValue: number | null, suggestionId: number) => {
+    if (newValue !== null) {
+      mutation.mutate({ suggestionId, rank: newValue });
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -114,7 +131,12 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                           Our recommendation: {suggestion.suggestionContent}
                         </Typography>
                         <Grid container alignItems="center" justifyContent="space-between">
-                          <Rating value={suggestion.suggestionRank} readOnly size="large" max={3} />
+                          <Rating
+                            value={suggestion.suggestionRank}
+                            size="large"
+                            max={3}
+                            onChange={(event, newValue) => handleRankChange(newValue, suggestion.suggestionId)}
+                          />
                         </Grid>
                       </Grid>
                       <Grid item>
