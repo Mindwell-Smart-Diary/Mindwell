@@ -1,4 +1,4 @@
-import { useThemeMode } from '@/hooks/ThemeModeContext';
+import { useThemeMode } from '@/contexts/ThemeModeContext';
 import { ThemeProvider, Container, Grid, Typography, Card, CardContent, Rating, IconButton, Collapse, Box, Divider } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';

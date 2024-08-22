@@ -1,12 +1,5 @@
 import React, { useState, ChangeEvent, useMemo } from "react";
-import {
-  TextField,
-  Button,
-  Card,
-  Typography,
-  Box,
-  SvgIcon,
-} from "@mui/material";
+import { TextField, Button, Card, Typography, Box } from "@mui/material";
 import * as styles from "./styles";
 import { SuggestionRank } from "@/types/enums/SuggestionRank";
 import { DailySharing } from "@/types/DailySharing";
@@ -159,7 +152,7 @@ const SuggestionPage: React.FC = () => {
               </Typography>
               <TextField
                 value={dailySharing}
-                rows={2}
+                rows={6}
                 multiline={true}
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   !postDailySharingMutation.isPending &&

@@ -1,0 +1,1 @@
+export type LoginResultDto = { id: string, accessToken: string, refreshToken: string }

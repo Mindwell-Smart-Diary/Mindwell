@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Box, Button, Tooltip } from '@mui/material';
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
-import { useThemeMode } from '@/hooks/ThemeModeContext';
+import { useThemeMode } from '@/contexts/ThemeModeContext';
 
 const useStyles = {
   root: {
@@ -60,7 +60,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
             width: 50,
             marginRight: 2,
           }}
-          src="src/assets/mindwell-favicon-color.png"
+          src="/icons/mindwell-favicon-color.png"
           alt="Logo"
         />
         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
@@ -77,7 +77,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
                   height: 24,
                   width: 24,
                 }}
-                src="src\assets\icons\diary.png"
+                src="/icons/diary.svg"
                 alt=""
               />
               {activeTab === 'diary' && <ActiveUnderline />}
@@ -97,7 +97,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
                   height: 24,
                   width: 24,
                 }}
-                src="src\assets\icons\calendar.png"
+                src="/icons/calendar.svg"
                 alt=""
               />
               {activeTab === 'calendar' && <ActiveUnderline />}
@@ -116,7 +116,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
                   height: 24,
                   width: 24,
                 }}
-                src="src\assets\icons\history.png"
+                src="/icons/history.svg"
                 alt=""
               />
               {activeTab === 'history' && <ActiveUnderline />}
@@ -135,7 +135,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
                   height: 24,
                   width: 24,
                 }}
-                src="src\assets\icons\user.png"
+                src="/icons/user.svg"
                 alt=""
               />
               {activeTab === 'profile' && <ActiveUnderline />}
@@ -150,7 +150,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
                 height: 24,
                 width: 24,
               }}
-              src="src\assets\icons\logout.png"
+              src="/icons/logout.svg"
               alt=""
             />
           </Button>
