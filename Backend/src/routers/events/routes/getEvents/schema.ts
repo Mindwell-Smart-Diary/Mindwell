@@ -4,4 +4,5 @@ export const queryParamsSchema = z.object({
   date: z.number().int().optional(),
   withSuggestions: z.boolean().optional(),
   keywords: z.string().optional(),
+  keywordsPrefix: z.string().optional(),
 });

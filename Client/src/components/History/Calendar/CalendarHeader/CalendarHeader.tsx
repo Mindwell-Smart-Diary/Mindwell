@@ -3,7 +3,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import { MONTHS_OF_YEAR } from '@/types/enums/Month';
-import { useThemeMode } from '@/hooks/ThemeModeContext';
+import { useThemeMode } from '@/contexts/ThemeModeContext';
 
 import styles from './CalendarHeader.module.css';
 

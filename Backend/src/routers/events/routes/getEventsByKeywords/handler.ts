@@ -4,7 +4,7 @@ import { validateData } from "../../../../middleware/zodValidate";
 import { queryParamsSchema } from "./schema";
 import { getKeywordsByPrefix } from "../../../../services/events.service";
 
-export const getEventsByKeywords = async (
+export const getKeywords = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction

@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@mui/material";
-import { useThemeMode } from "./hooks/ThemeModeContext";
+import { useThemeMode } from "./contexts/ThemeModeContext";
 import LoginPage from "./pages/login/Login";
 import SignUpPage from "./pages/signup/Signup";
 import SharingPage from "./pages/sharing/SharingPage";
@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import { Layout } from "./components/Layout/Layout";
 import { isAxiosError } from "axios";
+import { Profile } from "./pages/Profile/Profile";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "sharing/:year/:month/:day",
         element: <SharingPage />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
       },
       {
         path: "/",

@@ -2,9 +2,9 @@ import * as React from "react";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import { useThemeMode } from "@/hooks/ThemeModeContext";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import logo from "../../assets/logo-full.png";
+import { useThemeMode } from "@/contexts/ThemeModeContext";
 
 export default function UserManagementLayout({
   children,

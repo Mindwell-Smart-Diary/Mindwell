@@ -5,9 +5,14 @@ import Box from "@mui/material/Box";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import UserManagementLayout from "@/components/Layout/UserManagementLayout";
+
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoginResultDto } from "@/types/LoginResultDto";
 
 export default function LoginPage() {
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -42,8 +47,7 @@ export default function LoginPage() {
       const result = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("accessToken", result.accessToken);
-        localStorage.setItem("refreshToken", result.refreshToken);
+        login(result as LoginResultDto);
 
         const today = new Date();
 
