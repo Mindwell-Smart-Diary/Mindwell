@@ -1,20 +1,16 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import { useThemeMode } from "@/contexts/ThemeModeContext";
-import { useState } from "react";
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import UserManagementLayout from "@/components/Layout/UserManagementLayout";
+
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoginResultDto } from "@/types/LoginResultDto";
 
 export default function LoginPage() {
-  const { theme } = useThemeMode();
   const { login } = useAuth();
 
   const [email, setEmail] = useState("");
@@ -51,13 +47,14 @@ export default function LoginPage() {
       const result = await response.json();
 
       if (response.ok) {
-        login(result as LoginResultDto)
+        login(result as LoginResultDto);
 
         const today = new Date();
 
         console.log(today);
         navigate(
-          `/sharing/${today.getFullYear()}/${today.getMonth() + 1
+          `/sharing/${today.getFullYear()}/${
+            today.getMonth() + 1
           }/${today.getDate()}`
         );
       } else {
@@ -69,84 +66,60 @@ export default function LoginPage() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container>
-        <Grid
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          style={{ minHeight: "100vh" }}
-        >
-          <Grid item xs={11} style={{ marginBottom: "16px" }}>
-            <Typography component="h1" variant="h2">
-              Login
-            </Typography>
-          </Grid>
-          <Box
-            component="form"
-            noValidate
-            autoComplete="off"
-            sx={{ width: "100%", maxWidth: 350 }}
-            onSubmit={handleLogin}
+    <UserManagementLayout>
+      <Box
+        component="form"
+        noValidate
+        flexDirection="column"
+        display="flex"
+        gap="16px"
+        autoComplete="off"
+        sx={{ width: "100%" }}
+        onSubmit={handleLogin}
+      >
+        <TextField
+          fullWidth
+          id="email"
+          label="Email"
+          variant="outlined"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          id="password"
+          label="Password"
+          type="password"
+          variant="outlined"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {error && (
+          <Alert severity="error" variant="filled">
+            {error}
+          </Alert>
+        )}
+        <Box display="flex" flexDirection="row" gap={"10px"}>
+          <Button
+            sx={{ flexBasis: "66%" }}
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
           >
-            <Grid item xs={11} style={{ marginBottom: "16px" }}>
-              <TextField
-                fullWidth
-                id="email"
-                label="Email"
-                variant="outlined"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={11} style={{ marginBottom: "16px" }}>
-              <TextField
-                fullWidth
-                id="password"
-                label="Password"
-                type="password"
-                variant="outlined"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Grid>
-            {error && (
-              <Grid item xs={11} style={{ marginBottom: "16px" }}>
-                <Alert severity="error">{error}</Alert>
-              </Grid>
-            )}
-            <Grid
-              item
-              xs={11}
-              container
-              direction="row"
-              justifyContent="space-between"
-            >
-              <Grid item xs={7}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                >
-                  Login
-                </Button>
-              </Grid>
-              <Grid item xs={4}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  fullWidth
-                  onClick={handleRedirect}
-                >
-                  Sign Up
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-      </Container>
-    </ThemeProvider>
+            Login
+          </Button>
+          <Button
+            sx={{ flexBasis: "33%" }}
+            variant="text"
+            color="primary"
+            fullWidth
+            onClick={handleRedirect}
+          >
+            Sign Up
+          </Button>
+        </Box>
+      </Box>
+    </UserManagementLayout>
   );
 }

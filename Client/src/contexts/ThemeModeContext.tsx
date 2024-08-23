@@ -32,6 +32,9 @@ interface ThemeModeProviderProps {
 
 const getTheme = (isDarkMode: boolean) =>
   createTheme({
+    typography: {
+      fontFamily: '"Open Sans", sans-serif',
+    },
     palette: {
       mode: isDarkMode ? "dark" : "light",
       primary: {
@@ -40,17 +43,31 @@ const getTheme = (isDarkMode: boolean) =>
         dark: isDarkMode ? "#6F79A8" : "#3E39B2",
       },
       secondary: {
-        main: isDarkMode ? "#FFB74D" : "#FFC947",
-        light: isDarkMode ? "#FFE97D" : "#FFE08A",
-        dark: isDarkMode ? "#C88719" : "#C39D22",
+        main: isDarkMode ? "#FFF" : "#FFF",
+      },
+      error: {
+        main: "#E36588",
       },
       background: {
-        default: isDarkMode ? "#121212" : "#F5F5F5",
+        default: isDarkMode ? "#121212" : "rgb(255, 255, 255)",
         paper: isDarkMode ? "#1E1E1E" : "#FFFFFF",
       },
       text: {
         primary: isDarkMode ? "#FFFFFF" : "#000000",
         secondary: isDarkMode ? "#B0B0B0" : "#666666",
+      },
+    },
+    components: {
+      MuiButton: {
+        styleOverrides: {
+          contained: {
+            fontWeight: "bold",
+            boxShadow: "none",
+            "&:hover": {
+              boxShadow: "none",
+            },
+          },
+        },
       },
     },
   });
