@@ -3,7 +3,7 @@ services:
   server:
     restart: always
     build:
-      context: ./backend
+      context: ./Backend
     ports:
       - 3000:3000
     depends_on:
@@ -14,7 +14,7 @@ services:
   client:
     restart: always
     build:
-      context: ./client
+      context: ./Client
     ports:
       - 80:80
     depends_on:
