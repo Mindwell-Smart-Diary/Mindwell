@@ -152,7 +152,7 @@ const SuggestionPage: React.FC = () => {
                             </Typography>
                             <TextField
                                 value={dailySharing}
-                                rows={6}
+                                rows={3}
                                 multiline={true}
                                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                                     !postDailySharingMutation.isPending &&
@@ -256,12 +256,12 @@ const SuggestionPage: React.FC = () => {
                         : !isToday && (
                             <>
                                 {isDayPass ? (
-                                    <Typography variant="h2">
-                                        No sharings found on {day}/{month}/{year}.
+                                    <Typography variant="h6" sx={{ alignSelf: 'center' }}>
+                                        No sharings found on this date
                                     </Typography>
                                 ) : (
-                                    <Typography variant="h2">
-                                        The day {day}/{month}/{year} has not occurred yet.
+                                    <Typography variant="h6" sx={{ alignSelf: 'center' }}>
+                                        This day has not occurred yet
                                     </Typography>
                                 )}
                             </>

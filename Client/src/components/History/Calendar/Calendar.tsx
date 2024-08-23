@@ -1,28 +1,67 @@
 import styles from './Calendar.module.css';
 
-import { DAYS_OF_WEEK } from '@/types/enums/Day';
 import { CalendarDay } from '@/types/CalendarDay';
-
-import { CalendarHeader } from './CalendarHeader/CalendarHeader';
-import { ButtonBase } from '@mui/material';
+import { ButtonBase, Menu, MenuItem, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { NON_MOOD_COLOR } from '@/constants/MoodColor';
 import { averageMoodColor } from '@/utilities/MoodUtils';
 import { getReadableTextColor } from '@/utilities/ColorUtils';
 import { backendAxiosInstance } from '@/axios/backendInstance';
 import { useQuery } from '@tanstack/react-query';
+import { Month, MONTHS_OF_YEAR } from '@/types/enums/Month';
 
-const CalendarWeekDays = () => {
-    return (
-        <ul className={styles.weekdays}>
-            {
-                DAYS_OF_WEEK.map((day) => (<li key={day}>{day}</li>))
-            }
-        </ul>
-    )
+const DateDropdown = ({ title, values, selectValue }: {
+    title: string, values: number[] | string[], selectValue: (value: string | number) => void
+}) => {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (<>
+        <Button
+            onClick={handleClick}
+            disableRipple
+            sx={{
+                backgroundColor: "transparent",
+                color: "black",
+                fontWeight: 'bold',
+                fontSize: '1.2rem',
+                '&:hover': {
+                    backgroundColor: "transparent",
+                },
+            }}
+        >
+            {title}
+        </Button>
+        <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            MenuListProps={{
+                sx: {
+                    maxHeight: '200px',
+                    overflowY: 'auto',
+                },
+            }}
+        >
+            {values?.map((value) => (
+                <MenuItem key={value} onClick={() => {
+                    handleClose();
+                    selectValue(value);
+                }}>
+                    {value}
+                </MenuItem>
+            ))}
+        </Menu>
+    </>);
 }
-
 const MonthDays = ({ days, month, year, handleDayClick }: { days: CalendarDay[], month: number, year: number, handleDayClick: (day: number) => void }) => {
     const today = new Date();
     const currentYear = today.getFullYear();
@@ -45,9 +84,10 @@ const MonthDays = ({ days, month, year, handleDayClick }: { days: CalendarDay[],
                             className={styles.day}
                             disabled={isFutureDate}
                             sx={{
-                                borderRadius: '50%',
+                                borderRadius: '10%',
                                 maxWidth: '90%',
-                                width: 27,
+                                width: '40px',
+                                height: '40px',
                                 bgcolor: isFutureDate ? '#d0d0d0' : moodColor ?? NON_MOOD_COLOR,
                                 color: getReadableTextColor(moodColor ?? NON_MOOD_COLOR),
                             }}
@@ -102,8 +142,14 @@ export const Calendar = (props: CalendarProps) => {
 
     return (
         <div className={styles.calendar}>
-            <CalendarHeader {...props} />
-            <CalendarWeekDays />
+            <div className={styles.monthAndYearDropdown}>
+                <DateDropdown
+                    title={'Year'}
+                    values={Array.from({ length: new Date().getFullYear() - 1969 }, (_, index) => new Date().getFullYear() - index)}
+                    selectValue={(year) => props.setYear(Number(year))} />
+                <DateDropdown title={'Month'} values={MONTHS_OF_YEAR} selectValue={(month) => props.setMonth(Month[month as keyof typeof Month])} />
+            </div>
+            <Typography sx={{ textTransform: 'uppercase' }}>{Month[props.month]} {props.year}</Typography>
             <MonthDays
                 days={monthDays}
                 month={props.month}

@@ -11,7 +11,7 @@ export const container: SxProps = {
 };
 
 export const title: SxProps = {
-  fontSize: "2rem",
+  fontSize: "1.8rem",
   color: "#3A3A3A",
   fontWeight: "bold",
 };
@@ -50,8 +50,9 @@ export const suggestionButton: SxProps = {
   bgcolor: "#7EC796",
   fontWeight: "bold",
   color: "white",
-  p: "0.5rem 1rem",
+  p: "0.5rem 0.8rem",
   borderRadius: "1rem",
+  fontSize: '0.75rem'
 };
 
 export const listContainer: SxProps = {

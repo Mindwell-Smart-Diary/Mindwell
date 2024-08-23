@@ -71,18 +71,15 @@ export const History = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <Box sx={{ m: 5, maxWidth: '600px' }}>
+      <Box sx={{ maxWidth: '600px', display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
         <SearchInput setValue={(val: string) => setSearchValue(val)} />
         {
           searchValue.length > 0 ?
             <Box sx={{
-              my: 1,
-              width: '600px',
-              height: '100%',
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: '0.5rem'
             }}>
               {
                 keyWordsByDate.length > 0 ?
