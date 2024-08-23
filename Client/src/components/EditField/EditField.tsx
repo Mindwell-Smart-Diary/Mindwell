@@ -95,9 +95,10 @@ const EditField: React.FC<EditFieldProps> = ({
                                 value={editedValue}
                                 onChange={(e) => setEditedValue(e.target.value)}
                                 fullWidth
+                                placeholder={value}
                             />
                         )}
-                        <IconButton color="primary" onClick={handleSave}>
+                        <IconButton disabled={!editedValue} color="primary" onClick={handleSave}>
                             <SaveIcon />
                         </IconButton>
                         <IconButton color="primary" onClick={handleCancle}>
