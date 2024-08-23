@@ -50,6 +50,8 @@ export const Profile = () => {
                     p: 3,
                     maxWidth: "90vw",
                     width: 600,
+                    boxShadow: 'none',
+                    border: "1.5px solid #00000080"
                 }}
             >
                 <Box
@@ -59,12 +61,9 @@ export const Profile = () => {
                         alignItems: "center",
                     }}
                 >
-                    <Typography gutterBottom variant="h4">
-                        Profile
-                    </Typography>
                     <UserAvatar
                         {...user}
-                        sx={{ width: 100, height: 100, fontSize: 40 }}
+                        sx={{ width: 80, height: 80, fontSize: 30 }}
                     />
                 </Box>
                 <EditField
@@ -92,7 +91,7 @@ export const Profile = () => {
                     isDate
                     label="birthdate"
                     value={user?.birthdate?.toLocaleString() ?? ""}
-                    onSave={(value) => handleSave("birthdate", value)}
+                    onSave={(value) => handleSave("birthdate", new Date(value).toISOString())}
                 />
                 <EditField
                     value={user?.gender}
