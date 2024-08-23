@@ -33,6 +33,7 @@ export const saveNewSuggestion = async (
       content: suggestion,
       title: "", // TODO: Do we need the title?
       event_id: eventId,
+      execution_date:new Date(),
     },
   });
 
