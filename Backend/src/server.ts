@@ -14,9 +14,9 @@ import { buildUsersRouter } from "./routers/users/usersRouter";
 export const initServer = () => {
   const { PORT } = Configuration.getInstance();
 
-  console.log(process.env.DATABASE_URL);
-
   const app = express();
+
+  app.use(morgan("tiny"));
   app.use(cors());
 
   app.use(bodyParser.json());
@@ -41,3 +41,6 @@ export const initServer = () => {
     });
   };
 };
+function morgan(arg0: string): any {
+  throw new Error("Function not implemented.");
+}
