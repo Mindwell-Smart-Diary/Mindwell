@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
@@ -10,12 +10,16 @@ ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 RUN npm install
 
-RUN npm i -g serve
-
 COPY . .
 
 RUN npm run build
 
+
+
+FROM nginx
+
 EXPOSE 80
 
-CMD [ "serve", "-l", "80", "-s", "dist" ]
+COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=build /app/dist /usr/share/nginx/html
