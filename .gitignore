@@ -25,6 +25,7 @@ Thumbs.db
 build/
 dist/
 out/
+data/
 coverage/
 
 # Ignore configuration files

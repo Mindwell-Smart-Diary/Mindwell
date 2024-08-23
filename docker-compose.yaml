@@ -14,6 +14,8 @@ services:
   client:
     restart: always
     build:
+      args:
+        VITE_API_BASE_URL: http://server:3000
       context: ./Client
     ports:
       - 80:80
