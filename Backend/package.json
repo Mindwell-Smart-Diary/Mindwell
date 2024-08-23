@@ -46,6 +46,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/lodash.omit": "^4.5.9",
     "@types/luxon": "^3.4.2",
+    "@types/morgan": "^1.9.9",
     "@types/node": "^20.14.9",
     "axios": "^1.7.2",
     "dotenv-cli": "^7.4.2",

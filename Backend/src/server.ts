@@ -10,6 +10,7 @@ import { buildEventsRouter } from "./routers/events/eventsRouter";
 import { buildAuthRouter } from "./routers/auth/authRouter";
 import { authorizeUser } from "./middleware/auth";
 import { buildUsersRouter } from "./routers/users/usersRouter";
+import morgan from "morgan";
 
 export const initServer = () => {
   const { PORT } = Configuration.getInstance();
@@ -41,6 +42,3 @@ export const initServer = () => {
     });
   };
 };
-function morgan(arg0: string): any {
-  throw new Error("Function not implemented.");
-}
