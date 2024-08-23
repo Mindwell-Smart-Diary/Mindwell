@@ -1,0 +1,34 @@
+version: "3"
+services:
+  server:
+    restart: always
+    build:
+      context: ./backend
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/mindwell
+
+  client:
+    restart: always
+    build:
+      context: ./client
+    ports:
+      - 80:80
+    depends_on:
+      - server
+  db:
+    restart: always
+    image: postgres:13
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mindwell
+
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./Scripts/DDL.sql:/docker-entrypoint-initdb.d/DDL.sql
