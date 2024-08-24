@@ -18,8 +18,10 @@ RUN npm run build
 
 FROM nginx
 
-EXPOSE 80
+EXPOSE 443
 
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY ./nginx/certs/ /etc/nginx/certs/
 
 COPY --from=build /app/dist /usr/share/nginx/html

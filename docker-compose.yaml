@@ -18,7 +18,7 @@ services:
         VITE_API_BASE_URL: http://server:3000
       context: ./Client
     ports:
-      - 80:80
+      - 443:443
     depends_on:
       - server
   # db:
