@@ -9,8 +9,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5433/mindwell
-
+      - DATABASE_URL=${DB_URL}
   client:
     restart: always
 
@@ -22,16 +21,16 @@ services:
       - 80:80
     depends_on:
       - server
-  db:
-    restart: always
-    image: postgres:13
-    ports:
-      - 5433:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mindwell
+  # db:
+  #   restart: always
+  #   image: postgres:13
+  #   ports:
+  #     - 5433:5432
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: mindwell
 
-    volumes:
-      - ./data:/var/lib/postgresql/data
-      - ./Scripts/DDL.sql:/docker-entrypoint-initdb.d/DDL.sql
+  #   volumes:
+  #     - ./data:/var/lib/postgresql/data
+  #     - ./Scripts/DDL.sql:/docker-entrypoint-initdb.d/DDL.sql
