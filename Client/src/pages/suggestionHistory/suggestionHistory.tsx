@@ -1,6 +1,6 @@
 import React from 'react';
 import { useThemeMode } from '@/contexts/ThemeModeContext';
-import { ThemeProvider, Container, Grid, Typography, Card, CardContent, Rating, IconButton, Box, Divider } from '@mui/material';
+import { ThemeProvider, Container, Grid, Typography, Card, CardContent, Rating, IconButton, Box, Divider, Tooltip } from '@mui/material';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
@@ -17,7 +17,6 @@ interface FlatEventWithSuggestion {
   eventDate: string;
   mood: Mood;
   suggestionId: number;
-  suggestionTitle: string;
   suggestionContent: string;
   suggestionRank: number;
   suggestionExecutionDate: string;
@@ -38,7 +37,6 @@ const fetchEventsWithSuggestions = async (): Promise<FlatEventWithSuggestion[]> 
       eventDate: event.date,
       mood: event.mood,
       suggestionId: suggestion.id,
-      suggestionTitle: suggestion.title,
       suggestionContent: suggestion.content,
       suggestionRank: suggestion.rank,
       suggestionExecutionDate: suggestion.execution_date,
@@ -119,13 +117,11 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                     <Grid container justifyContent="space-between">
                       <Grid item xs={8}>
                         <Typography variant="h6" component="div">
-                          {suggestion.suggestionTitle}
-                          <IconButton style={{ marginLeft: '10px' }} size="small">
-                            {getMoodIcon(getMoodCategory(suggestion.mood)).icon}
-                          </IconButton>
+                          
                         </Typography>
                         <Typography color="text.secondary" gutterBottom>
-                          Your personal share: {suggestion.eventContent}
+                          Your personal share: 
+                          {suggestion.eventContent}
                         </Typography>
                         <Typography color="text.secondary" gutterBottom>
                           Our recommendation: {suggestion.suggestionContent}
@@ -141,6 +137,14 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                       </Grid>
                       <Grid item>
                         <Grid container alignItems="center" spacing={1}>
+                          <Grid item>
+                          <Tooltip title={suggestion.mood} arrow>
+
+                          <IconButton style={{ marginLeft: '10px' }} size="small">
+                            {getMoodIcon(getMoodCategory(suggestion.mood)).icon}
+                          </IconButton>
+                          </Tooltip>
+                          </Grid>
                           <Grid item>
                             <CalendarTodayIcon fontSize="medium" />
                           </Grid>
