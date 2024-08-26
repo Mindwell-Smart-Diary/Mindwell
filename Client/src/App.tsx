@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         element: <HistoryPage />,
       },
       {
-        path: "historySuggestions",
+        path: "suggestions",
         element: <HistoryOfSuggestionsPage />,
       },
       {
