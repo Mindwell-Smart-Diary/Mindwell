@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Box, Button, Tooltip } from "@mui/material";
 import { styled } from "@mui/system";
-import { useNavigate } from "react-router-dom";
-import { useThemeMode } from "@/contexts/ThemeModeContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const useStyles = {
   root: {
@@ -43,6 +42,22 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
 
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const path = location.pathname;
+
+    if (path.startsWith("/sharing")) {
+      setActiveTab("diary");
+    } else if (path.startsWith("/history")) {
+      setActiveTab("calendar");
+    } else if (path.startsWith("/suggestions")) {
+      setActiveTab("suggestions");
+    } else if (path.startsWith("/profile")) {
+      setActiveTab("profile");
+    }
+  }, [location.pathname]);
 
   const handleTabClick = (tabName: string, path: string) => {
     setActiveTab(tabName);
@@ -110,12 +125,12 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
               {activeTab === "calendar" && <ActiveUnderline />}
             </Button>
           </Tooltip>
-          <Tooltip title="History" arrow>
+          <Tooltip title="Suggestions" arrow>
             <Button
               sx={{ ...useStyles.menuButton, ...useStyles.iconSize }}
               color="inherit"
-              aria-label="history"
-              onClick={() => handleTabClick("history", "/historySuggestions")}
+              aria-label="suggestions"
+              onClick={() => handleTabClick("suggestions", "/suggestions")}
             >
               <Box
                 component="img"
@@ -126,7 +141,7 @@ const AppBarComponent: React.FC<AppBarComponentProps> = () => {
                 src="/icons/history.svg"
                 alt=""
               />
-              {activeTab === "history" && <ActiveUnderline />}
+              {activeTab === "suggestions" && <ActiveUnderline />}
             </Button>
           </Tooltip>
           <Tooltip title="Profile" arrow>
