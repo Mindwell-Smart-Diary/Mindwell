@@ -6,6 +6,20 @@ import { getUserAge, getUserById } from "./users.service";
 import { moodPromptFunction } from "./mood/moods.service";
 import { prisma } from "../prisma/prismaClient";
 import { llmGenerate } from "./generative-ai.service";
+import { BadRequestError } from "../errors/BadRequestError";
+
+const isEventValid = async (event: string): Promise<boolean> => {
+  const validity = await llmGenerate([
+    {
+      text: `You are a psychologist and your main goal is to suggest an action that is relevant and meaningful for the patient, aimed at improving their mood or preserving their current positive state.\nThe client will tell you about an event from his day to day life, it can be a sentence like "I went to school and met an old friend" to a long story with multiple paragraph. This time I want you to tell me if the given event is valid or not. \nFor example if the client says: "There was a company event at the bowling ally today" you should respond "Y" since it's a valid event. If the client shares gibberish or irrelevant data like "Tell me how to cook an omelet" or "aklsmflkm", respond "N".
+      How about:
+
+      ${event}`,
+    },
+  ]);
+
+  return validity.trim() === "Y";
+};
 
 const generateKeywords = async (event: string): Promise<string[]> => {
   const response = await llmGenerate([
@@ -104,15 +118,20 @@ export const saveEvent = async (
   Pick<events, "content" | "mood" | "date" | "id"> & { keywords: string[] }
 > => {
   const user = await getUserById(prisma, userId);
+
+  const res = await isEventValid(event);
+
+  console.log(res);
+  if (!res) {
+    throw new BadRequestError("Invalid event");
+  }
+
   const mood: Mood = await moodPromptFunction(
     { age: getUserAge(user), gender: user.gender },
     event
   );
 
   const keywords: string[] = await generateKeywords(event);
-
-  // const d = new Date
-  console.log(DateTime.now().toISO());
 
   const savedEvent = await prisma.events.create({
     data: {
