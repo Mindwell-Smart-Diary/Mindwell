@@ -1,6 +1,7 @@
 import { PrismaClient, suggestions } from "@prisma/client";
 import { Mood } from "../models/enums/mood.enum";
 import omit from "lodash.omit";
+import { DateTime } from "luxon";
 
 export type suggestionByMood = {
   id: number;
@@ -33,7 +34,7 @@ export const saveNewSuggestion = async (
       content: suggestion,
       title: "", // TODO: Do we need the title?
       event_id: eventId,
-      execution_date:new Date(),
+      execution_date: DateTime.now().toJSDate(),
     },
   });
 

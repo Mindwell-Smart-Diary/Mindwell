@@ -10,11 +10,16 @@ import { buildEventsRouter } from "./routers/events/eventsRouter";
 import { buildAuthRouter } from "./routers/auth/authRouter";
 import { authorizeUser } from "./middleware/auth";
 import { buildUsersRouter } from "./routers/users/usersRouter";
+import morgan from "morgan";
+import { Settings } from "luxon";
 
 export const initServer = () => {
   const { PORT } = Configuration.getInstance();
+  Settings.defaultZone = "Asia/Jerusalem";
 
   const app = express();
+
+  app.use(morgan("tiny"));
   app.use(cors());
 
   app.use(bodyParser.json());
