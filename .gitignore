@@ -25,6 +25,7 @@ Thumbs.db
 build/
 dist/
 out/
+data/
 coverage/
 
 # Ignore configuration files
@@ -42,6 +43,7 @@ coverage/
 .env.development
 .env.test
 .env.production
+Client/nginx/certs
 
 # Ignore database files
 *.sqlite

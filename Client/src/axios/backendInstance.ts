@@ -2,7 +2,7 @@ import axios from "axios";
 import { getErrorInterceptor } from "./responseInterceptors";
 
 export const backendAxiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "/api",
 });
 
 backendAxiosInstance.interceptors.request.use(

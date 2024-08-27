@@ -7,6 +7,7 @@ import { moodPromptFunction } from "./mood/moods.service";
 import { prisma } from "../prisma/prismaClient";
 import { llmGenerate } from "./generative-ai.service";
 import { BadRequestError } from "../errors/BadRequestError";
+import uniq from "lodash.uniq";
 
 const isEventValid = async (event: string): Promise<boolean> => {
   const validity = await llmGenerate([
@@ -143,7 +144,7 @@ export const saveEvent = async (
   });
 
   await prisma.event_keywords.createMany({
-    data: keywords.map((keyword) => ({
+    data: uniq(keywords).map((keyword) => ({
       keyword,
       event_id: savedEvent.id,
     })),

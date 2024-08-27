@@ -1,0 +1,36 @@
+version: "3"
+services:
+  server:
+    restart: always
+    build:
+      context: ./Backend
+    ports:
+      - 3000:3000
+    # depends_on:
+    #   - db
+    environment:
+      - DATABASE_URL=${DB_URL}
+  client:
+    restart: always
+
+    build:
+      args:
+        VITE_API_BASE_URL: http://server:3000
+      context: ./Client
+    ports:
+      - 443:443
+    depends_on:
+      - server
+  # db:
+  #   restart: always
+  #   image: postgres:13
+  #   ports:
+  #     - 5433:5432
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: mindwell
+
+  #   volumes:
+  #     - ./data:/var/lib/postgresql/data
+  #     - ./Scripts/DDL.sql:/docker-entrypoint-initdb.d/DDL.sql
