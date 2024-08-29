@@ -20,6 +20,7 @@ import { useLoadingText } from "@/hooks/useLoadingText";
 import { HappyIcon } from "@/components/icons/HappyIcon";
 import { EmotionlessIcon } from "@/components/icons/EmotionlessIcon";
 import { SadIcon } from "@/components/icons/SadIcon";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const SuggestionPage: React.FC = () => {
   const [dailySharing, setDailySharing] = useState<string>("");
@@ -95,7 +96,7 @@ const SuggestionPage: React.FC = () => {
   });
 
   const postDailySharingMutation = useMutation({
-    mutationFn: (e: React.KeyboardEvent<HTMLDivElement>) =>
+    mutationFn: (e: React.KeyboardEvent<HTMLDivElement> | undefined) =>
       handleAddDailySharing(e),
     onSuccess: async (res) => {
       setDailySharing("");
@@ -110,9 +111,9 @@ const SuggestionPage: React.FC = () => {
   });
 
   const handleAddDailySharing = async (
-    event: React.KeyboardEvent<HTMLDivElement>
+    event?: React.KeyboardEvent<HTMLDivElement>
   ) => {
-    event.preventDefault();
+    event?.preventDefault();
     return await backendAxiosInstance.post("/events", { event: dailySharing });
   };
 
@@ -160,17 +161,32 @@ const SuggestionPage: React.FC = () => {
               <Typography sx={styles.title}>
                 Tell me about your day..
               </Typography>
-              <TextField
-                value={dailySharing}
-                rows={3}
-                multiline={true}
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  !postDailySharingMutation.isPending &&
-                  setDailySharing(event.target.value)
-                }
-                onKeyDown={handleKeyDown}
-                sx={styles.dailySharingText}
-              ></TextField>
+              <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+                <TextField
+                  value={dailySharing}
+                  rows={3}
+                  multiline={true}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    !postDailySharingMutation.isPending &&
+                    setDailySharing(event.target.value)
+                  }
+                  onKeyDown={handleKeyDown}
+                  sx={styles.dailySharingText}
+                >
+                </TextField>
+                <Button
+                  variant="contained"
+                  sx={{ width: '2.5rem', minWidth: '0', p: '0.2rem' }}
+                  disabled={!dailySharing.trim().length || postDailySharingMutation.isPending}
+                  onClick={() => {
+
+                    postDailySharingMutation.mutate(undefined);
+
+                  }}
+                >
+                  <ArrowForwardIcon sx={{ fontSize: '1.2rem' }} />
+                </Button>
+              </Box>
             </>
           ) : (
             <Typography sx={{ alignSelf: "center" }} variant="h4">
@@ -286,8 +302,8 @@ const SuggestionPage: React.FC = () => {
                   ].includes(suggestion.rank ?? SuggestionRank.NEW_SUGGESTION)
                     ? " We are sorry to here that! You can always generate another suggestion and try something new"
                     : suggestion.rank === SuggestionRank.LIKE
-                    ? "Great! You can still generate a new suggestion to get more activities or share new events"
-                    : ""}
+                      ? "Great! You can still generate a new suggestion to get more activities or share new events"
+                      : ""}
                 </Typography>
               </Card>
             )
@@ -298,23 +314,23 @@ const SuggestionPage: React.FC = () => {
         <Box sx={styles.listContainer}>
           {dailySharings?.length > 0
             ? dailySharings.map((item) => (
-                <Card key={item.id} sx={styles.dailySharingCard}>
-                  {item.content}
-                </Card>
-              ))
+              <Card key={item.id} sx={styles.dailySharingCard}>
+                {item.content}
+              </Card>
+            ))
             : !isToday && (
-                <>
-                  {isDayPass ? (
-                    <Typography variant="h6" sx={{ alignSelf: "center" }}>
-                      No sharings found on this date
-                    </Typography>
-                  ) : (
-                    <Typography variant="h6" sx={{ alignSelf: "center" }}>
-                      This day has not occurred yet
-                    </Typography>
-                  )}
-                </>
-              )}
+              <>
+                {isDayPass ? (
+                  <Typography variant="h6" sx={{ alignSelf: "center" }}>
+                    No sharings found on this date
+                  </Typography>
+                ) : (
+                  <Typography variant="h6" sx={{ alignSelf: "center" }}>
+                    This day has not occurred yet
+                  </Typography>
+                )}
+              </>
+            )}
         </Box>
       </Box>
     </>

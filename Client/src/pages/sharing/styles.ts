@@ -17,6 +17,7 @@ export const title: SxProps = {
 };
 
 export const dailySharingText: SxProps = {
+  width: '100%',
   "& .MuiOutlinedInput-root": {
     "&.Mui-focused fieldset": {
       borderColor: "inherit",

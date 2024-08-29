@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import UserManagementLayout from "@/components/Layout/UserManagementLayout";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoginResultDto } from "@/types/LoginResultDto";
 
 const SignUpPage: React.FC = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -21,11 +23,12 @@ const SignUpPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const { login } = useAuth();
 
   const navigate = useNavigate();
 
   const handleRedirect = () => {
-    navigate("/login"); // Adjust the path to match your login route
+    navigate("/login");
   };
 
   const sendSignUpData = async (
@@ -37,7 +40,6 @@ const SignUpPage: React.FC = () => {
     password: string
   ) => {
     try {
-      // TODO: send to server currectly
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
@@ -106,14 +108,12 @@ const SignUpPage: React.FC = () => {
         email,
         password
       );
-      localStorage.setItem("accessToken", result.accessToken);
-      localStorage.setItem("refreshToken", result.refreshToken);
+      login(result as LoginResultDto);
 
       const today = new Date();
 
       navigate(
-        `/sharing/${today.getFullYear()}/${
-          today.getMonth() + 1
+        `/sharing/${today.getFullYear()}/${today.getMonth() + 1
         }/${today.getDate()}`
       );
     } catch {
