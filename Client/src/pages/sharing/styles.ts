@@ -14,6 +14,7 @@ export const title: SxProps = {
   fontSize: "1.8rem",
   color: "#3A3A3A",
   fontWeight: "bold",
+  height: "fit-content",
 };
 
 export const dailySharingText: SxProps = {
@@ -52,7 +53,7 @@ export const suggestionButton: SxProps = {
   color: "white",
   p: "0.5rem 0.8rem",
   borderRadius: "1rem",
-  fontSize: '0.75rem'
+  fontSize: "0.75rem",
 };
 
 export const listContainer: SxProps = {
