@@ -20,9 +20,11 @@ import { useLoadingText } from "@/hooks/useLoadingText";
 import { HappyIcon } from "@/components/icons/HappyIcon";
 import { EmotionlessIcon } from "@/components/icons/EmotionlessIcon";
 import { SadIcon } from "@/components/icons/SadIcon";
+import { MoodCircle } from "./MoodCirlce";
 
 const SuggestionPage: React.FC = () => {
   const [dailySharing, setDailySharing] = useState<string>("");
+  const [currentMood, setCurrentMood] = useState<string>("");
   const loadingText = useLoadingText();
   const { year, month, day } = useParams();
 
@@ -76,6 +78,10 @@ const SuggestionPage: React.FC = () => {
     enabled: dailySharings.length > 0,
     queryKey: ["events", dailySharings[0]?.id, "suggestions"],
     queryFn: async () => {
+      backendAxiosInstance
+        .get(`/events/${dailySharings[0]?.id}`)
+        .then((data) => setCurrentMood(data.data.mood));
+
       const suggestions: Suggestion[] = (
         await backendAxiosInstance.get(
           `/events/${dailySharings[0]?.id}/suggestions`
@@ -99,6 +105,7 @@ const SuggestionPage: React.FC = () => {
       handleAddDailySharing(e),
     onSuccess: async (res) => {
       setDailySharing("");
+      setCurrentMood(res.data.mood);
       queryClient.invalidateQueries({ queryKey: ["events", { date: time }] });
       if (res.status === 200 || res.status === 201) {
         await generateSuggestionMutation.mutate(res.data.id);
@@ -157,9 +164,17 @@ const SuggestionPage: React.FC = () => {
         <Box sx={styles.main}>
           {isToday ? (
             <>
-              <Typography sx={styles.title}>
-                Tell me about your day..
-              </Typography>
+              <Box
+                display={"flex"}
+                flexDirection={"row"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+              >
+                <Typography sx={styles.title}>
+                  Tell me about your day...
+                </Typography>
+                {currentMood && <MoodCircle mood={currentMood} />}
+              </Box>
               <TextField
                 value={dailySharing}
                 rows={3}
@@ -202,11 +217,7 @@ const SuggestionPage: React.FC = () => {
                   <Skeleton component={Button} />
                 </Box>
 
-                <Skeleton
-                  //   variant="rectangular"
-                  //   width="20%"
-                  component={Button}
-                />
+                <Skeleton component={Button} />
               </Box>
             </Card>
           ) : (
