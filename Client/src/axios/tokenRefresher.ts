@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const REFRESH_ENDPOINT = "http:/localhost:3000/auth/refresh";
+export const REFRESH_ENDPOINT = "api/auth/refresh";
 
 export const refreshToken = async (): Promise<void> => {
   const res = await axios.get(REFRESH_ENDPOINT, {

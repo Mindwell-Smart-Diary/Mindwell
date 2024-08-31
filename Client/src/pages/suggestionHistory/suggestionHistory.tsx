@@ -108,7 +108,8 @@ const HistoryOfSuggestionsPage: React.FC = () => {
             History of Suggestions
           </Typography>
         </Box>
-        <Grid container spacing={0.5} direction="column">
+        {(suggestions && suggestions?.length > 0) ?
+        (<Grid container spacing={0.5} direction="column">
           {suggestions?.map((suggestion, index) => (
             <React.Fragment key={index}>
               <Grid item xs={12}>
@@ -120,8 +121,7 @@ const HistoryOfSuggestionsPage: React.FC = () => {
                           
                         </Typography>
                         <Typography color="text.secondary" gutterBottom>
-                          Your personal share: 
-                          {suggestion.eventContent}
+                          Your personal share: "{suggestion.eventContent}"
                         </Typography>
                         <Typography color="text.secondary" gutterBottom>
                           Our recommendation: {suggestion.suggestionContent}
@@ -162,7 +162,12 @@ const HistoryOfSuggestionsPage: React.FC = () => {
               </Grid>
             </React.Fragment>
           ))}
-        </Grid>
+        </Grid>) : (
+          <Typography color="text.secondary">
+            No recommendations have been made yet...
+          </Typography>
+         )
+      }
       </Container>
     </ThemeProvider>
   );
