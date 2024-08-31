@@ -11,8 +11,11 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import UserManagementLayout from "@/components/Layout/UserManagementLayout";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoginResultDto } from "@/types/LoginResultDto";
 
 const SignUpPage: React.FC = () => {
+  const { login } = useAuth();
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState<string>("");
@@ -106,8 +109,8 @@ const SignUpPage: React.FC = () => {
         email,
         password
       );
-      localStorage.setItem("accessToken", result.accessToken);
-      localStorage.setItem("refreshToken", result.refreshToken);
+
+      login(result as LoginResultDto);
 
       const today = new Date();
 
